@@ -1,0 +1,26 @@
+.DS_Store
+node_modules
+/dist
+
+# Env files
+.env*
+
+# Log files
+access.log*
+nodemon.json*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Uploads
+uploads
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+log.log
