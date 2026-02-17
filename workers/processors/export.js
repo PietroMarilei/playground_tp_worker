@@ -4,7 +4,21 @@ const path = require("path");
 
 // File System
 const fs = require("fs");
-
+const {
+    S3Client,
+    GetObjectCommand,
+    PutObjectCommand,
+} = require("@aws-sdk/client-s3");
+// Configure S3
+const s3 = new S3Client({
+    endpoint: "https://fra1.digitaloceanspaces.com",
+    region: "fra1",
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
+});
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 // MomentJS
 const moment = require("moment");
 moment.locale("it");
@@ -226,10 +240,11 @@ module.exports = {
 
 
         const components = [];
-
+        let count = 0;
         let page = 1;
         const per_page = 100;
         while (true) {
+
             const components_ids = await components_filter(
                 {
                     text: fields.includes("filters") ? filters.text : null,
@@ -256,6 +271,7 @@ module.exports = {
                     side: fields.includes("filters") ? filters.side : null,
 
                     vehicle_key: fields.includes("filters") ? filters.vehicle_id : null,
+
 
                     type_id: fields.includes("filters") ? filters.type_id : null,
                     brand_id: fields.includes("filters") ? filters.brand_id : null,
@@ -288,9 +304,10 @@ module.exports = {
                 context
             );
 
-            if (components.length === 0) {
-                components = components_ids.count;
+            if (count === 0) {
+                count = components_ids.count;
             }
+
             const components_ids_in_page = components_ids.rows.map((c) => c.component_id);
 
             console.log("[export_components] Page:", page, "IDs:", components_ids_in_page);
@@ -527,8 +544,6 @@ module.exports = {
         }
 
 
-        console.log('components', components.length);
-
         // Checking if component is set
         if (!components) {
             const error = new Error("Not found");
@@ -541,10 +556,654 @@ module.exports = {
         // Reorder component by components_ids
         components.sort((a, b) => b.component_id - a.component_id); // DESC
 
+        // #region ExcelJS
+        // Workbook
+        const workbook = new ExcelJS.Workbook();
+
+        // Workbook properties
+        workbook.created = new Date();
+        workbook.modified = new Date();
+
+        // Worksheet
+        const worksheet = workbook.addWorksheet("Componenti");
+
+        // Columns
+        const columns = [
+            {
+                key: "component.component_id",
+                header: "ID Componente",
+                width: 14,
+            },
+
+            {
+                key: "component.label",
+                header: "Etichetta",
+                width: 14,
+            },
+
+            {
+                key: "component.entry",
+                header: "Voce",
+                width: 46,
+            },
+
+            {
+                key: "component.side",
+                header: "Lato",
+                width: 10,
+            },
+
+            {
+                key: "component.type",
+                header: "Tipo",
+                width: 30,
+            },
+            {
+                key: "component.brand",
+                header: "Marca",
+                width: 16,
+            },
+            {
+                key: "component.model",
+                header: "Modello",
+                width: 30,
+            },
+            {
+                key: "component.version",
+                header: "Versione",
+                width: 44,
+            },
+            {
+                key: "component.version.produced_from",
+                header: "Commercializzato dal",
+                width: 18,
+            },
+            {
+                key: "component.version.produced_to",
+                header: "Commercializzato fino al",
+                width: 20,
+            },
+
+            // TODO Evaluate if expose the IDs
+            {
+                key: "component.vehicle_id",
+                header: "ID Veicolo",
+                width: 12,
+            },
+            {
+                key: "component.version_id",
+                header: "ID Versione",
+                width: 12,
+            },
+            {
+                key: "component.entry_id",
+                header: "ID Voce",
+                width: 12,
+            },
+
+            {
+                key: "component.is_disassembled",
+                header: "Smontato",
+                width: 14,
+            },
+
+            {
+                key: "component.oem_code",
+                header: "Codice OEM",
+                width: 16,
+            },
+            {
+                key: "component.constructor_code",
+                header: "Codice costruttore",
+                width: 16,
+            },
+            {
+                key: "component.manufacturer",
+                header: "Produttore",
+                width: 14,
+            },
+            {
+                key: "component.manufacturer_code",
+                header: "Codice produttore",
+                width: 20,
+            },
+            {
+                key: "component.other_codes",
+                header: "Codici ulteriori",
+                width: 20,
+            },
+
+            {
+                key: "component.weight",
+                header: "Peso",
+                width: 24,
+            },
+
+            {
+                key: "component.condition",
+                header: "Condizione",
+                width: 12,
+            },
+            {
+                key: "component.status",
+                header: "Status",
+                width: 18,
+            },
+
+            {
+                key: "component.list_price",
+                header: "Prezzo di listino",
+                width: 20,
+            },
+            {
+                key: "component.counter_price",
+                header: "Prezzo al banco",
+                width: 18,
+            },
+
+            // Warehouse
+            {
+                key: "component.warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.warehouse.warehouse",
+                header: "Magazzino: Magazzino",
+                width: 20,
+            },
+            {
+                key: "component.warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.floor",
+                header: "Magazzino: Piano",
+                width: 18,
+            },
+            {
+                key: "component.warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.lane",
+                header: "Magazzino: Corsia",
+                width: 18,
+            },
+            {
+                key: "component.warehouse_bin.warehouse_shelf.warehouse_rack.rack",
+                header: "Magazzino: Scaffale",
+                width: 18,
+            },
+            {
+                key: "component.warehouse_bin.warehouse_shelf.shelf",
+                header: "Magazzino: Ripiano",
+                width: 18,
+            },
+            {
+                key: "component.warehouse_bin.bin",
+                header: "Magazzino: Contenitore",
+                width: 20,
+            },
+
+            // Vehicle
+            {
+                key: "component.vehicle.code",
+                header: "Veicolo associato: ID Pratica",
+                width: 24,
+            },
+            {
+                key: "component.vehicle.plate",
+                header: "Veicolo associato: Targa",
+                width: 20,
+            },
+            {
+                key: "component.vehicle.vin",
+                header: "Veicolo associato: Telaio",
+                width: 20,
+            },
+            {
+                key: "component.vehicle.registered_at",
+                header: "Veicolo associato: Data immatricolazione",
+                width: 36,
+            },
+            {
+                key: "component.vehicle.km",
+                header: "Veicolo associato: Chilometri",
+                width: 24,
+            },
+            {
+                key: "component.vehicle.notes",
+                header: "Veicolo associato: Note",
+                width: 26,
+            },
+            {
+                key: "component.vehicle.vehicle_engine.code",
+                header: "Veicolo associato: Motore: Codice",
+                width: 30,
+            },
+            {
+                key: "component.vehicle.vehicle_engine.propulsion",
+                header: "Veicolo associato: Motore: Propulsione",
+                width: 32,
+            },
+
+            {
+                key: "component.notes",
+                header: "Note",
+                width: 26,
+            },
+
+            {
+                key: "component.component_scanner_codes",
+                header: "Codici scanner",
+                width: 30,
+            },
+
+            {
+                key: "component.images",
+                header: "Fotografie",
+                width: 26,
+            },
+
+            {
+                key: "component.created_at",
+                header: "Creato il",
+                width: 18,
+            },
+            {
+                key: "component.updated_at",
+                header: "Aggiornato il",
+                width: 18,
+            },
+        ];
+
+        worksheet.columns = columns.filter((column) => {
+            return fields.includes(column.key);
+        });
+
+        // Rows
+        let index = 0;
+        components.forEach((component) => {
+            // Row
+            const row = {};
+            fields.forEach((field) => {
+                if (field === "filters") {
+                    return;
+                }
+                switch (field) {
+                    case "component.is_disassembled":
+                        if (
+                            component[field.replace("component.", "")] &&
+                            component[field.replace("component.", "")] !== null
+                        ) {
+                            row[field] =
+                                component_enums.is_disassembled[
+                                component[field.replace("component.", "")].toString() === "true"
+                                    ? 1
+                                    : 0
+                                ][0];
+                        }
+                        break;
+
+                    case "component.entry":
+                        let entry = null;
+                        if (component.entry !== null && component.entry.entry !== undefined) {
+                            if (component.entry.entry_type === "ania_entry") {
+                                // ANIA Entry
+                                entry = component.entry.entry.ania_entry;
+
+                                if (component.entry.entry.dismantler_ania_entries?.length > 0) {
+                                    if (
+                                        component.entry.entry.dismantler_ania_entries[0].entry !==
+                                        null
+                                    ) {
+                                        entry =
+                                            component.entry.entry.dismantler_ania_entries[0].entry;
+                                    }
+                                }
+                            } else {
+                                // Dismantler Entry
+                                entry = component.entry.entry.dismantler_entry;
+                            }
+                        }
+
+                        if (entry !== null) {
+                            row[field] = entry;
+                        }
+                        break;
+
+                    case "component.side":
+                        if (
+                            component[field.replace("component.", "")] &&
+                            component[field.replace("component.", "")] !== null
+                        ) {
+                            row[field] =
+                                side_enums[component[field.replace("component.", "")]][0];
+                        }
+                        break;
+
+                    case "component.type":
+                        let type = null;
+                        if (component.version.model.brand.type.type_type == "ania_type") {
+                            type = component.version.model.brand.type.type.ania_type;
+                        }
+                        if (
+                            component.version.model.brand.type.type_type == "dismantler_type"
+                        ) {
+                            type = component.version.model.brand.type.type.dismantler_type;
+                        }
+                        if (type !== null) {
+                            row[field] = type;
+                        }
+                        break;
+
+                    case "component.brand":
+                        let brand = null;
+                        if (component.version.model.brand.brand_type == "ania_brand") {
+                            brand = component.version.model.brand.brand.ania_brand;
+                        }
+                        if (component.version.model.brand.brand_type == "dismantler_brand") {
+                            brand = component.version.model.brand.brand.dismantler_brand;
+                        }
+                        if (brand !== null) {
+                            row[field] = brand;
+                        }
+                        break;
+                    case "component.model":
+                        let model = null;
+                        if (component.version.model.model_type == "ania_model") {
+                            model = component.version.model.model.ania_model;
+                        }
+                        if (component.version.model.model_type == "dismantler_model") {
+                            model = component.version.model.model.dismantler_model;
+                        }
+                        if (model !== null) {
+                            row[field] = model;
+                        }
+                        break;
+                    case "component.version":
+                        let version = null;
+                        if (component.version.version_type === "ania_version") {
+                            version = component.version.version.ania_version;
+                        }
+                        if (component.version.version_type === "dismantler_version") {
+                            version = component.version.version.dismantler_version;
+                        }
+                        if (version !== null) {
+                            row[field] = version;
+                        }
+                        break;
+                    case "component.version.produced_from":
+                        let produced_from = null;
+                        if (component.version.version_type === "ania_version") {
+                            produced_from = component.version.ania_version.produced_from;
+                        }
+                        if (produced_from !== null) {
+                            row[field] = moment(produced_from).format("DD-MM-YYYY");
+                        }
+                        break;
+                    case "component.version.produced_to":
+                        let produced_to = null;
+                        if (component.version.version_type === "ania_version") {
+                            produced_to = component.version.ania_version.produced_to;
+                        }
+                        if (produced_to !== null) {
+                            row[field] = moment(produced_to).format("DD-MM-YYYY");
+                        }
+                        break;
+
+                    case "component.status":
+                        if (
+                            component[field.replace("component.", "")] &&
+                            component[field.replace("component.", "")] !== null
+                        ) {
+                            row[field] =
+                                component_enums.status[
+                                component[field.replace("component.", "")]
+                                ][0];
+                        }
+                        break;
+                    case "component.condition":
+                        if (
+                            component[field.replace("component.", "")] &&
+                            component[field.replace("component.", "")] !== null
+                        ) {
+                            row[field] =
+                                component_enums.condition[
+                                component[field.replace("component.", "")]
+                                ][0];
+                        }
+                        break;
+
+                    // Warehouse
+                    case "component.warehouse_bin.bin":
+                        if (component.warehouse_bin) {
+                            if (component.warehouse_bin.default === true) {
+                                row[field] = "Su ripiano";
+                            } else {
+                                row[field] = component.warehouse_bin.bin;
+                            }
+                        }
+                        break;
+                    case "component.warehouse_bin.warehouse_shelf.shelf":
+                        if (
+                            component.warehouse_bin &&
+                            component.warehouse_bin.warehouse_shelf
+                        ) {
+                            row[field] = component.warehouse_bin.warehouse_shelf.shelf;
+                        }
+                        break;
+                    case "component.warehouse_bin.warehouse_shelf.warehouse_rack.rack":
+                        if (
+                            component.warehouse_bin &&
+                            component.warehouse_bin.warehouse_shelf &&
+                            component.warehouse_bin.warehouse_shelf.warehouse_rack
+                        ) {
+                            row[field] =
+                                component.warehouse_bin.warehouse_shelf.warehouse_rack.rack;
+                        }
+                        break;
+                    case "component.warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.lane":
+                        if (
+                            component.warehouse_bin &&
+                            component.warehouse_bin.warehouse_shelf &&
+                            component.warehouse_bin.warehouse_shelf.warehouse_rack &&
+                            component.warehouse_bin.warehouse_shelf.warehouse_rack
+                                .warehouse_lane
+                        ) {
+                            row[field] =
+                                component.warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.lane;
+                        }
+                        break;
+                    case "component.warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.floor":
+                        if (
+                            component.warehouse_bin &&
+                            component.warehouse_bin.warehouse_shelf &&
+                            component.warehouse_bin.warehouse_shelf.warehouse_rack &&
+                            component.warehouse_bin.warehouse_shelf.warehouse_rack
+                                .warehouse_lane &&
+                            component.warehouse_bin.warehouse_shelf.warehouse_rack
+                                .warehouse_lane.warehouse_floor
+                        ) {
+                            row[field] =
+                                component.warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.floor;
+                        }
+                        break;
+                    case "component.warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.warehouse.warehouse":
+                        if (
+                            component.warehouse_bin &&
+                            component.warehouse_bin.warehouse_shelf &&
+                            component.warehouse_bin.warehouse_shelf.warehouse_rack &&
+                            component.warehouse_bin.warehouse_shelf.warehouse_rack
+                                .warehouse_lane &&
+                            component.warehouse_bin.warehouse_shelf.warehouse_rack
+                                .warehouse_lane.warehouse_floor &&
+                            component.warehouse_bin.warehouse_shelf.warehouse_rack
+                                .warehouse_lane.warehouse_floor.warehouse
+                        ) {
+                            row[field] =
+                                component.warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.warehouse.warehouse;
+                        }
+                        break;
+
+                    // Vehicle
+                    case "component.vehicle.code":
+                        if (component.vehicle) {
+                            row[field] = component.vehicle.code;
+                        }
+                        break;
+                    case "component.vehicle.plate":
+                        if (component.vehicle) {
+                            row[field] = component.vehicle.plate;
+                        }
+                        break;
+                    case "component.vehicle.vin":
+                        if (component.vehicle) {
+                            row[field] = component.vehicle.vin;
+                        }
+                        break;
+                    case "component.vehicle.registered_at":
+                        if (component.vehicle) {
+                            if (component.vehicle.registered_at !== null) {
+                                row[field] = moment(component.vehicle.registered_at).format(
+                                    "DD-MM-YYYY"
+                                );
+                            }
+                        }
+                        break;
+                    case "component.vehicle.km":
+                        if (component.vehicle) {
+                            if (component.vehicle.km !== null) {
+                                row[field] = component.vehicle.km;
+                            }
+                        }
+                        break;
+                    case "component.vehicle.notes":
+                        if (component.vehicle) {
+                            if (component.vehicle.notes !== null) {
+                                row[field] = component.vehicle.notes;
+                            }
+                        }
+                        break;
+                    case "component.vehicle.vehicle_engine.code":
+                        if (component.vehicle) {
+                            if (component.vehicle.vehicle_engine !== null) {
+                                if (component.vehicle.vehicle_engine.code !== null) {
+                                    row[field] = component.vehicle.vehicle_engine.code;
+                                }
+                            }
+                        }
+                        break;
+                    case "component.vehicle.vehicle_engine.propulsion":
+                        if (component.vehicle) {
+                            if (component.vehicle.vehicle_engine !== null) {
+                                if (component.vehicle.vehicle_engine.propulsion !== null) {
+                                    row[field] =
+                                        vehicle_engine_enums.propulsion[
+                                        component.vehicle.vehicle_engine.propulsion
+                                        ][0];
+                                }
+                            }
+                        }
+                        break;
+
+                    // Scanner codes
+                    case "component.component_scanner_codes":
+                        let component_scanner_codes = [];
+                        if (component.component_scanner_codes.length > 0) {
+                            component_scanner_codes = component.component_scanner_codes.map(
+                                (component_scanner_code) => component_scanner_code.scanner_code
+                            );
+                            row[field] = component_scanner_codes.join(", ");
+                        }
+                        break;
+
+                    // Media
+                    case "component.images":
+                        let images = [];
+                        if (component.component_media.length > 0) {
+                            images = component.component_media.filter(
+                                (component_media) => component_media.media_type === "image"
+                            );
+                        }
+                        if (images.length > 0) {
+                            images = images.map((image) => {
+                                return `https://twice-parts.fra1.digitaloceanspaces.com/components/img/${image.media.filename}`;
+                            });
+                            row[field] = images.join(", ");
+                        }
+                        break;
+
+                    case "component.created_at":
+                        row[field] = moment(
+                            component[field.replace("component.", "")]
+                        ).format("DD-MM-YYYY HH:mm:ss");
+                        break;
+                    case "component.updated_at":
+                        row[field] = moment(
+                            component[field.replace("component.", "")]
+                        ).format("DD-MM-YYYY HH:mm:ss");
+                        break;
+
+                    default:
+                        row[field] = component[field.replace("component.", "")];
+                        break;
+                }
+            });
+
+            // Values
+            worksheet.insertRow(2 + index, row);
+
+            index++;
 
 
-        console.log(components.length);
-        return { success: true, count: components.length };
+        });
+
+        // Alignment
+        try {
+            worksheet
+                .getColumn("component.vehicle.notes")
+                .eachCell(function (cell, rowNumber) {
+                    cell.alignment = { wrapText: true };
+                });
+
+            worksheet.getColumn("component.notes").eachCell(function (cell, rowNumber) {
+                cell.alignment = { wrapText: true };
+            });
+        } catch (error) {
+            console.log("[export_components]", error);
+            // No existing column
+        }
+
+        const fileBuffer = await workbook.xlsx.writeBuffer();
+        const key = `exports/components/export_components_${job.data.dismantler_id}_${moment().format("YYYYMMDD_HHmmss")}.xlsx`;
+
+        if (process.env.NODE_ENV === "development") {
+            await workbook.xlsx.writeFile(`../local_bucket/${fileName}`);
+        } else {
+            //NOTE: da testare
+            await s3.send(
+                new PutObjectCommand({
+                    Bucket: "twice-parts",
+                    Key: key,
+                    Body: fileBuffer,
+                    ACL: "private",
+                    ContentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                })
+            );
+
+            console.log("[export_components] Export uploaded to S3");
+        }
+        //#endregion Write on file
+
+        //#endregion ExcelJS
+
+        const presignedUrl = await getSignedUrl(
+            s3,
+            //NOTE: dice serve per forza in aws 3
+            new GetObjectCommand({
+                Bucket: "twice-parts",
+                Key: key,
+            }),
+            { expiresIn: 6 * 60 * 60 } // 6 hours in seconds
+        );
+
+        if (!presignedUrl) {
+            const error = new Error("Failed to generate presigned URL");
+            error.status = 500;
+            throw error;
+        }
+
+
+        //send e-mail
 
 
     },
