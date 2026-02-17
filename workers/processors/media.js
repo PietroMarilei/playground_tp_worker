@@ -35,8 +35,8 @@ const VehicleMedia = require("@databases/sequelize/models/vehicle/vehicle_media"
 module.exports = {
   media_from_url: async function (job) {
     if (job.data.media_type === "image") {
-
       console.log('Fake creating image placeholder', job.data.url.split("/").pop())
+
       // // Get file content from URL
       // const response = await fetch(job.data.url);
 
@@ -60,8 +60,8 @@ module.exports = {
       //   .webp()
       //   .toBuffer();
 
-      //     const filename = original_name.split(".");
-      //     if (filename.length > 1) filename.pop();
+      // const filename = original_name.split(".");
+      // if (filename.length > 1) filename.pop();
 
       // const keys = {
       //   component: "components",
@@ -70,13 +70,13 @@ module.exports = {
       //   wheel: "wheels"
       // };
 
-      //     const key =
-      //       keys[job.data.entity] +
-      //       "/img/" +
-      //       new Date().toISOString() +
-      //       "-" +
-      //       filename.join("").replace(/\s/g, "") +
-      //       ".webp";
+      // const key =
+      //   keys[job.data.entity] +
+      //   "/img/" +
+      //   new Date().toISOString() +
+      //   "-" +
+      //   filename.join("").replace(/\s/g, "") +
+      //   ".webp";
 
       // Upload to S3
       // await s3.send(
@@ -89,19 +89,19 @@ module.exports = {
       //   })
       // );
 
-      //     if (job.data.entity === "component") {
-      //       // Existing
-      //       const existing_component = await Component.findOne({
-      //         where: {
-      //           component_id: job.data.entity_id,
+      // if (job.data.entity === "component") {
+      //   // Existing
+      //   const existing_component = await Component.findOne({
+      //     where: {
+      //       component_id: job.data.entity_id,
 
-      //     dismantler_id: job.data.dismantler_id
+      //       dismantler_id: job.data.dismantler_id
+      //     }
+      //   });
+
+      //   if (!existing_component) {
+      //     return { code: "ENTITY_NOT_FOUND" };
       //   }
-      // });
-
-      //       if (!existing_component) {
-      //         return { code: "ENTITY_NOT_FOUND" };
-      //       }
 
       //   // Save to database
       //   await ComponentMedia.create({
@@ -154,37 +154,39 @@ module.exports = {
       // } else {
       //   return { code: "INVALID_ENTITY" };
       // }
-      //     }
-      //   },
-      // media_resize: async function (job) {
-      //   // S3
-      //   const params = {
-      //     Bucket: "twice-parts",
-      //     Key: job.data.key
-      //   };
+    }
+  },
+  media_resize: async function (job) {
 
-      //   const command = new GetObjectCommand(params);
-      //   const file = await s3.send(command);
+    console.log('Fake resizing image placeholder', job.data.key)
+    // // S3
+    // const params = {
+    //   Bucket: "twice-parts",
+    //   Key: job.data.key
+    // };
 
-      //   // Resize the image using Sharp
-      //   const resizedImageBuffer = await sharp(
-      //     await file.Body.transformToByteArray()
-      //   )
-      //     .resize(job.data.width, job.data.height, {
-      //       fit: job.data.fit || "inside",
-      //       withoutEnlargement: true
-      //     })
-      //     .toBuffer();
+    // const command = new GetObjectCommand(params);
+    // const file = await s3.send(command);
 
-      //   // Upload to S3
-      //   await s3.send(
-      //     new PutObjectCommand({
-      //       Bucket: "twice-parts",
-      //       Key: job.data.key,
-      //       Body: resizedImageBuffer,
-      //       ContentType: "image/webp",
-      //       ACL: "public-read"
-      //     })
-      //   );
-      // }
-    };
+    // // Resize the image using Sharp
+    // const resizedImageBuffer = await sharp(
+    //   await file.Body.transformToByteArray()
+    // )
+    //   .resize(job.data.width, job.data.height, {
+    //     fit: job.data.fit || "inside",
+    //     withoutEnlargement: true
+    //   })
+    //   .toBuffer();
+
+    // // Upload to S3
+    // await s3.send(
+    //   new PutObjectCommand({
+    //     Bucket: "twice-parts",
+    //     Key: job.data.key,
+    //     Body: resizedImageBuffer,
+    //     ContentType: "image/webp",
+    //     ACL: "public-read"
+    //   })
+    // );
+  }
+};
