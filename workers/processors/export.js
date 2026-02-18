@@ -1,6 +1,7 @@
 // #region imports
 // Path
 const path = require("path");
+const { sendEmail } = require("@utilities/helpers/mailer");
 
 // File System
 const fs = require("fs");
@@ -240,9 +241,8 @@ module.exports = {
 
 
         const components = [];
-        let count = 0;
         let page = 1;
-        const per_page = 100;
+        const per_page = 250;
         while (true) {
 
             const components_ids = await components_filter(
@@ -304,9 +304,7 @@ module.exports = {
                 context
             );
 
-            if (count === 0) {
-                count = components_ids.count;
-            }
+            console.log("components_ids.count", components_ids.count);
 
             const components_ids_in_page = components_ids.rows.map((c) => c.component_id);
 
@@ -551,7 +549,7 @@ module.exports = {
 
             throw error;
         }
-
+        // FIXME: 
         //NOTE: perché sovrascrivere order_by dell'utente ? 
         // Reorder component by components_ids
         components.sort((a, b) => b.component_id - a.component_id); // DESC
@@ -1163,47 +1161,83 @@ module.exports = {
             // No existing column
         }
 
-        const fileBuffer = await workbook.xlsx.writeBuffer();
-        const key = `exports/components/export_components_${job.data.dismantler_id}_${moment().format("YYYYMMDD_HHmmss")}.xlsx`;
+
+        //#endregion ExcelJS
+
+        const file_buffer = await workbook.xlsx.writeBuffer();
+        const file_name = `export_components_${job.data.dismantler_id}_${moment().format("YYYYMMDD_HHmmss")}.xlsx`;
+
+        let presignedUrl = null
 
         if (process.env.NODE_ENV === "development") {
-            await workbook.xlsx.writeFile(`../local_bucket/${fileName}`);
+            await workbook.xlsx.writeFile(path.resolve(__dirname, "../../local_bucket/exports/components", file_name));
         } else {
             //NOTE: da testare
             await s3.send(
                 new PutObjectCommand({
                     Bucket: "twice-parts",
-                    Key: key,
-                    Body: fileBuffer,
+                    Key: `exports/components/${file_name}`,
+                    Body: file_buffer,
                     ACL: "private",
                     ContentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 })
             );
 
+            presignedUrl = await getSignedUrl(
+                s3,
+                //NOTE: dice serve per forza in aws 3
+                new GetObjectCommand({
+                    Bucket: "twice-parts",
+                    Key: `exports/components/${file_name}`,
+                }),
+                { expiresIn: 6 * 60 * 60 } // 6 hours in seconds
+            );
+
+            if (!presignedUrl) {
+                const error = new Error("Failed to generate presigned URL");
+                error.status = 500;
+                throw error;
+            }
+
+
             console.log("[export_components] Export uploaded to S3");
-        }
-        //#endregion Write on file
-
-        //#endregion ExcelJS
-
-        const presignedUrl = await getSignedUrl(
-            s3,
-            //NOTE: dice serve per forza in aws 3
-            new GetObjectCommand({
-                Bucket: "twice-parts",
-                Key: key,
-            }),
-            { expiresIn: 6 * 60 * 60 } // 6 hours in seconds
-        );
-
-        if (!presignedUrl) {
-            const error = new Error("Failed to generate presigned URL");
-            error.status = 500;
-            throw error;
         }
 
 
         //send e-mail
+        const email_template_path = fs.readFileSync(
+            path.resolve(__dirname, "../../templates/export_mail.html"),
+            "utf8"
+        );
+
+        const access = await Access.findOne({
+            where: {
+                access_id: job.data.access_id,
+            },
+            include: [
+                {
+                    model: Dismantler,
+                    required: true,
+                    attributes: [],
+                    where: {
+                        dismantler_id: job.data.dismantler_id,
+                    },
+                },
+            ],
+        });
+
+        if (!access || !access.email) {
+            const error = new Error("Access email not found");
+            error.status = 404;
+            throw error;
+        }
+
+
+        await sendEmail(access.email, "TwiceParts - Servizio Esportazione Dati", email_template_path, {
+            url: presignedUrl,
+        });
+
+
 
 
     },
