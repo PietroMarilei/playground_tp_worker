@@ -14,7 +14,7 @@ const redis = require("@databases/redis/redis.js");
 // Processors
 const {
   update_oem_code_compatible_versions,
-  populate_oem_code_compatible_versions,
+  populate_oem_code_compatible_versions
 } = require("@workers/processors/oem");
 
 const oem_worker = new Worker(

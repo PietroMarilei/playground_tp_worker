@@ -28,11 +28,9 @@ const vehicle = new Queue("vehicle", { connection: redis });
 
 const media = new Queue("media", { connection: redis });
 
-const dismantler_api_sale = new Queue("dismantler_api_sale", {
-  connection: redis
-});
+const exportQueue = new Queue("export", { connection: redis });
 
-const exportQueue = new Queue("export", {
+const dismantler_api_sale = new Queue("dismantler_api_sale", {
   connection: redis
 });
 
@@ -47,6 +45,7 @@ const system = new Queue("system", { connection: redis });
 // BullBoard
 const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
   queues: [
+    // Internal
     new BullMQAdapter(component, {
       readOnlyMode: readOnlyMode
     }),
@@ -62,10 +61,15 @@ const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
       readOnlyMode: readOnlyMode
     }),
 
+    new BullMQAdapter(exportQueue, {
+      readOnlyMode: readOnlyMode
+    }),
+
     new BullMQAdapter(dismantler_api_sale, {
       readOnlyMode: readOnlyMode
     }),
 
+    // External
     new BullMQAdapter(multibreves, {
       readOnlyMode: readOnlyMode
     }),
@@ -73,13 +77,10 @@ const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
       readOnlyMode: readOnlyMode
     }),
 
+    // System
     new BullMQAdapter(system, {
       readOnlyMode: readOnlyMode
-    }),
-
-    new BullMQAdapter(exportQueue, {
-      readOnlyMode: readOnlyMode
-    }),
+    })
   ],
   serverAdapter: serverAdapter
 });

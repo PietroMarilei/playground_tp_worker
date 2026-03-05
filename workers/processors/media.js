@@ -18,10 +18,6 @@ const s3 = new S3Client({
   }
 });
 
-// Local storage
-const fs = require("fs");
-const path = require("path");
-
 // #region Models
 // Component
 const Component = require("@databases/sequelize/models/component/component");
@@ -34,51 +30,50 @@ const VehicleMedia = require("@databases/sequelize/models/vehicle/vehicle_media"
 
 module.exports = {
   media_from_url: async function (job) {
+    console.log('received job', job.data.url, job.data.entity, job.data.entity_id, job.data.dismantler_id, job.data.position)
+
     if (job.data.media_type === "image") {
-      console.log('Fake creating image placeholder', job.data.url.split("/").pop())
+      // Get file content from URL
+      const response = await fetch(job.data.url);
 
-      // // Get file content from URL
-      // const response = await fetch(job.data.url);
+      // Get the image original name from url
+      const original_name = job.data.url.split("/").pop();
+      original_name.replaceAll(" ", "");
 
+      if (!response.ok) {
+        return {
+          code: "NOT_FETCHED"
+        };
+      }
 
-      // //Get the image original name from url
-      // const original_name = job.data.url.split("/").pop();
-      // original_name.replaceAll(" ", "");
+      // Process image with sharp
+      const compressed_buffer = await sharp(await response.arrayBuffer())
+        .resize(1080, 1080, {
+          fit: "inside",
+          withoutEnlargement: true
+        })
+        .webp()
+        .toBuffer();
 
-      // if (!response.ok) {
-      //   return {
-      //     code: "NOT_FETCHED"
-      //   };
-      // }
+      const filename = original_name.split(".");
+      if (filename.length > 1) filename.pop();
 
-      // // Process image with sharp
-      // const compressed_buffer = await sharp(await response.arrayBuffer())
-      //   .resize(1080, 1080, {
-      //     fit: "inside",
-      //     withoutEnlargement: true
-      //   })
-      //   .webp()
-      //   .toBuffer();
+      const keys = {
+        component: "components",
+        vehicle: "vehicles",
+        tyre: "tyres",
+        wheel: "wheels"
+      };
 
-      // const filename = original_name.split(".");
-      // if (filename.length > 1) filename.pop();
+      const key =
+        keys[job.data.entity] +
+        "/img/" +
+        new Date().toISOString() +
+        "-" +
+        filename.join("").replace(/\s/g, "") +
+        ".webp";
 
-      // const keys = {
-      //   component: "components",
-      //   vehicle: "vehicles",
-      //   tyre: "tyres",
-      //   wheel: "wheels"
-      // };
-
-      // const key =
-      //   keys[job.data.entity] +
-      //   "/img/" +
-      //   new Date().toISOString() +
-      //   "-" +
-      //   filename.join("").replace(/\s/g, "") +
-      //   ".webp";
-
-      // Upload to S3
+      // // Upload to S3
       // await s3.send(
       //   new PutObjectCommand({
       //     Bucket: "twice-parts",
@@ -89,104 +84,127 @@ module.exports = {
       //   })
       // );
 
-      // if (job.data.entity === "component") {
-      //   // Existing
-      //   const existing_component = await Component.findOne({
-      //     where: {
-      //       component_id: job.data.entity_id,
+      // Upload
+      if (process.env.NODE_ENV === "production") {
+        // Upload to S3
+        await s3.send(
+          new PutObjectCommand({
+            Bucket: "twice-parts",
+            Key: key,
+            Body: compressed_buffer,
+            ContentType: "image/webp",
+            ACL: "public-read"
+          })
+        );
+      } else {
+        // Save locally for development
+        const fs = require("fs");
+        const path = require("path");
 
-      //       dismantler_id: job.data.dismantler_id
-      //     }
-      //   });
+        const local_path = path.join("/home/moon/Desktop/work_linux/TwiceParts/local_bucket", key);
 
-      //   if (!existing_component) {
-      //     return { code: "ENTITY_NOT_FOUND" };
-      //   }
+        // Crea le cartelle padre se non esistono (es. components/img)
+        fs.mkdirSync(path.dirname(local_path), { recursive: true });
+        // Salva il buffer nel file
+        fs.writeFileSync(local_path, compressed_buffer);
+      }
 
-      //   // Save to database
-      //   await ComponentMedia.create({
-      //     media_type: job.data.media_type,
-      //     media: JSON.stringify({
-      //       filename: key.replace(keys[job.data.entity] + "/img/", ""),
-      //       mimetype: "image/webp",
-      //       filesize: compressed_buffer.length
-      //     }),
-      //     position: job.data.position,
+      if (job.data.entity === "component") {
+        // Existing
+        const existing_component = await Component.findOne({
+          where: {
+            component_id: job.data.entity_id,
 
-      //     component_id: existing_component.component_id
-      //   });
+            dismantler_id: job.data.dismantler_id
+          }
+        });
 
-      //   return {
-      //     code: "UPLOADED",
-      //     filename: key.replace(keys[job.data.entity] + "/img/", "")
-      //   };
-      // } else if (job.data.entity === "vehicle") {
-      //   // Existing
-      //   const existing_vehicle = await Vehicle.findOne({
-      //     where: {
-      //       vehicle_id: job.data.entity_id,
+        if (!existing_component) {
+          return { code: "ENTITY_NOT_FOUND" };
+        }
 
-      //       dismantler_id: job.data.dismantler_id
-      //     }
-      //   });
+        // Save to database
+        await ComponentMedia.create({
+          media_type: job.data.media_type,
+          media: JSON.stringify({
+            filename: key.replace(keys[job.data.entity] + "/img/", ""),
+            mimetype: "image/webp",
+            filesize: compressed_buffer.length
+          }),
+          position: job.data.position,
 
-      //   //       if (!existing_vehicle) {
-      //   //         return { code: "ENTITY_NOT_FOUND" };
-      //   //       }
+          component_id: existing_component.component_id
+        });
 
-      //   // Save to database
-      //   await VehicleMedia.create({
-      //     media_type: job.data.media_type,
-      //     media: JSON.stringify({
-      //       filename: key.replace(keys[job.data.entity] + "/img/", ""),
-      //       mimetype: "image/webp",
-      //       filesize: compressed_buffer.length
-      //     }),
-      //     position: job.data.position,
+        return {
+          code: "UPLOADED",
+          filename: key.replace(keys[job.data.entity] + "/img/", "")
+        };
+      } else if (job.data.entity === "vehicle") {
+        // Existing
+        const existing_vehicle = await Vehicle.findOne({
+          where: {
+            vehicle_id: job.data.entity_id,
 
-      //     vehicle_id: existing_vehicle.vehicle_id
-      //   });
+            dismantler_id: job.data.dismantler_id
+          }
+        });
 
-      //   return {
-      //     code: "UPLOADED",
-      //     filename: key.replace(keys[job.data.entity] + "/img/", "")
-      //   };
-      // } else {
-      //   return { code: "INVALID_ENTITY" };
-      // }
+        if (!existing_vehicle) {
+          return { code: "ENTITY_NOT_FOUND" };
+        }
+
+        // Save to database
+        await VehicleMedia.create({
+          media_type: job.data.media_type,
+          media: JSON.stringify({
+            filename: key.replace(keys[job.data.entity] + "/img/", ""),
+            mimetype: "image/webp",
+            filesize: compressed_buffer.length
+          }),
+          position: job.data.position,
+
+          vehicle_id: existing_vehicle.vehicle_id
+        });
+
+        return {
+          code: "UPLOADED",
+          filename: key.replace(keys[job.data.entity] + "/img/", "")
+        };
+      } else {
+        return { code: "INVALID_ENTITY" };
+      }
     }
   },
   media_resize: async function (job) {
+    // S3
+    const params = {
+      Bucket: "twice-parts",
+      Key: job.data.key
+    };
 
-    console.log('Fake resizing image placeholder', job.data.key)
-    // // S3
-    // const params = {
-    //   Bucket: "twice-parts",
-    //   Key: job.data.key
-    // };
+    const command = new GetObjectCommand(params);
+    const file = await s3.send(command);
 
-    // const command = new GetObjectCommand(params);
-    // const file = await s3.send(command);
+    // Resize the image using Sharp
+    const resizedImageBuffer = await sharp(
+      await file.Body.transformToByteArray()
+    )
+      .resize(job.data.width, job.data.height, {
+        fit: job.data.fit || "inside",
+        withoutEnlargement: true
+      })
+      .toBuffer();
 
-    // // Resize the image using Sharp
-    // const resizedImageBuffer = await sharp(
-    //   await file.Body.transformToByteArray()
-    // )
-    //   .resize(job.data.width, job.data.height, {
-    //     fit: job.data.fit || "inside",
-    //     withoutEnlargement: true
-    //   })
-    //   .toBuffer();
-
-    // // Upload to S3
-    // await s3.send(
-    //   new PutObjectCommand({
-    //     Bucket: "twice-parts",
-    //     Key: job.data.key,
-    //     Body: resizedImageBuffer,
-    //     ContentType: "image/webp",
-    //     ACL: "public-read"
-    //   })
-    // );
+    // Upload to S3
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: "twice-parts",
+        Key: job.data.key,
+        Body: resizedImageBuffer,
+        ContentType: "image/webp",
+        ACL: "public-read"
+      })
+    );
   }
 };

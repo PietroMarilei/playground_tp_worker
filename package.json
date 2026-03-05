@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently --raw \"node index.js\" \"node workers.js\"",
-    "dev": "concurrently --raw \"nodemon index.js\" \"nodemon workers.js\""
+    "dev": "concurrently --raw \"node index.js\" \"node workers.js\""
   },
   "_moduleAliases": {
     "@root": "~",
@@ -17,11 +17,12 @@
     "@workers": "./workers",
     "@utilities": "./utilities",
     "@services": "./services",
-    "@graphql": "./graphql"
+    "@graphql": "./graphql",
+    "@email": "./email"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.832.0",
-    "@aws-sdk/s3-request-presigner": "^3.991.0",
+    "@aws-sdk/s3-request-presigner": "^3.993.0",
     "@bull-board/api": "^6.10.1",
     "@bull-board/express": "^6.10.1",
     "axios": "^1.10.0",
@@ -33,10 +34,8 @@
     "express": "^5.1.0",
     "glob": "^11.0.3",
     "module-alias": "^2.2.3",
-    "moment": "^2.30.1",
     "mysql2": "^3.10.0",
     "nodemailer": "^8.0.1",
-    "nodemon": "^3.1.11",
     "sequelize": "^6.37.3",
     "sharp": "^0.34.2"
   }

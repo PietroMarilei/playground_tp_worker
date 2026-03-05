@@ -37,7 +37,6 @@ const VehicleDashboard = require("@databases/sequelize/models/vehicle/vehicle_da
 
 module.exports = {
   import_vehicle: async function (job) {
-    console.log('creating vehicle:', job.data.vehicle?.code)
     const vehicle = job.data.vehicle;
     const dismantler_id = job.data.dismantler_id;
     const access_id = job.data.access_id;
@@ -53,78 +52,78 @@ module.exports = {
 
       plate:
         vehicle.plate !== undefined &&
-          vehicle.plate !== null &&
-          vehicle.plate !== "" &&
-          vehicle.plate !== "null"
+        vehicle.plate !== null &&
+        vehicle.plate !== "" &&
+        vehicle.plate !== "null"
           ? vehicle.plate
           : null,
       vin:
         vehicle.vin !== undefined &&
-          vehicle.vin !== null &&
-          vehicle.vin !== "" &&
-          vehicle.vin !== "null"
+        vehicle.vin !== null &&
+        vehicle.vin !== "" &&
+        vehicle.vin !== "null"
           ? vehicle.vin
           : null,
 
       produced_from:
         vehicle.produced_from !== undefined &&
-          vehicle.produced_from !== null &&
-          vehicle.produced_from !== "" &&
-          vehicle.produced_from !== "null"
+        vehicle.produced_from !== null &&
+        vehicle.produced_from !== "" &&
+        vehicle.produced_from !== "null"
           ? vehicle.produced_from
           : null,
       produced_to:
         vehicle.produced_to !== undefined &&
-          vehicle.produced_to !== null &&
-          vehicle.produced_to !== "" &&
-          vehicle.produced_to !== "null"
+        vehicle.produced_to !== null &&
+        vehicle.produced_to !== "" &&
+        vehicle.produced_to !== "null"
           ? vehicle.produced_to
           : null,
       registered_at:
         vehicle.registered_at !== undefined &&
-          vehicle.registered_at !== null &&
-          vehicle.registered_at !== "" &&
-          vehicle.registered_at !== "null"
+        vehicle.registered_at !== null &&
+        vehicle.registered_at !== "" &&
+        vehicle.registered_at !== "null"
           ? vehicle.registered_at
           : null,
 
       km:
         vehicle.km !== undefined &&
-          vehicle.km !== null &&
-          vehicle.km !== 0 &&
-          vehicle.km !== "null"
+        vehicle.km !== null &&
+        vehicle.km !== 0 &&
+        vehicle.km !== "null"
           ? vehicle.km
           : null,
 
       keys:
         vehicle.keys !== undefined &&
-          vehicle.keys !== null &&
-          vehicle.keys !== "" &&
-          vehicle.keys !== "null"
+        vehicle.keys !== null &&
+        vehicle.keys !== "" &&
+        vehicle.keys !== "null"
           ? vehicle.keys
           : null,
 
       counter_price:
         vehicle.counter_price !== undefined &&
-          vehicle.counter_price !== null &&
-          vehicle.counter_price !== "" &&
-          vehicle.counter_price !== "null"
+        vehicle.counter_price !== null &&
+        vehicle.counter_price !== "" &&
+        vehicle.counter_price !== "null"
           ? vehicle.counter_price
           : null,
 
       status:
         vehicle.status !== undefined &&
-          vehicle.status !== null &&
-          vehicle.status !== "" &&
-          vehicle.status !== "null"
+        vehicle.status !== null &&
+        vehicle.status !== "" &&
+        vehicle.status !== "null"
           ? vehicle.status
           : "available",
 
       notes:
         vehicle.notes !== undefined &&
-          vehicle.notes !== null &&
-          vehicle.notes !== "" &&
-          vehicle.notes !== "null"
+        vehicle.notes !== null &&
+        vehicle.notes !== "" &&
+        vehicle.notes !== "null"
           ? vehicle.notes
           : null,
 
@@ -133,9 +132,9 @@ module.exports = {
 
       deposit_floor_id:
         vehicle.deposit_floor_id !== undefined &&
-          vehicle.deposit_floor_id !== null &&
-          vehicle.deposit_floor_id !== "" &&
-          vehicle.deposit_floor_id !== "null"
+        vehicle.deposit_floor_id !== null &&
+        vehicle.deposit_floor_id !== "" &&
+        vehicle.deposit_floor_id !== "null"
           ? vehicle.deposit_floor_id
           : null,
     });
@@ -164,32 +163,32 @@ module.exports = {
       const createdVehicleAcceptance = await VehicleAcceptance.create({
         accepted_at:
           vehicle.vehicle_acceptance.accepted_at !== undefined &&
-            vehicle.vehicle_acceptance.accepted_at !== null &&
-            vehicle.vehicle_acceptance.accepted_at !== "" &&
-            vehicle.vehicle_acceptance.accepted_at !== "null"
+          vehicle.vehicle_acceptance.accepted_at !== null &&
+          vehicle.vehicle_acceptance.accepted_at !== "" &&
+          vehicle.vehicle_acceptance.accepted_at !== "null"
             ? vehicle.vehicle_acceptance.accepted_at
             : null,
 
         purchase_price:
           vehicle.vehicle_acceptance.purchase_price !== undefined &&
-            vehicle.vehicle_acceptance.purchase_price !== null &&
-            vehicle.vehicle_acceptance.purchase_price !== "" &&
-            vehicle.vehicle_acceptance.purchase_price !== "null"
+          vehicle.vehicle_acceptance.purchase_price !== null &&
+          vehicle.vehicle_acceptance.purchase_price !== "" &&
+          vehicle.vehicle_acceptance.purchase_price !== "null"
             ? vehicle.vehicle_acceptance.purchase_price
             : null,
         purchased_from:
           vehicle.vehicle_acceptance.purchased_from !== undefined &&
-            vehicle.vehicle_acceptance.purchased_from !== null &&
-            vehicle.vehicle_acceptance.purchased_from !== "" &&
-            vehicle.vehicle_acceptance.purchased_from !== "null"
+          vehicle.vehicle_acceptance.purchased_from !== null &&
+          vehicle.vehicle_acceptance.purchased_from !== "" &&
+          vehicle.vehicle_acceptance.purchased_from !== "null"
             ? vehicle.vehicle_acceptance.purchased_from
             : null,
 
         notes:
           vehicle.vehicle_acceptance.notes !== undefined &&
-            vehicle.vehicle_acceptance.notes !== null &&
-            vehicle.vehicle_acceptance.notes !== "" &&
-            vehicle.vehicle_acceptance.notes !== "null"
+          vehicle.vehicle_acceptance.notes !== null &&
+          vehicle.vehicle_acceptance.notes !== "" &&
+          vehicle.vehicle_acceptance.notes !== "null"
             ? vehicle.vehicle_acceptance.notes
             : null,
 
@@ -202,16 +201,16 @@ module.exports = {
       const createdVehicleDrainage = await VehicleDrainage.create({
         drained_at:
           vehicle.vehicle_drainage.drained_at !== undefined &&
-            vehicle.vehicle_drainage.drained_at !== null &&
-            vehicle.vehicle_drainage.drained_at !== "" &&
-            vehicle.vehicle_drainage.drained_at !== "null"
+          vehicle.vehicle_drainage.drained_at !== null &&
+          vehicle.vehicle_drainage.drained_at !== "" &&
+          vehicle.vehicle_drainage.drained_at !== "null"
             ? vehicle.vehicle_drainage.drained_at
             : null,
         notes:
           vehicle.vehicle_drainage.notes !== undefined &&
-            vehicle.vehicle_drainage.notes !== null &&
-            vehicle.vehicle_drainage.notes !== "" &&
-            vehicle.vehicle_drainage.notes !== "null"
+          vehicle.vehicle_drainage.notes !== null &&
+          vehicle.vehicle_drainage.notes !== "" &&
+          vehicle.vehicle_drainage.notes !== "null"
             ? vehicle.vehicle_drainage.notes
             : null,
 
@@ -224,33 +223,33 @@ module.exports = {
       const createdVehicleBody = await VehicleBody.create({
         color:
           vehicle.vehicle_body.color !== undefined &&
-            vehicle.vehicle_body.color !== null &&
-            vehicle.vehicle_body.color !== "" &&
-            vehicle.vehicle_body.color !== "null"
+          vehicle.vehicle_body.color !== null &&
+          vehicle.vehicle_body.color !== "" &&
+          vehicle.vehicle_body.color !== "null"
             ? vehicle.vehicle_body.color
             : null,
 
         color_code:
           vehicle.vehicle_body.color_code !== undefined &&
-            vehicle.vehicle_body.color_code !== null &&
-            vehicle.vehicle_body.color_code !== "" &&
-            vehicle.vehicle_body.color_code !== "null"
+          vehicle.vehicle_body.color_code !== null &&
+          vehicle.vehicle_body.color_code !== "" &&
+          vehicle.vehicle_body.color_code !== "null"
             ? vehicle.vehicle_body.color_code
             : null,
 
         finish:
           vehicle.vehicle_body.finish !== undefined &&
-            vehicle.vehicle_body.finish !== null &&
-            vehicle.vehicle_body.finish !== "" &&
-            vehicle.vehicle_body.finish !== "null"
+          vehicle.vehicle_body.finish !== null &&
+          vehicle.vehicle_body.finish !== "" &&
+          vehicle.vehicle_body.finish !== "null"
             ? vehicle.vehicle_body.finish
             : null,
 
         notes:
           vehicle.vehicle_body.notes !== undefined &&
-            vehicle.vehicle_body.notes !== null &&
-            vehicle.vehicle_body.notes !== "" &&
-            vehicle.vehicle_body.notes !== "null"
+          vehicle.vehicle_body.notes !== null &&
+          vehicle.vehicle_body.notes !== "" &&
+          vehicle.vehicle_body.notes !== "null"
             ? vehicle.vehicle_body.notes
             : null,
 
@@ -265,71 +264,71 @@ module.exports = {
 
         code:
           vehicle.vehicle_engine.code !== undefined &&
-            vehicle.vehicle_engine.code !== null &&
-            vehicle.vehicle_engine.code !== "" &&
-            vehicle.vehicle_engine.code !== "null"
+          vehicle.vehicle_engine.code !== null &&
+          vehicle.vehicle_engine.code !== "" &&
+          vehicle.vehicle_engine.code !== "null"
             ? vehicle.vehicle_engine.code
             : null,
 
         propulsion:
           vehicle.vehicle_engine.propulsion !== undefined &&
-            vehicle.vehicle_engine.propulsion !== null &&
-            vehicle.vehicle_engine.propulsion !== "" &&
-            vehicle.vehicle_engine.propulsion !== "null"
+          vehicle.vehicle_engine.propulsion !== null &&
+          vehicle.vehicle_engine.propulsion !== "" &&
+          vehicle.vehicle_engine.propulsion !== "null"
             ? vehicle.vehicle_engine.propulsion
             : null,
 
         kw:
           vehicle.vehicle_engine.kw !== undefined &&
-            vehicle.vehicle_engine.kw !== null &&
-            vehicle.vehicle_engine.kw !== 0 &&
-            vehicle.vehicle_engine.kw !== "null"
+          vehicle.vehicle_engine.kw !== null &&
+          vehicle.vehicle_engine.kw !== 0 &&
+          vehicle.vehicle_engine.kw !== "null"
             ? vehicle.vehicle_engine.kw
             : null,
         hp:
           vehicle.vehicle_engine.hp !== undefined &&
-            vehicle.vehicle_engine.hp !== null &&
-            vehicle.vehicle_engine.hp !== 0 &&
-            vehicle.vehicle_engine.hp !== "null"
+          vehicle.vehicle_engine.hp !== null &&
+          vehicle.vehicle_engine.hp !== 0 &&
+          vehicle.vehicle_engine.hp !== "null"
             ? vehicle.vehicle_engine.hp
             : null,
 
         displacement:
           vehicle.vehicle_engine.displacement !== undefined &&
-            vehicle.vehicle_engine.displacement !== null &&
-            vehicle.vehicle_engine.displacement !== 0 &&
-            vehicle.vehicle_engine.displacement !== "null"
+          vehicle.vehicle_engine.displacement !== null &&
+          vehicle.vehicle_engine.displacement !== 0 &&
+          vehicle.vehicle_engine.displacement !== "null"
             ? vehicle.vehicle_engine.displacement
             : null,
         cylinders:
           vehicle.vehicle_engine.cylinders !== undefined &&
-            vehicle.vehicle_engine.cylinders !== null &&
-            vehicle.vehicle_engine.cylinders !== 0 &&
-            vehicle.vehicle_engine.cylinders !== "null"
+          vehicle.vehicle_engine.cylinders !== null &&
+          vehicle.vehicle_engine.cylinders !== 0 &&
+          vehicle.vehicle_engine.cylinders !== "null"
             ? vehicle.vehicle_engine.cylinders
             : null,
         valves:
           vehicle.vehicle_engine.valves !== undefined &&
-            vehicle.vehicle_engine.valves !== null &&
-            vehicle.vehicle_engine.valves !== 0 &&
-            vehicle.vehicle_engine.valves !== "null"
+          vehicle.vehicle_engine.valves !== null &&
+          vehicle.vehicle_engine.valves !== 0 &&
+          vehicle.vehicle_engine.valves !== "null"
             ? vehicle.vehicle_engine.valves
             : null,
 
         is_tested: vehicle.vehicle_engine.is_tested,
         condition:
           vehicle.vehicle_engine.condition !== undefined &&
-            vehicle.vehicle_engine.condition !== null &&
-            vehicle.vehicle_engine.condition !== "" &&
-            vehicle.vehicle_engine.condition !== "null"
+          vehicle.vehicle_engine.condition !== null &&
+          vehicle.vehicle_engine.condition !== "" &&
+          vehicle.vehicle_engine.condition !== "null"
             ? vehicle.vehicle_engine.condition
             : null,
 
         notes:
           vehicle.vehicle_engine.notes !== undefined &&
-            vehicle.vehicle_engine.notes !== null &&
-            vehicle.vehicle_engine.notes !== "" &&
-            vehicle.vehicle_engine.notes !== "null"
+          vehicle.vehicle_engine.notes !== null &&
+          vehicle.vehicle_engine.notes !== "" &&
+          vehicle.vehicle_engine.notes !== "null"
             ? vehicle.vehicle_engine.notes
             : null,
 
@@ -344,56 +343,56 @@ module.exports = {
 
         code:
           vehicle.vehicle_transmission.code !== undefined &&
-            vehicle.vehicle_transmission.code !== null &&
-            vehicle.vehicle_transmission.code !== "" &&
-            vehicle.vehicle_transmission.code !== "null"
+          vehicle.vehicle_transmission.code !== null &&
+          vehicle.vehicle_transmission.code !== "" &&
+          vehicle.vehicle_transmission.code !== "null"
             ? vehicle.vehicle_transmission.code
             : null,
 
         type:
           vehicle.vehicle_transmission.type !== undefined &&
-            vehicle.vehicle_transmission.type !== null &&
-            vehicle.vehicle_transmission.type !== "" &&
-            vehicle.vehicle_transmission.type !== "null"
+          vehicle.vehicle_transmission.type !== null &&
+          vehicle.vehicle_transmission.type !== "" &&
+          vehicle.vehicle_transmission.type !== "null"
             ? vehicle.vehicle_transmission.type
             : null,
         gears:
           vehicle.vehicle_transmission.gears !== undefined &&
-            vehicle.vehicle_transmission.gears !== null &&
-            vehicle.vehicle_transmission.gears !== "" &&
-            vehicle.vehicle_transmission.gears !== "null" &&
-            vehicle.vehicle_transmission.gears !== 0
+          vehicle.vehicle_transmission.gears !== null &&
+          vehicle.vehicle_transmission.gears !== "" &&
+          vehicle.vehicle_transmission.gears !== "null" &&
+          vehicle.vehicle_transmission.gears !== 0
             ? vehicle.vehicle_transmission.gears
             : null,
         has_reverse:
           vehicle.vehicle_transmission.has_reverse !== undefined &&
-            vehicle.vehicle_transmission.has_reverse !== null &&
-            vehicle.vehicle_transmission.has_reverse !== "" &&
-            vehicle.vehicle_transmission.has_reverse !== "null"
+          vehicle.vehicle_transmission.has_reverse !== null &&
+          vehicle.vehicle_transmission.has_reverse !== "" &&
+          vehicle.vehicle_transmission.has_reverse !== "null"
             ? vehicle.vehicle_transmission.has_reverse
             : null,
         drive:
           vehicle.vehicle_transmission.drive !== undefined &&
-            vehicle.vehicle_transmission.drive !== null &&
-            vehicle.vehicle_transmission.drive !== "" &&
-            vehicle.vehicle_transmission.drive !== "null"
+          vehicle.vehicle_transmission.drive !== null &&
+          vehicle.vehicle_transmission.drive !== "" &&
+          vehicle.vehicle_transmission.drive !== "null"
             ? vehicle.vehicle_transmission.drive
             : null,
 
         is_tested: vehicle.vehicle_transmission.is_tested,
         condition:
           vehicle.vehicle_transmission.condition !== undefined &&
-            vehicle.vehicle_transmission.condition !== null &&
-            vehicle.vehicle_transmission.condition !== "" &&
-            vehicle.vehicle_transmission.condition !== "null"
+          vehicle.vehicle_transmission.condition !== null &&
+          vehicle.vehicle_transmission.condition !== "" &&
+          vehicle.vehicle_transmission.condition !== "null"
             ? vehicle.vehicle_transmission.condition
             : null,
 
         notes:
           vehicle.vehicle_transmission.notes !== undefined &&
-            vehicle.vehicle_transmission.notes !== null &&
-            vehicle.vehicle_transmission.notes !== "" &&
-            vehicle.vehicle_transmission.notes !== "null"
+          vehicle.vehicle_transmission.notes !== null &&
+          vehicle.vehicle_transmission.notes !== "" &&
+          vehicle.vehicle_transmission.notes !== "null"
             ? vehicle.vehicle_transmission.notes
             : null,
 

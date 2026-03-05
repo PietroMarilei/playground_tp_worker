@@ -163,13 +163,13 @@ module.exports = {
     let filter = {
       where: [
         {
-          dismantler_id: context.dismantler.dismantler_id,
-        },
+          dismantler_id: context.dismantler.dismantler_id
+        }
       ],
       include: [],
       order: [["access_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -180,7 +180,7 @@ module.exports = {
       is_active !== ""
     ) {
       filter.where.push({
-        is_active: is_active,
+        is_active: is_active
       });
     }
 
@@ -193,8 +193,8 @@ module.exports = {
     ) {
       filter.where.push({
         access_id: {
-          [Op.ne]: context.access.access_id,
-        },
+          [Op.ne]: context.access.access_id
+        }
       });
     }
 
@@ -208,12 +208,12 @@ module.exports = {
     ) {
       filter.where.push({
         archived_at: {
-          [Op.ne]: null,
-        },
+          [Op.ne]: null
+        }
       });
     } else {
       filter.where.push({
-        archived_at: null,
+        archived_at: null
       });
     }
 
@@ -256,8 +256,8 @@ module.exports = {
             { access_id: { [Op[op]]: text[i] } },
             { name: { [Op[op]]: text[i] } },
             { surname: { [Op[op]]: text[i] } },
-            { email: { [Op[op]]: text[i] } },
-          ],
+            { email: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -289,7 +289,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -308,12 +308,12 @@ module.exports = {
         {
           model: Access,
           required: true,
-          where: { dismantler_id: context.dismantler.dismantler_id },
-        },
+          where: { dismantler_id: context.dismantler.dismantler_id }
+        }
       ],
       order: [["access_log_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -324,7 +324,7 @@ module.exports = {
       access_id !== ""
     ) {
       filter.where.push({
-        access_id: access_id,
+        access_id: access_id
       });
     }
 
@@ -335,7 +335,7 @@ module.exports = {
       action !== ""
     ) {
       filter.where.push({
-        action: action,
+        action: action
       });
     }
 
@@ -346,7 +346,7 @@ module.exports = {
       entity !== ""
     ) {
       filter.where.push({
-        entity: entity,
+        entity: entity
       });
     }
 
@@ -389,8 +389,8 @@ module.exports = {
             { "$access.access_id$": { [Op[op]]: text[i] } },
             { "$access.name$": { [Op[op]]: text[i] } },
             { "$access.surname$": { [Op[op]]: text[i] } },
-            { "$access.email$": { [Op[op]]: text[i] } },
-          ],
+            { "$access.email$": { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -422,7 +422,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -441,7 +441,7 @@ module.exports = {
       to,
       access_id,
       client_id,
-      archived_at,
+      archived_at
     },
     context
   ) {
@@ -449,8 +449,8 @@ module.exports = {
     let filter = {
       where: [
         {
-          dismantler_id: context.dismantler.dismantler_id,
-        },
+          dismantler_id: context.dismantler.dismantler_id
+        }
       ],
       include: [
         // Order Buyer
@@ -460,11 +460,11 @@ module.exports = {
         { model: OrderShipping },
 
         // Order Billing
-        { model: OrderBilling },
+        { model: OrderBilling }
       ],
       order: [["order_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -476,7 +476,7 @@ module.exports = {
       access_id !== ""
     ) {
       filter.where.push({
-        access_id: access_id,
+        access_id: access_id
       });
     }
 
@@ -488,7 +488,7 @@ module.exports = {
       client_id !== ""
     ) {
       filter.where.push({
-        client_id: client_id,
+        client_id: client_id
       });
     }
 
@@ -502,12 +502,12 @@ module.exports = {
     ) {
       filter.where.push({
         archived_at: {
-          [Op.ne]: null,
-        },
+          [Op.ne]: null
+        }
       });
     } else {
       filter.where.push({
-        archived_at: null,
+        archived_at: null
       });
     }
 
@@ -580,7 +580,7 @@ module.exports = {
           { "$order_billing.ssn$": { [Op[op]]: text[i] } },
           { "$order_billing.vat$": { [Op[op]]: text[i] } },
           { "$order_billing.sdi$": { [Op[op]]: text[i] } },
-          { "$order_billing.pec$": { [Op[op]]: text[i] } },
+          { "$order_billing.pec$": { [Op[op]]: text[i] } }
         ];
 
         // Order Items
@@ -592,40 +592,40 @@ module.exports = {
               // Component
               {
                 "$component_order_item.component.component_id$": {
-                  [Op[op]]: text[i],
-                },
+                  [Op[op]]: text[i]
+                }
               },
               {
-                "$component_order_item.component.label$": { [Op[op]]: text[i] },
+                "$component_order_item.component.label$": { [Op[op]]: text[i] }
               },
               {
                 "$component_order_item.component.oem_code$": {
-                  [Op[op]]: text[i],
-                },
+                  [Op[op]]: text[i]
+                }
               },
               {
                 "$component_order_item.component.constructor_code$": {
-                  [Op[op]]: text[i],
-                },
+                  [Op[op]]: text[i]
+                }
               },
               {
                 "$component_order_item.component.manufacturer_code$": {
-                  [Op[op]]: text[i],
-                },
+                  [Op[op]]: text[i]
+                }
               },
 
               // Entry
               {
                 "$component_order_item.component.entry.ania_entry.ania_entry$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$component_order_item.component.entry.ania_entry.original_ania_entry$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$component_order_item.component.entry.dismantler_entry.dismantler_entry$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
 
               //NOTE: Dismantler_ania_entry é bottom up
@@ -633,27 +633,27 @@ module.exports = {
               // Version
               {
                 "$component_order_item.component.version.ania_version.ania_version$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$component_order_item.component.version.dismantler_version.dismantler_version$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$component_order_item.component.version.model.ania_model.ania_model$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$component_order_item.component.version.model.dismantler_model.dismantler_model$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$component_order_item.component.version.model.brand.ania_brand.ania_brand$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$component_order_item.component.version.model.brand.dismantler_brand.dismantler_brand$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               // #endregion Component Order Item
 
@@ -663,34 +663,34 @@ module.exports = {
               { "$vehicle_order_item.vehicle.vin$": { [Op[op]]: text[i] } },
               {
                 "$vehicle_order_item.vehicle.vehicle_engine.code$": {
-                  [Op[op]]: text[i],
-                },
+                  [Op[op]]: text[i]
+                }
               },
 
               // Version
               {
                 "$vehicle_order_item.vehicle.version.ania_version.ania_version$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$vehicle_order_item.vehicle.version.dismantler_version.dismantler_version$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$vehicle_order_item.vehicle.version.model.ania_model.ania_model$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$vehicle_order_item.vehicle.version.model.dismantler_model.dismantler_model$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$vehicle_order_item.vehicle.version.model.brand.ania_brand.ania_brand$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$vehicle_order_item.vehicle.version.model.brand.dismantler_brand.dismantler_brand$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               // #endregion Vehicle Order Item
 
@@ -709,31 +709,31 @@ module.exports = {
               // Version
               {
                 "$wheel_order_item.wheel.version.ania_version.ania_version$": {
-                  [Op[op]]: text[i],
-                },
+                  [Op[op]]: text[i]
+                }
               },
               {
                 "$wheel_order_item.wheel.version.dismantler_version.dismantler_version$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$wheel_order_item.wheel.version.model.ania_model.ania_model$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$wheel_order_item.wheel.version.model.dismantler_model.dismantler_model$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$wheel_order_item.wheel.version.model.brand.ania_brand.ania_brand$":
-                  { [Op[op]]: text[i] },
+                  { [Op[op]]: text[i] }
               },
               {
                 "$wheel_order_item.wheel.version.model.brand.dismantler_brand.dismantler_brand$":
-                  { [Op[op]]: text[i] },
-              },
+                  { [Op[op]]: text[i] }
+              }
               // #endregion Wheel Order Item
-            ],
+            ]
           },
           include: [
             // Component Order Item
@@ -757,17 +757,17 @@ module.exports = {
                         {
                           model: AniaEntry,
                           required: false,
-                          attributes: [],
+                          attributes: []
                         },
                         {
                           model: DismantlerEntry,
                           where: {
-                            dismantler_id: context.dismantler.dismantler_id,
+                            dismantler_id: context.dismantler.dismantler_id
                           },
                           required: false,
-                          attributes: [],
-                        },
-                      ],
+                          attributes: []
+                        }
+                      ]
                     },
 
                     // Version
@@ -779,15 +779,15 @@ module.exports = {
                         {
                           model: AniaVersion,
                           required: false,
-                          attributes: [],
+                          attributes: []
                         },
                         {
                           model: DismantlerVersion,
                           where: {
-                            dismantler_id: context.dismantler.dismantler_id,
+                            dismantler_id: context.dismantler.dismantler_id
                           },
                           required: false,
-                          attributes: [],
+                          attributes: []
                         },
                         {
                           model: Model,
@@ -797,15 +797,15 @@ module.exports = {
                             {
                               model: AniaModel,
                               required: false,
-                              attributes: [],
+                              attributes: []
                             },
                             {
                               model: DismantlerModel,
                               where: {
-                                dismantler_id: context.dismantler.dismantler_id,
+                                dismantler_id: context.dismantler.dismantler_id
                               },
                               required: false,
-                              attributes: [],
+                              attributes: []
                             },
                             {
                               model: Brand,
@@ -814,26 +814,26 @@ module.exports = {
                                 {
                                   model: AniaBrand,
                                   required: false,
-                                  attributes: [],
+                                  attributes: []
                                 },
                                 {
                                   model: DismantlerBrand,
                                   where: {
                                     dismantler_id:
-                                      context.dismantler.dismantler_id,
+                                      context.dismantler.dismantler_id
                                   },
                                   required: false,
-                                  attributes: [],
-                                },
-                              ],
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
+                                  attributes: []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             },
 
             // Vehicle Order Item
@@ -852,7 +852,7 @@ module.exports = {
                     {
                       model: VehicleEngine,
                       required: false,
-                      attributes: [],
+                      attributes: []
                     },
 
                     // Vehicle Version
@@ -864,15 +864,15 @@ module.exports = {
                         {
                           model: AniaVersion,
                           required: false,
-                          attributes: [],
+                          attributes: []
                         },
                         {
                           model: DismantlerVersion,
                           where: {
-                            dismantler_id: context.dismantler.dismantler_id,
+                            dismantler_id: context.dismantler.dismantler_id
                           },
                           required: false,
-                          attributes: [],
+                          attributes: []
                         },
                         {
                           model: Model,
@@ -882,15 +882,15 @@ module.exports = {
                             {
                               model: AniaModel,
                               required: false,
-                              attributes: [],
+                              attributes: []
                             },
                             {
                               model: DismantlerModel,
                               where: {
-                                dismantler_id: context.dismantler.dismantler_id,
+                                dismantler_id: context.dismantler.dismantler_id
                               },
                               required: false,
-                              attributes: [],
+                              attributes: []
                             },
                             {
                               model: Brand,
@@ -900,26 +900,26 @@ module.exports = {
                                 {
                                   model: AniaBrand,
                                   required: false,
-                                  attributes: [],
+                                  attributes: []
                                 },
                                 {
                                   model: DismantlerBrand,
                                   where: {
                                     dismantler_id:
-                                      context.dismantler.dismantler_id,
+                                      context.dismantler.dismantler_id
                                   },
                                   required: false,
-                                  attributes: [],
-                                },
-                              ],
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
+                                  attributes: []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             },
 
             // Tyre Order Item
@@ -932,9 +932,9 @@ module.exports = {
                   model: Tyre,
                   where: { dismantler_id: context.dismantler.dismantler_id },
                   required: false,
-                  attributes: [],
-                },
-              ],
+                  attributes: []
+                }
+              ]
             },
 
             // Wheel Order Item
@@ -958,15 +958,15 @@ module.exports = {
                         {
                           model: AniaVersion,
                           required: false,
-                          attributes: [],
+                          attributes: []
                         },
                         {
                           model: DismantlerVersion,
                           where: {
-                            dismantler_id: context.dismantler.dismantler_id,
+                            dismantler_id: context.dismantler.dismantler_id
                           },
                           required: false,
-                          attributes: [],
+                          attributes: []
                         },
                         {
                           model: Model,
@@ -976,15 +976,15 @@ module.exports = {
                             {
                               model: AniaModel,
                               required: false,
-                              attributes: [],
+                              attributes: []
                             },
                             {
                               model: DismantlerModel,
                               where: {
-                                dismantler_id: context.dismantler.dismantler_id,
+                                dismantler_id: context.dismantler.dismantler_id
                               },
                               required: false,
-                              attributes: [],
+                              attributes: []
                             },
                             {
                               model: Brand,
@@ -994,35 +994,35 @@ module.exports = {
                                 {
                                   model: AniaBrand,
                                   required: false,
-                                  attributes: [],
+                                  attributes: []
                                 },
                                 {
                                   model: DismantlerBrand,
                                   where: {
                                     dismantler_id:
-                                      context.dismantler.dismantler_id,
+                                      context.dismantler.dismantler_id
                                   },
                                   required: false,
-                                  attributes: [],
-                                },
-                              ],
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+                                  attributes: []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         });
 
         if (order_items.length > 0) {
           params.push({
             order_id: {
-              [Op.in]: [...new Set(order_items.map((item) => item.order_id))],
-            },
+              [Op.in]: [...new Set(order_items.map((item) => item.order_id))]
+            }
           });
         }
 
@@ -1033,8 +1033,8 @@ module.exports = {
           attributes: ["entry_id"],
           where: {
             dismantler_id: context.dismantler.dismantler_id,
-            entry: { [Op[op]]: text[i] },
-          },
+            entry: { [Op[op]]: text[i] }
+          }
         });
 
         if (dismantler_ania_entries.length > 0) {
@@ -1044,8 +1044,8 @@ module.exports = {
               "$component_order_item.component.entry_id$": {
                 [Op.in]: dismantler_ania_entries.map(
                   (dismantler_ania_entry) => dismantler_ania_entry.entry_id
-                ),
-              },
+                )
+              }
             },
             include: [
               {
@@ -1057,27 +1057,27 @@ module.exports = {
                     model: Component,
                     where: { dismantler_id: context.dismantler.dismantler_id },
                     required: true,
-                    attributes: [],
-                  },
-                ],
-              },
-            ],
+                    attributes: []
+                  }
+                ]
+              }
+            ]
           });
 
           if (entry_order_items.length > 0) {
             params.push({
               order_id: {
                 [Op.in]: [
-                  ...new Set(entry_order_items.map((item) => item.order_id)),
-                ],
-              },
+                  ...new Set(entry_order_items.map((item) => item.order_id))
+                ]
+              }
             });
           }
         }
         // END Dismantler Ania Entry
 
         filter.where.push({
-          [Op.or]: [...params],
+          [Op.or]: [...params]
         });
       }
     }
@@ -1086,16 +1086,16 @@ module.exports = {
     if (from && from !== "null" && from !== "") {
       filter.where.push({
         ordered_at: {
-          [Op.gte]: moment(from).format("YYYY-MM-DD HH:mm:ss"),
-        },
+          [Op.gte]: moment(from).format("YYYY-MM-DD HH:mm:ss")
+        }
       });
     }
     // Only to
     if (to && to !== "null" && to !== "") {
       filter.where.push({
         ordered_at: {
-          [Op.lte]: moment(to).format("YYYY-MM-DD HH:mm:ss"),
-        },
+          [Op.lte]: moment(to).format("YYYY-MM-DD HH:mm:ss")
+        }
       });
     }
     // Both from - to
@@ -1111,9 +1111,9 @@ module.exports = {
         ordered_at: {
           [Op.between]: [
             moment(from).format("YYYY-MM-DD HH:mm:ss"),
-            moment(to).format("YYYY-MM-DD HH:mm:ss"),
-          ],
-        },
+            moment(to).format("YYYY-MM-DD HH:mm:ss")
+          ]
+        }
       });
     }
     // END Populating filter.where
@@ -1144,7 +1144,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -1163,7 +1163,7 @@ module.exports = {
       to,
       access_id,
       client_id,
-      archived_at,
+      archived_at
     },
     context
   ) {
@@ -1171,8 +1171,8 @@ module.exports = {
     let filter = {
       where: [
         {
-          dismantler_id: context.dismantler.dismantler_id,
-        },
+          dismantler_id: context.dismantler.dismantler_id
+        }
       ],
       include: [
         // Reservation Reservee
@@ -1182,11 +1182,11 @@ module.exports = {
         { model: ReservationShipping },
 
         // Reservation Billing
-        { model: ReservationBilling },
+        { model: ReservationBilling }
       ],
       order: [["reservation_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -1198,7 +1198,7 @@ module.exports = {
       access_id !== ""
     ) {
       filter.where.push({
-        access_id: access_id,
+        access_id: access_id
       });
     }
 
@@ -1210,7 +1210,7 @@ module.exports = {
       client_id !== ""
     ) {
       filter.where.push({
-        client_id: client_id,
+        client_id: client_id
       });
     }
 
@@ -1224,12 +1224,12 @@ module.exports = {
     ) {
       filter.where.push({
         archived_at: {
-          [Op.ne]: null,
-        },
+          [Op.ne]: null
+        }
       });
     } else {
       filter.where.push({
-        archived_at: null,
+        archived_at: null
       });
     }
 
@@ -1302,8 +1302,8 @@ module.exports = {
             { "$reservation_billing.ssn$": { [Op[op]]: text[i] } },
             { "$reservation_billing.vat$": { [Op[op]]: text[i] } },
             { "$reservation_billing.sdi$": { [Op[op]]: text[i] } },
-            { "$reservation_billing.pec$": { [Op[op]]: text[i] } },
-          ],
+            { "$reservation_billing.pec$": { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -1312,16 +1312,16 @@ module.exports = {
     if (from && from !== "null" && from !== "") {
       filter.where.push({
         reserved_at: {
-          [Op.gte]: moment(from).format("YYYY-MM-DD HH:mm:ss"),
-        },
+          [Op.gte]: moment(from).format("YYYY-MM-DD HH:mm:ss")
+        }
       });
     }
     // Only to
     if (to && to !== "null" && to !== "") {
       filter.where.push({
         reserved_at: {
-          [Op.lte]: moment(to).format("YYYY-MM-DD HH:mm:ss"),
-        },
+          [Op.lte]: moment(to).format("YYYY-MM-DD HH:mm:ss")
+        }
       });
     }
     // Both from - to
@@ -1337,9 +1337,9 @@ module.exports = {
         reserved_at: {
           [Op.between]: [
             moment(from).format("YYYY-MM-DD HH:mm:ss"),
-            moment(to).format("YYYY-MM-DD HH:mm:ss"),
-          ],
-        },
+            moment(to).format("YYYY-MM-DD HH:mm:ss")
+          ]
+        }
       });
     }
     // END Populating filter.where
@@ -1370,7 +1370,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -1391,7 +1391,7 @@ module.exports = {
     let filter = {
       where: [
         {
-          dismantler_id: { [Op.ne]: context.dismantler.dismantler_id },
+          dismantler_id: { [Op.ne]: context.dismantler.dismantler_id }
         },
 
         // Check type
@@ -1401,12 +1401,12 @@ module.exports = {
               { "$version.model.brand.type.type_type$": "ania_type" },
               {
                 "$version.model.brand.type.ania_type.type_id$":
-                  dismantler_settings.allowed_ania_type_ids,
-              },
+                  dismantler_settings.allowed_ania_type_ids
+              }
             ],
-            [{ "$version.model.brand.type.type_type$": "dismantler_type" }],
-          ],
-        },
+            [{ "$version.model.brand.type.type_type$": "dismantler_type" }]
+          ]
+        }
       ],
       include: [
         // Entry
@@ -1416,9 +1416,9 @@ module.exports = {
             { model: AniaEntry, required: false },
             {
               model: DismantlerEntry,
-              required: false,
-            },
-          ],
+              required: false
+            }
+          ]
         },
 
         // Version
@@ -1428,7 +1428,7 @@ module.exports = {
             { model: AniaVersion, required: false },
             {
               model: DismantlerVersion,
-              required: false,
+              required: false
             },
             {
               model: Model,
@@ -1436,7 +1436,7 @@ module.exports = {
                 { model: AniaModel, required: false },
                 {
                   model: DismantlerModel,
-                  required: false,
+                  required: false
                 },
                 {
                   model: Brand,
@@ -1444,7 +1444,7 @@ module.exports = {
                     { model: AniaBrand, required: false },
                     {
                       model: DismantlerBrand,
-                      required: false,
+                      required: false
                     },
                     {
                       model: Type,
@@ -1452,20 +1452,20 @@ module.exports = {
                         { model: AniaType, required: false },
                         {
                           model: DismantlerType,
-                          required: false,
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
+                          required: false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
       ],
       order: [["component_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -1526,80 +1526,80 @@ module.exports = {
             { "$entry.ania_entry.ania_id$": { [Op[op]]: text[i] } },
             {
               "$entry.dismantler_entry.dismantler_entry$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
 
             // Version
             { "$version.version_id$": { [Op[op]]: text[i] } },
             { "$version.ania_version.ania_version$": { [Op[op]]: text[i] } },
             {
-              "$version.ania_version.ania_id$": { [Op[op]]: text[i] },
+              "$version.ania_version.ania_id$": { [Op[op]]: text[i] }
             },
             {
               "$version.dismantler_version.dismantler_version$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
 
             // Model
             { "$version.model.model_id$": { [Op[op]]: text[i] } },
             {
-              "$version.model.ania_model.ania_model$": { [Op[op]]: text[i] },
+              "$version.model.ania_model.ania_model$": { [Op[op]]: text[i] }
             },
             {
               "$version.model.ania_model.ania_id$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
               "$version.model.dismantler_model.dismantler_model$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
 
             // Brand
             {
-              "$version.model.brand.brand_id$": { [Op[op]]: text[i] },
+              "$version.model.brand.brand_id$": { [Op[op]]: text[i] }
             },
             {
               "$version.model.brand.ania_brand.ania_brand$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
               "$version.model.brand.ania_brand.ania_id$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
               "$version.model.brand.dismantler_brand.dismantler_brand$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
 
             // Type
             {
               "$version.model.brand.type.type_id$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
               "$version.model.brand.type.ania_type.ania_type$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
               "$version.model.brand.type.ania_type.ania_id$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
               "$version.model.brand.type.dismantler_type.dismantler_type$": {
-                [Op[op]]: text[i],
-              },
-            },
-          ],
+                [Op[op]]: text[i]
+              }
+            }
+          ]
         });
       }
     }
@@ -1631,7 +1631,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -1676,18 +1676,17 @@ module.exports = {
 
       media,
 
-      archived_at,
+      archived_at
     },
     context
   ) {
-
     // Initializing filter
     let filter = {
       attributes: ["component_id"],
       where: [
         {
-          dismantler_id: context.dismantler.dismantler_id,
-        },
+          dismantler_id: context.dismantler.dismantler_id
+        }
       ],
       include: [
         // Version
@@ -1698,13 +1697,13 @@ module.exports = {
             {
               model: AniaVersion,
               attributes: ["ania_version"],
-              required: false,
+              required: false
             },
             {
               model: DismantlerVersion,
               attributes: ["dismantler_version"],
               where: { dismantler_id: context.dismantler.dismantler_id },
-              required: false,
+              required: false
             },
             {
               model: Model,
@@ -1713,13 +1712,13 @@ module.exports = {
                 {
                   model: AniaModel,
                   attributes: ["ania_model"],
-                  required: false,
+                  required: false
                 },
                 {
                   model: DismantlerModel,
                   attributes: ["dismantler_model"],
                   where: { dismantler_id: context.dismantler.dismantler_id },
-                  required: false,
+                  required: false
                 },
                 {
                   model: Brand,
@@ -1728,26 +1727,26 @@ module.exports = {
                     {
                       model: AniaBrand,
                       attributes: ["ania_brand"],
-                      required: false,
+                      required: false
                     },
                     {
                       model: DismantlerBrand,
                       attributes: ["dismantler_brand"],
                       where: {
-                        dismantler_id: context.dismantler.dismantler_id,
+                        dismantler_id: context.dismantler.dismantler_id
                       },
-                      required: false,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
+                      required: false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
       ],
       order: [["component_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.include
@@ -1761,15 +1760,15 @@ module.exports = {
             {
               model: AniaEntry,
               attributes: ["ania_entry"],
-              required: false,
+              required: false
             },
             {
               model: DismantlerEntry,
               attributes: ["dismantler_entry"],
               where: { dismantler_id: context.dismantler.dismantler_id },
-              required: false,
-            },
-          ],
+              required: false
+            }
+          ]
         },
 
         // Vehicle
@@ -1779,8 +1778,8 @@ module.exports = {
           where: { dismantler_id: context.dismantler.dismantler_id },
           required: false,
           include: [
-            { model: VehicleEngine, attributes: ["code"], required: false },
-          ],
+            { model: VehicleEngine, attributes: ["code"], required: false }
+          ]
         }
       );
     }
@@ -1842,19 +1841,19 @@ module.exports = {
                               model: Warehouse,
                               attributes: ["warehouse_id"],
                               where: {
-                                dismantler_id: context.dismantler.dismantler_id,
+                                dismantler_id: context.dismantler.dismantler_id
                               },
-                              required: false,
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+                              required: false
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       );
     }
@@ -1870,12 +1869,12 @@ module.exports = {
     ) {
       filter.where.push({
         archived_at: {
-          [Op.ne]: null,
-        },
+          [Op.ne]: null
+        }
       });
     } else {
       filter.where.push({
-        archived_at: null,
+        archived_at: null
       });
     }
 
@@ -1887,7 +1886,7 @@ module.exports = {
       is_disassembled !== ""
     ) {
       filter.where.push({
-        is_disassembled: is_disassembled,
+        is_disassembled: is_disassembled
       });
     }
 
@@ -1899,7 +1898,7 @@ module.exports = {
       oem_code !== ""
     ) {
       filter.where.push({
-        oem_code: oem_code,
+        oem_code: oem_code
       });
     }
 
@@ -1911,7 +1910,7 @@ module.exports = {
       constructor_code !== ""
     ) {
       filter.where.push({
-        constructor_code: constructor_code,
+        constructor_code: constructor_code
       });
     }
 
@@ -1923,7 +1922,7 @@ module.exports = {
       manufacturer_code !== ""
     ) {
       filter.where.push({
-        manufacturer_code: manufacturer_code,
+        manufacturer_code: manufacturer_code
       });
     }
 
@@ -1935,7 +1934,7 @@ module.exports = {
       condition !== ""
     ) {
       filter.where.push({
-        condition: condition,
+        condition: condition
       });
     }
 
@@ -1948,7 +1947,7 @@ module.exports = {
     ) {
       if (!["sold", "reserved"].includes(status)) {
         filter.where.push({
-          status: status,
+          status: status
         });
       } else {
         // Sold or Reserved
@@ -1966,11 +1965,11 @@ module.exports = {
                   {
                     model: Order,
                     attributes: ["order_id", "ordered_at"],
-                    required: true,
-                  },
-                ],
-              },
-            ],
+                    required: true
+                  }
+                ]
+              }
+            ]
           });
         } else if (status === "reserved") {
           filter.include.push({
@@ -1986,11 +1985,11 @@ module.exports = {
                   {
                     model: Reservation,
                     attributes: ["reservation_id", "reserved_at"],
-                    required: true,
-                  },
-                ],
-              },
-            ],
+                    required: true
+                  }
+                ]
+              }
+            ]
           });
         }
       }
@@ -2004,7 +2003,7 @@ module.exports = {
       side !== ""
     ) {
       filter.where.push({
-        side: side,
+        side: side
       });
     }
 
@@ -2016,7 +2015,7 @@ module.exports = {
       vehicle_id !== ""
     ) {
       filter.where.push({
-        vehicle_id: vehicle_id,
+        vehicle_id: vehicle_id
       });
     }
 
@@ -2028,7 +2027,7 @@ module.exports = {
       manufacturer_id !== ""
     ) {
       filter.where.push({
-        manufacturer_id: manufacturer_id,
+        manufacturer_id: manufacturer_id
       });
     }
 
@@ -2044,18 +2043,18 @@ module.exports = {
 
       if (OEMCodes.length === 0) {
         filter.where.push({
-          "$version.version_id$": version_id,
+          "$version.version_id$": version_id
         });
       } else {
         filter.where.push({
           [Op.or]: [
             {
-              "$version.version_id$": version_id,
+              "$version.version_id$": version_id
             },
             {
-              oem_code: OEMCodes,
-            },
-          ],
+              oem_code: OEMCodes
+            }
+          ]
         });
       }
     } else {
@@ -2069,7 +2068,7 @@ module.exports = {
         model_id !== ""
       ) {
         filter.where.push({
-          "$version.model.model_id$": model_id,
+          "$version.model.model_id$": model_id
         });
       }
 
@@ -2081,7 +2080,7 @@ module.exports = {
         brand_id !== ""
       ) {
         filter.where.push({
-          "$version.model.brand.brand_id$": brand_id,
+          "$version.model.brand.brand_id$": brand_id
         });
       }
 
@@ -2093,7 +2092,7 @@ module.exports = {
         type_id !== ""
       ) {
         filter.where.push({
-          "$version.model.brand.type_id$": type_id,
+          "$version.model.brand.type_id$": type_id
         });
       }
     }
@@ -2106,7 +2105,7 @@ module.exports = {
       warehouse_bin_id !== ""
     ) {
       filter.where.push({
-        "$warehouse_bin.warehouse_bin_id$": warehouse_bin_id,
+        "$warehouse_bin.warehouse_bin_id$": warehouse_bin_id
       });
     }
 
@@ -2118,8 +2117,7 @@ module.exports = {
       warehouse_shelf_id !== ""
     ) {
       filter.where.push({
-        "$warehouse_bin.warehouse_shelf.warehouse_shelf_id$":
-          warehouse_shelf_id,
+        "$warehouse_bin.warehouse_shelf.warehouse_shelf_id$": warehouse_shelf_id
       });
     }
 
@@ -2132,7 +2130,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_rack_id$":
-          warehouse_rack_id,
+          warehouse_rack_id
       });
     }
 
@@ -2145,7 +2143,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_lane_id$":
-          warehouse_lane_id,
+          warehouse_lane_id
       });
     }
 
@@ -2158,7 +2156,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.warehouse_floor_id$":
-          warehouse_floor_id,
+          warehouse_floor_id
       });
     }
 
@@ -2171,7 +2169,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.warehouse.warehouse_id$":
-          warehouse_id,
+          warehouse_id
       });
     }
 
@@ -2185,7 +2183,7 @@ module.exports = {
       if (media === "images" || media === "no_images") {
         const where = [
           { media_type: "image" },
-          { "$component.dismantler_id$": context.dismantler.dismantler_id },
+          { "$component.dismantler_id$": context.dismantler.dismantler_id }
         ];
 
         if (
@@ -2197,12 +2195,12 @@ module.exports = {
         ) {
           where.push({
             "$component.archived_at$": {
-              [Op.ne]: null,
-            },
+              [Op.ne]: null
+            }
           });
         } else {
           where.push({
-            "$component.archived_at$": null,
+            "$component.archived_at$": null
           });
         }
 
@@ -2211,9 +2209,9 @@ module.exports = {
           include: [
             {
               model: Component,
-              required: true,
-            },
-          ],
+              required: true
+            }
+          ]
         });
 
         if (media === "images") {
@@ -2222,9 +2220,9 @@ module.exports = {
               [Op.in]: [
                 ...new Set(
                   components_with_media_ids.map((c) => c.component.component_id)
-                ),
-              ],
-            },
+                )
+              ]
+            }
           });
         } else {
           filter.where.push({
@@ -2232,9 +2230,9 @@ module.exports = {
               [Op.notIn]: [
                 ...new Set(
                   components_with_media_ids.map((c) => c.component.component_id)
-                ),
-              ],
-            },
+                )
+              ]
+            }
           });
         }
       }
@@ -2289,15 +2287,15 @@ module.exports = {
           { "$entry.ania_entry.ania_entry$": { [Op[op]]: text[i] } },
           {
             "$entry.dismantler_entry.dismantler_entry$": {
-              [Op[op]]: text[i],
-            },
+              [Op[op]]: text[i]
+            }
           },
 
           // Vehicle
           { "$vehicle.code$": { [Op[op]]: text[i] } },
           { "$vehicle.plate$": { [Op[op]]: text[i] } },
           { "$vehicle.vin$": { [Op[op]]: text[i] } },
-          { "$vehicle.vehicle_engine.code$": { [Op[op]]: text[i] } },
+          { "$vehicle.vehicle_engine.code$": { [Op[op]]: text[i] } }
         ];
 
         // Version
@@ -2307,13 +2305,13 @@ module.exports = {
             {
               model: AniaVersion,
               attributes: ["ania_version"],
-              required: false,
+              required: false
             },
             {
               model: DismantlerVersion,
               attributes: ["dismantler_version"],
               where: { dismantler_id: context.dismantler.dismantler_id },
-              required: false,
+              required: false
             },
             {
               model: Model,
@@ -2322,13 +2320,13 @@ module.exports = {
                 {
                   model: AniaModel,
                   attributes: ["ania_model"],
-                  required: false,
+                  required: false
                 },
                 {
                   model: DismantlerModel,
                   attributes: ["dismantler_model"],
                   where: { dismantler_id: context.dismantler.dismantler_id },
-                  required: false,
+                  required: false
                 },
                 {
                   model: Brand,
@@ -2337,20 +2335,20 @@ module.exports = {
                     {
                       model: AniaBrand,
                       attributes: ["ania_brand"],
-                      required: false,
+                      required: false
                     },
                     {
                       model: DismantlerBrand,
                       attributes: ["dismantler_brand"],
                       where: {
-                        dismantler_id: context.dismantler.dismantler_id,
+                        dismantler_id: context.dismantler.dismantler_id
                       },
-                      required: false,
-                    },
-                  ],
-                },
-              ],
-            },
+                      required: false
+                    }
+                  ]
+                }
+              ]
+            }
           ],
           where: {
             [Op.or]: [
@@ -2358,37 +2356,37 @@ module.exports = {
               { "$ania_version.ania_version$": { [Op[op]]: text[i] } },
               {
                 "$dismantler_version.dismantler_version$": {
-                  [Op[op]]: text[i],
-                },
+                  [Op[op]]: text[i]
+                }
               },
 
               // Model
               { "$model.ania_model.ania_model$": { [Op[op]]: text[i] } },
               {
                 "$model.dismantler_model.dismantler_model$": {
-                  [Op[op]]: text[i],
-                },
+                  [Op[op]]: text[i]
+                }
               },
 
               // Brand
               {
                 "$model.brand.ania_brand.ania_brand$": {
-                  [Op[op]]: text[i],
-                },
+                  [Op[op]]: text[i]
+                }
               },
               {
                 "$model.brand.dismantler_brand.dismantler_brand$": {
-                  [Op[op]]: text[i],
-                },
-              },
-            ],
-          },
+                  [Op[op]]: text[i]
+                }
+              }
+            ]
+          }
         });
         if (version_ids.length > 0) {
           params.push({
             "$version.version_id$": {
-              [Op.in]: version_ids.map((v) => v.version_id),
-            },
+              [Op.in]: version_ids.map((v) => v.version_id)
+            }
           });
         }
 
@@ -2397,14 +2395,14 @@ module.exports = {
           attributes: ["entry_id", "entry"],
           where: {
             dismantler_id: context.dismantler.dismantler_id,
-            entry: { [Op[op]]: text[i] },
-          },
+            entry: { [Op[op]]: text[i] }
+          }
         });
         if (dismantler_ania_entries.length > 0) {
           params.push({
             entry_id: {
-              [Op.in]: dismantler_ania_entries.map((e) => e.entry_id),
-            },
+              [Op.in]: dismantler_ania_entries.map((e) => e.entry_id)
+            }
           });
         }
 
@@ -2412,30 +2410,30 @@ module.exports = {
         const component_ids = await ComponentScannerCode.findAll({
           attributes: ["component_id"],
           where: {
-            scanner_code: { [Op[op]]: text[i] },
+            scanner_code: { [Op[op]]: text[i] }
           },
           include: [
             {
               model: Component,
               where: {
-                dismantler_id: context.dismantler.dismantler_id,
+                dismantler_id: context.dismantler.dismantler_id
               },
-              required: true,
-            },
-          ],
+              required: true
+            }
+          ]
         });
         if (component_ids.length > 0) {
           params.push({
             component_id: {
-              [Op.in]: component_ids.map((c) => c.component_id),
-            },
+              [Op.in]: component_ids.map((c) => c.component_id)
+            }
           });
         }
 
         // Dismantler ANIA Entries with text and then OR with other parameters
 
         filter.where.push({
-          [Op.or]: [...params],
+          [Op.or]: [...params]
         });
       }
     }
@@ -2483,7 +2481,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -2528,7 +2526,7 @@ module.exports = {
 
       media,
 
-      archived_at,
+      archived_at
     },
     context
   ) {
@@ -2537,13 +2535,13 @@ module.exports = {
       attributes: ["component_id"],
       where: [
         {
-          dismantler_id: context.dismantler.dismantler_id,
-        },
+          dismantler_id: context.dismantler.dismantler_id
+        }
       ],
       include: [],
-      order: [["component_id", "DESC"]],
+      order: [[Sequelize.col("component_id"), "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.include
@@ -2574,13 +2572,13 @@ module.exports = {
             {
               model: AniaVersion,
               attributes: ["ania_version"],
-              required: false,
+              required: false
             },
             {
               model: DismantlerVersion,
               attributes: ["dismantler_version"],
               where: { dismantler_id: context.dismantler.dismantler_id },
-              required: false,
+              required: false
             },
             {
               model: Model,
@@ -2589,13 +2587,13 @@ module.exports = {
                 {
                   model: AniaModel,
                   attributes: ["ania_model"],
-                  required: false,
+                  required: false
                 },
                 {
                   model: DismantlerModel,
                   attributes: ["dismantler_model"],
                   where: { dismantler_id: context.dismantler.dismantler_id },
-                  required: false,
+                  required: false
                 },
                 {
                   model: Brand,
@@ -2604,21 +2602,21 @@ module.exports = {
                     {
                       model: AniaBrand,
                       attributes: ["ania_brand"],
-                      required: false,
+                      required: false
                     },
                     {
                       model: DismantlerBrand,
                       attributes: ["dismantler_brand"],
                       where: {
-                        dismantler_id: context.dismantler.dismantler_id,
+                        dismantler_id: context.dismantler.dismantler_id
                       },
-                      required: false,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+                      required: false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       );
     }
@@ -2680,19 +2678,19 @@ module.exports = {
                               model: Warehouse,
                               attributes: ["warehouse_id"],
                               where: {
-                                dismantler_id: context.dismantler.dismantler_id,
+                                dismantler_id: context.dismantler.dismantler_id
                               },
-                              required: false,
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+                              required: false
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       );
     }
@@ -2708,12 +2706,12 @@ module.exports = {
     ) {
       filter.where.push({
         archived_at: {
-          [Op.ne]: null,
-        },
+          [Op.ne]: null
+        }
       });
     } else {
       filter.where.push({
-        archived_at: null,
+        archived_at: null
       });
     }
 
@@ -2725,7 +2723,7 @@ module.exports = {
       is_disassembled !== ""
     ) {
       filter.where.push({
-        is_disassembled: is_disassembled,
+        is_disassembled: is_disassembled
       });
     }
 
@@ -2737,7 +2735,7 @@ module.exports = {
       oem_code !== ""
     ) {
       filter.where.push({
-        oem_code: oem_code,
+        oem_code: oem_code
       });
     }
 
@@ -2749,7 +2747,7 @@ module.exports = {
       constructor_code !== ""
     ) {
       filter.where.push({
-        constructor_code: constructor_code,
+        constructor_code: constructor_code
       });
     }
 
@@ -2761,7 +2759,7 @@ module.exports = {
       manufacturer_code !== ""
     ) {
       filter.where.push({
-        manufacturer_code: manufacturer_code,
+        manufacturer_code: manufacturer_code
       });
     }
 
@@ -2773,7 +2771,7 @@ module.exports = {
       condition !== ""
     ) {
       filter.where.push({
-        condition: condition,
+        condition: condition
       });
     }
 
@@ -2786,7 +2784,7 @@ module.exports = {
     ) {
       if (!["sold", "reserved"].includes(status)) {
         filter.where.push({
-          status: status,
+          status: status
         });
       } else {
         // Sold or Reserved
@@ -2804,11 +2802,11 @@ module.exports = {
                   {
                     model: Order,
                     attributes: ["order_id", "ordered_at"],
-                    required: true,
-                  },
-                ],
-              },
-            ],
+                    required: true
+                  }
+                ]
+              }
+            ]
           });
         } else if (status === "reserved") {
           filter.include.push({
@@ -2824,11 +2822,11 @@ module.exports = {
                   {
                     model: Reservation,
                     attributes: ["reservation_id", "reserved_at"],
-                    required: true,
-                  },
-                ],
-              },
-            ],
+                    required: true
+                  }
+                ]
+              }
+            ]
           });
         }
       }
@@ -2842,7 +2840,7 @@ module.exports = {
       side !== ""
     ) {
       filter.where.push({
-        side: side,
+        side: side
       });
     }
 
@@ -2854,7 +2852,7 @@ module.exports = {
       vehicle_id !== ""
     ) {
       filter.where.push({
-        vehicle_id: vehicle_id,
+        vehicle_id: vehicle_id
       });
     }
 
@@ -2866,7 +2864,7 @@ module.exports = {
       manufacturer_id !== ""
     ) {
       filter.where.push({
-        manufacturer_id: manufacturer_id,
+        manufacturer_id: manufacturer_id
       });
     }
 
@@ -2882,18 +2880,18 @@ module.exports = {
 
       if (OEMCodes.length === 0) {
         filter.where.push({
-          "$version.version_id$": version_id,
+          "$version.version_id$": version_id
         });
       } else {
         filter.where.push({
           [Op.or]: [
             {
-              "$version.version_id$": version_id,
+              "$version.version_id$": version_id
             },
             {
-              oem_code: OEMCodes,
-            },
-          ],
+              oem_code: OEMCodes
+            }
+          ]
         });
       }
     } else {
@@ -2907,7 +2905,7 @@ module.exports = {
         model_id !== ""
       ) {
         filter.where.push({
-          "$version.model.model_id$": model_id,
+          "$version.model.model_id$": model_id
         });
       }
 
@@ -2919,7 +2917,7 @@ module.exports = {
         brand_id !== ""
       ) {
         filter.where.push({
-          "$version.model.brand.brand_id$": brand_id,
+          "$version.model.brand.brand_id$": brand_id
         });
       }
 
@@ -2931,7 +2929,7 @@ module.exports = {
         type_id !== ""
       ) {
         filter.where.push({
-          "$version.model.brand.type_id$": type_id,
+          "$version.model.brand.type_id$": type_id
         });
       }
     }
@@ -2944,7 +2942,7 @@ module.exports = {
       warehouse_bin_id !== ""
     ) {
       filter.where.push({
-        "$warehouse_bin.warehouse_bin_id$": warehouse_bin_id,
+        "$warehouse_bin.warehouse_bin_id$": warehouse_bin_id
       });
     }
 
@@ -2956,8 +2954,7 @@ module.exports = {
       warehouse_shelf_id !== ""
     ) {
       filter.where.push({
-        "$warehouse_bin.warehouse_shelf.warehouse_shelf_id$":
-          warehouse_shelf_id,
+        "$warehouse_bin.warehouse_shelf.warehouse_shelf_id$": warehouse_shelf_id
       });
     }
 
@@ -2970,7 +2967,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_rack_id$":
-          warehouse_rack_id,
+          warehouse_rack_id
       });
     }
 
@@ -2983,7 +2980,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_lane_id$":
-          warehouse_lane_id,
+          warehouse_lane_id
       });
     }
 
@@ -2996,7 +2993,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.warehouse_floor_id$":
-          warehouse_floor_id,
+          warehouse_floor_id
       });
     }
 
@@ -3009,7 +3006,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.warehouse.warehouse_id$":
-          warehouse_id,
+          warehouse_id
       });
     }
 
@@ -3023,7 +3020,7 @@ module.exports = {
       if (media === "images" || media === "no_images") {
         const where = [
           { media_type: "image" },
-          { "$component.dismantler_id$": context.dismantler.dismantler_id },
+          { "$component.dismantler_id$": context.dismantler.dismantler_id }
         ];
 
         if (
@@ -3035,12 +3032,12 @@ module.exports = {
         ) {
           where.push({
             "$component.archived_at$": {
-              [Op.ne]: null,
-            },
+              [Op.ne]: null
+            }
           });
         } else {
           where.push({
-            "$component.archived_at$": null,
+            "$component.archived_at$": null
           });
         }
 
@@ -3049,36 +3046,43 @@ module.exports = {
           include: [
             {
               model: Component,
-              required: true,
-            },
-          ],
+              required: true
+            }
+          ]
         });
 
-        if (media === "images") {
-          filter.where.push({
-            component_id: {
-              [Op.in]: [
-                ...new Set(
-                  components_with_media_ids.map((c) => c.component.component_id)
-                ),
-              ],
-            },
-          });
-        } else {
-          filter.where.push({
-            component_id: {
-              [Op.notIn]: [
-                ...new Set(
-                  components_with_media_ids.map((c) => c.component.component_id)
-                ),
-              ],
-            },
-          });
+        if (components_with_media_ids.length > 0) {
+          if (media === "images") {
+            filter.where.push({
+              component_id: {
+                [Op.in]: [
+                  ...new Set(
+                    components_with_media_ids.map(
+                      (c) => c.component.component_id
+                    )
+                  )
+                ]
+              }
+            });
+          } else {
+            filter.where.push({
+              component_id: {
+                [Op.notIn]: [
+                  ...new Set(
+                    components_with_media_ids.map(
+                      (c) => c.component.component_id
+                    )
+                  )
+                ]
+              }
+            });
+          }
         }
       }
     }
 
     // Text
+    const scores = [];
     if (text && text !== "null" && text !== null && text !== "") {
       // Split
       if (text.includes(" ")) {
@@ -3091,26 +3095,55 @@ module.exports = {
       }
 
       // Separate words
-      const long_words = [];
-      const short_words = [];
+      const special_characters = [
+        "/",
+        "-",
+        "_",
+        "+",
+        ".",
+        ">",
+        "<",
+        "=",
+        "(",
+        ")",
+        "~",
+        "*",
+        "@",
+        '"'
+      ];
+      const against_words = [];
+      const like_words = [];
       for (let i = 0; i < text.length; i++) {
-        if (text[i].length >= 3) {
-          long_words.push(text[i].trim());
+        if (text[i].length > 3) {
+          // Check special characters
+          if (special_characters.some((char) => text[i].includes(char))) {
+            like_words.push(text[i].trim());
+          } else {
+            against_words.push(text[i].trim());
+          }
         } else {
-          short_words.push(text[i].trim());
+          like_words.push(text[i].trim());
         }
       }
 
       // Init where
       const where = [];
+      const attributes = ["component_id"];
 
       // Against
       let against = "";
-      if (long_words.length > 0) {
-        against += long_words.map((long_word) => `+${long_word}*`).join(" ");
+      if (against_words.length > 0) {
+        against += against_words.map((long_word) => `+${long_word}*`).join(" ");
       }
 
       if (against !== "") {
+        attributes.push([
+          Sequelize.literal(
+            `MATCH(component_fulltext, version_fulltext, entry_fulltext, vehicle_fulltext, manufacturer_fulltext) AGAINST('${against}' IN BOOLEAN MODE)`
+          ),
+          "score"
+        ]);
+
         where.push(
           Sequelize.literal(
             `MATCH(component_fulltext, version_fulltext, entry_fulltext, vehicle_fulltext, manufacturer_fulltext) AGAINST('${against}' IN BOOLEAN MODE)`
@@ -3119,44 +3152,59 @@ module.exports = {
       }
 
       // Like
-      if (short_words.length > 0) {
-        for (let i = 0; i < short_words.length; i++) {
+      if (like_words.length > 0) {
+        for (let i = 0; i < like_words.length; i++) {
           where.push({
             [Op.or]: [
-              { component_fulltext: { [Op.like]: `%${short_words[i]}%` } },
-              { version_fulltext: { [Op.like]: `%${short_words[i]}%` } },
-              { entry_fulltext: { [Op.like]: `%${short_words[i]}%` } },
-              { vehicle_fulltext: { [Op.like]: `%${short_words[i]}%` } },
-              { manufacturer_fulltext: { [Op.like]: `%${short_words[i]}%` } },
-            ],
+              { component_fulltext: { [Op.like]: `%${like_words[i]}%` } },
+              { version_fulltext: { [Op.like]: `%${like_words[i]}%` } },
+              { entry_fulltext: { [Op.like]: `%${like_words[i]}%` } },
+              { vehicle_fulltext: { [Op.like]: `%${like_words[i]}%` } },
+              { manufacturer_fulltext: { [Op.like]: `%${like_words[i]}%` } }
+            ]
           });
         }
       }
 
       const fulltexts = await ComponentFulltext.findAll({
-        attributes: ["component_id"],
+        attributes: [...attributes],
         where: {
-          [Op.and]: [...where],
+          [Op.and]: [...where]
         },
         include: [
           {
             model: Component,
             where: { dismantler_id: context.dismantler.dismantler_id },
-            required: true,
-          },
-        ],
+            required: true
+          }
+        ]
       });
 
+      // Scores
       if (fulltexts && fulltexts.length > 0) {
+        if (against !== "") {
+          // Scores
+          for (let i = 0; i < fulltexts.length; i++) {
+            const fulltext = fulltexts[i];
+
+            scores.push({
+              component_id: fulltext.component_id,
+              score: fulltext.get("score")
+            });
+          }
+        }
+
         filter.where.push({
           component_id: {
-            [Op.in]: fulltexts.map((fulltext) => fulltext.component_id),
-          },
+            [Op.in]: fulltexts.map((fulltext) => fulltext.component_id)
+          }
         });
       } else {
         // No fulltext
         filter.where.push({
-          component_id: null,
+          component_id: {
+            [Op.in]: []
+          }
         });
       }
     }
@@ -3164,36 +3212,106 @@ module.exports = {
 
     // Populating filter.order
     // Order by
-    if (
-      typeof status !== "undefined" &&
-      status !== "null" &&
-      status !== null &&
-      status !== ""
-    ) {
-      if (["sold", "reserved"].includes(status)) {
-        if (status === "sold") {
-          order_by = "component_order_item.order_item.order.ordered_at-DESC";
-        } else if (status === "reserved") {
-          order_by =
-            "component_reservation_item.reservation_item.reservation.reserved_at-DESC";
+    // With scores
+    if (scores.length > 0) {
+      // Components
+      const component_ids = scores.map((s) => s.component_id);
+
+      // CASE statement
+      const score_map = scores
+        .map((s) => `WHEN ${s.component_id} THEN ${s.score}`)
+        .join(" ");
+
+      // Order
+      const order = [
+        // First: components in scores
+        [
+          Sequelize.literal(
+            `component.component_id IN (${component_ids.join(",")})`
+          ),
+          "DESC"
+        ],
+
+        // Second: CASE (for components in the scores)
+        [
+          Sequelize.literal(
+            `CASE component.component_id ${score_map} ELSE 0 END`
+          ),
+          "DESC"
+        ],
+
+        // Third: all the rest
+        [Sequelize.col("component.component_id"), "DESC"]
+      ];
+
+      // Status
+      if (
+        typeof status !== "undefined" &&
+        status !== "null" &&
+        status !== null &&
+        status !== ""
+      ) {
+        if (["sold", "reserved"].includes(status)) {
+          if (status === "sold") {
+            order.unshift([
+              ComponentOrderItem,
+              OrderItem,
+              Order,
+              "ordered_at",
+              "DESC"
+            ]);
+          } else if (status === "reserved") {
+            order.unshift([
+              ComponentReservationItem,
+              ReservationItem,
+              Reservation,
+              "reserved_at",
+              "DESC"
+            ]);
+          }
         }
       }
-    }
-    if (
-      typeof order_by !== "undefined" &&
-      order_by !== "null" &&
-      order_by !== null &&
-      order_by !== ""
-    ) {
-      let order = order_by.split("-");
 
-      // Split all dots
-      while (order[0].includes(".")) {
-        order[0] = order[0].split(".");
+      // OVERRIDE filter.order
+      filter.order = [...order];
+    }
+
+    // Without scores (classic)
+    if (scores.length === 0) {
+      if (
+        typeof status !== "undefined" &&
+        status !== "null" &&
+        status !== null &&
+        status !== ""
+      ) {
+        if (["sold", "reserved"].includes(status)) {
+          // OVERRIDE order_by
+          if (status === "sold") {
+            order_by = "component_order_item.order_item.order.ordered_at-DESC";
+          } else if (status === "reserved") {
+            order_by =
+              "component_reservation_item.reservation_item.reservation.reserved_at-DESC";
+          }
+        }
       }
 
-      // Flatten
-      filter.order = [order.flat(Infinity)];
+      // Order by
+      if (
+        typeof order_by !== "undefined" &&
+        order_by !== "null" &&
+        order_by !== null &&
+        order_by !== ""
+      ) {
+        let order = order_by.split("-");
+
+        // Split all dots
+        while (order[0].includes(".")) {
+          order[0] = order[0].split(".");
+        }
+
+        // Flatten
+        filter.order = [order.flat(Infinity)];
+      }
     }
     // END Populating filter.order
 
@@ -3204,7 +3322,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -3235,7 +3353,7 @@ module.exports = {
 
       media,
 
-      archived_at,
+      archived_at
     },
     context
   ) {
@@ -3243,8 +3361,8 @@ module.exports = {
     let filter = {
       where: [
         {
-          dismantler_id: context.dismantler.dismantler_id,
-        },
+          dismantler_id: context.dismantler.dismantler_id
+        }
       ],
       include: [
         // Version
@@ -3255,13 +3373,13 @@ module.exports = {
             {
               model: AniaVersion,
               attributes: ["ania_version"],
-              required: false,
+              required: false
             },
             {
               model: DismantlerVersion,
               attributes: ["dismantler_version"],
               where: { dismantler_id: context.dismantler.dismantler_id },
-              required: false,
+              required: false
             },
             {
               model: Model,
@@ -3270,13 +3388,13 @@ module.exports = {
                 {
                   model: AniaModel,
                   attributes: ["ania_model"],
-                  required: false,
+                  required: false
                 },
                 {
                   model: DismantlerModel,
                   attributes: ["dismantler_model"],
                   where: { dismantler_id: context.dismantler.dismantler_id },
-                  required: false,
+                  required: false
                 },
                 {
                   model: Brand,
@@ -3285,16 +3403,16 @@ module.exports = {
                     {
                       model: AniaBrand,
                       attributes: ["ania_brand"],
-                      required: false,
+                      required: false
                     },
                     {
                       model: DismantlerBrand,
                       attributes: ["dismantler_brand"],
                       where: {
-                        dismantler_id: context.dismantler.dismantler_id,
+                        dismantler_id: context.dismantler.dismantler_id
                       },
-                      required: false,
-                    },
+                      required: false
+                    }
                     // {
                     //   model: Type,
                     //   include: [
@@ -3308,16 +3426,16 @@ module.exports = {
                     //     },
                     //   ],
                     // },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
+                  ]
+                }
+              ]
+            }
+          ]
+        }
       ],
       order: [["vehicle_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.include
@@ -3383,17 +3501,17 @@ module.exports = {
                         {
                           model: Deposit,
                           where: {
-                            dismantler_id: context.dismantler.dismantler_id,
+                            dismantler_id: context.dismantler.dismantler_id
                           },
-                          required: false,
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+                          required: false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       );
     }
@@ -3406,7 +3524,7 @@ module.exports = {
     ) {
       const related_models = {
         vehicle_acceptance: VehicleAcceptance,
-        vehicle_drainage: VehicleDrainage,
+        vehicle_drainage: VehicleDrainage
       };
 
       Object.keys(related_models).forEach((key) => {
@@ -3433,12 +3551,12 @@ module.exports = {
     ) {
       filter.where.push({
         archived_at: {
-          [Op.ne]: null,
-        },
+          [Op.ne]: null
+        }
       });
     } else {
       filter.where.push({
-        archived_at: null,
+        archived_at: null
       });
     }
 
@@ -3451,7 +3569,7 @@ module.exports = {
     ) {
       if (!["sold", "reserved"].includes(status)) {
         filter.where.push({
-          status: status,
+          status: status
         });
       } else {
         // Sold or Reserved
@@ -3469,11 +3587,11 @@ module.exports = {
                   {
                     model: Order,
                     attributes: ["order_id", "ordered_at"],
-                    required: true,
-                  },
-                ],
-              },
-            ],
+                    required: true
+                  }
+                ]
+              }
+            ]
           });
         } else if (status === "reserved") {
           filter.include.push({
@@ -3489,11 +3607,11 @@ module.exports = {
                   {
                     model: Reservation,
                     attributes: ["reservation_id", "reserved_at"],
-                    required: true,
-                  },
-                ],
-              },
-            ],
+                    required: true
+                  }
+                ]
+              }
+            ]
           });
         }
       }
@@ -3507,7 +3625,7 @@ module.exports = {
       version_id !== ""
     ) {
       filter.where.push({
-        "$version.version_id$": version_id,
+        "$version.version_id$": version_id
       });
     } else {
       if (
@@ -3517,7 +3635,7 @@ module.exports = {
         model_id !== ""
       ) {
         filter.where.push({
-          "$version.model.model_id$": model_id,
+          "$version.model.model_id$": model_id
         });
       }
 
@@ -3528,7 +3646,7 @@ module.exports = {
         brand_id !== ""
       ) {
         filter.where.push({
-          "$version.model.brand.brand_id$": brand_id,
+          "$version.model.brand.brand_id$": brand_id
         });
       }
 
@@ -3539,7 +3657,7 @@ module.exports = {
         type_id !== ""
       ) {
         filter.where.push({
-          "$version.model.brand.type_id$": type_id,
+          "$version.model.brand.type_id$": type_id
         });
       }
     }
@@ -3552,7 +3670,7 @@ module.exports = {
       deposit_floor_id !== ""
     ) {
       filter.where.push({
-        "$deposit_floor.deposit_floor_id$": deposit_floor_id,
+        "$deposit_floor.deposit_floor_id$": deposit_floor_id
       });
     }
 
@@ -3565,7 +3683,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$deposit_floor.deposit_placement.deposit_placement_id$":
-          deposit_placement_id,
+          deposit_placement_id
       });
     }
 
@@ -3578,7 +3696,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$deposit_floor.deposit_placement.deposit_lane.deposit_lane_id$":
-          deposit_lane_id,
+          deposit_lane_id
       });
     }
 
@@ -3591,7 +3709,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$deposit_floor.deposit_placement.deposit_lane.deposit_lot.deposit_lot_id$":
-          deposit_lot_id,
+          deposit_lot_id
       });
     }
 
@@ -3604,7 +3722,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$deposit_floor.deposit_placement.deposit_lane.deposit_lot.deposit.deposit_id$":
-          deposit_id,
+          deposit_id
       });
     }
 
@@ -3618,7 +3736,7 @@ module.exports = {
       if (media === "images" || media === "no_images") {
         const where = [
           { media_type: "image" },
-          { "$vehicle.dismantler_id$": context.dismantler.dismantler_id },
+          { "$vehicle.dismantler_id$": context.dismantler.dismantler_id }
         ];
 
         if (
@@ -3630,12 +3748,12 @@ module.exports = {
         ) {
           where.push({
             "$vehicle.archived_at$": {
-              [Op.ne]: null,
-            },
+              [Op.ne]: null
+            }
           });
         } else {
           where.push({
-            "$vehicle.archived_at$": null,
+            "$vehicle.archived_at$": null
           });
         }
 
@@ -3644,9 +3762,9 @@ module.exports = {
           include: [
             {
               model: Vehicle,
-              required: true,
-            },
-          ],
+              required: true
+            }
+          ]
         });
 
         if (media === "images") {
@@ -3655,9 +3773,9 @@ module.exports = {
               [Op.in]: [
                 ...new Set(
                   vehicles_with_media_ids.map((c) => c.vehicle.vehicle_id)
-                ),
-              ],
-            },
+                )
+              ]
+            }
           });
         } else {
           filter.where.push({
@@ -3665,9 +3783,9 @@ module.exports = {
               [Op.notIn]: [
                 ...new Set(
                   vehicles_with_media_ids.map((c) => c.vehicle.vehicle_id)
-                ),
-              ],
-            },
+                )
+              ]
+            }
           });
         }
       }
@@ -3739,7 +3857,7 @@ module.exports = {
           // Vehicle Transmission
           { "$vehicle_transmission.code$": { [Op[op]]: text[i] } },
           { "$vehicle_transmission.type$": { [Op[op]]: text[i] } },
-          { "$vehicle_transmission.gears$": { [Op[op]]: text[i] } },
+          { "$vehicle_transmission.gears$": { [Op[op]]: text[i] } }
         ];
 
         // Version
@@ -3749,13 +3867,13 @@ module.exports = {
             {
               model: AniaVersion,
               attributes: ["ania_version"],
-              required: false,
+              required: false
             },
             {
               model: DismantlerVersion,
               attributes: ["dismantler_version"],
               where: { dismantler_id: context.dismantler.dismantler_id },
-              required: false,
+              required: false
             },
             {
               model: Model,
@@ -3764,13 +3882,13 @@ module.exports = {
                 {
                   model: AniaModel,
                   attributes: ["ania_model"],
-                  required: false,
+                  required: false
                 },
                 {
                   model: DismantlerModel,
                   attributes: ["dismantler_model"],
                   where: { dismantler_id: context.dismantler.dismantler_id },
-                  required: false,
+                  required: false
                 },
                 {
                   model: Brand,
@@ -3779,20 +3897,20 @@ module.exports = {
                     {
                       model: AniaBrand,
                       attributes: ["ania_brand"],
-                      required: false,
+                      required: false
                     },
                     {
                       model: DismantlerBrand,
                       attributes: ["dismantler_brand"],
                       where: {
-                        dismantler_id: context.dismantler.dismantler_id,
+                        dismantler_id: context.dismantler.dismantler_id
                       },
-                      required: false,
-                    },
-                  ],
-                },
-              ],
-            },
+                      required: false
+                    }
+                  ]
+                }
+              ]
+            }
           ],
           where: {
             [Op.or]: [
@@ -3800,42 +3918,42 @@ module.exports = {
               { "$ania_version.ania_version$": { [Op[op]]: text[i] } },
               {
                 "$dismantler_version.dismantler_version$": {
-                  [Op[op]]: text[i],
-                },
+                  [Op[op]]: text[i]
+                }
               },
 
               // Model
               { "$model.ania_model.ania_model$": { [Op[op]]: text[i] } },
               {
                 "$model.dismantler_model.dismantler_model$": {
-                  [Op[op]]: text[i],
-                },
+                  [Op[op]]: text[i]
+                }
               },
 
               // Brand
               {
                 "$model.brand.ania_brand.ania_brand$": {
-                  [Op[op]]: text[i],
-                },
+                  [Op[op]]: text[i]
+                }
               },
               {
                 "$model.brand.dismantler_brand.dismantler_brand$": {
-                  [Op[op]]: text[i],
-                },
-              },
-            ],
-          },
+                  [Op[op]]: text[i]
+                }
+              }
+            ]
+          }
         });
         if (version_ids.length > 0) {
           params.push({
             "$version.version_id$": {
-              [Op.in]: version_ids.map((v) => v.version_id),
-            },
+              [Op.in]: version_ids.map((v) => v.version_id)
+            }
           });
         }
 
         filter.where.push({
-          [Op.or]: [...params],
+          [Op.or]: [...params]
         });
       }
     }
@@ -3882,7 +4000,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -3912,7 +4030,7 @@ module.exports = {
 
       media,
 
-      archived_at,
+      archived_at
     },
     context
   ) {
@@ -3920,8 +4038,8 @@ module.exports = {
     let filter = {
       where: [
         {
-          dismantler_id: context.dismantler.dismantler_id,
-        },
+          dismantler_id: context.dismantler.dismantler_id
+        }
       ],
       include: [
         // Manufacturer
@@ -3930,14 +4048,14 @@ module.exports = {
           include: [
             {
               model: SystemManufacturer,
-              required: false,
+              required: false
             },
             {
               model: DismantlerManufacturer,
               where: { dismantler_id: context.dismantler.dismantler_id },
-              required: false,
-            },
-          ],
+              required: false
+            }
+          ]
         },
 
         // Warehouse Bin
@@ -3964,24 +4082,24 @@ module.exports = {
                             {
                               model: Warehouse,
                               where: {
-                                dismantler_id: context.dismantler.dismantler_id,
+                                dismantler_id: context.dismantler.dismantler_id
                               },
-                              required: false,
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
+                              required: false
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
       ],
       order: [["tyre_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -3995,12 +4113,12 @@ module.exports = {
     ) {
       filter.where.push({
         archived_at: {
-          [Op.ne]: null,
-        },
+          [Op.ne]: null
+        }
       });
     } else {
       filter.where.push({
-        archived_at: null,
+        archived_at: null
       });
     }
 
@@ -4013,7 +4131,7 @@ module.exports = {
     ) {
       if (!["sold", "reserved"].includes(status)) {
         filter.where.push({
-          status: status,
+          status: status
         });
       } else {
         // Sold or Reserved
@@ -4031,11 +4149,11 @@ module.exports = {
                   {
                     model: Order,
                     attributes: ["order_id", "ordered_at"],
-                    required: true,
-                  },
-                ],
-              },
-            ],
+                    required: true
+                  }
+                ]
+              }
+            ]
           });
         } else if (status === "reserved") {
           filter.include.push({
@@ -4051,11 +4169,11 @@ module.exports = {
                   {
                     model: Reservation,
                     attributes: ["reservation_id", "reserved_at"],
-                    required: true,
-                  },
-                ],
-              },
-            ],
+                    required: true
+                  }
+                ]
+              }
+            ]
           });
         }
       }
@@ -4069,7 +4187,7 @@ module.exports = {
       season !== ""
     ) {
       filter.where.push({
-        season: season,
+        season: season
       });
     }
 
@@ -4081,7 +4199,7 @@ module.exports = {
       manufacturer_id !== ""
     ) {
       filter.where.push({
-        "$manufacturer.manufacturer_id$": manufacturer_id,
+        "$manufacturer.manufacturer_id$": manufacturer_id
       });
     }
 
@@ -4093,7 +4211,7 @@ module.exports = {
       warehouse_bin_id !== ""
     ) {
       filter.where.push({
-        "$warehouse_bin.warehouse_bin_id$": warehouse_bin_id,
+        "$warehouse_bin.warehouse_bin_id$": warehouse_bin_id
       });
     }
 
@@ -4105,8 +4223,7 @@ module.exports = {
       warehouse_shelf_id !== ""
     ) {
       filter.where.push({
-        "$warehouse_bin.warehouse_shelf.warehouse_shelf_id$":
-          warehouse_shelf_id,
+        "$warehouse_bin.warehouse_shelf.warehouse_shelf_id$": warehouse_shelf_id
       });
     }
 
@@ -4119,7 +4236,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_rack_id$":
-          warehouse_rack_id,
+          warehouse_rack_id
       });
     }
 
@@ -4132,7 +4249,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_lane_id$":
-          warehouse_lane_id,
+          warehouse_lane_id
       });
     }
 
@@ -4145,7 +4262,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.warehouse_floor_id$":
-          warehouse_floor_id,
+          warehouse_floor_id
       });
     }
 
@@ -4158,7 +4275,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.warehouse.warehouse_id$":
-          warehouse_id,
+          warehouse_id
       });
     }
 
@@ -4172,7 +4289,7 @@ module.exports = {
       if (media === "images" || media === "no_images") {
         const where = [
           { media_type: "image" },
-          { "$tyre.dismantler_id$": context.dismantler.dismantler_id },
+          { "$tyre.dismantler_id$": context.dismantler.dismantler_id }
         ];
 
         if (
@@ -4184,12 +4301,12 @@ module.exports = {
         ) {
           where.push({
             "$tyre.archived_at$": {
-              [Op.ne]: null,
-            },
+              [Op.ne]: null
+            }
           });
         } else {
           where.push({
-            "$tyre.archived_at$": null,
+            "$tyre.archived_at$": null
           });
         }
 
@@ -4198,26 +4315,26 @@ module.exports = {
           include: [
             {
               model: Tyre,
-              required: true,
-            },
-          ],
+              required: true
+            }
+          ]
         });
 
         if (media === "images") {
           filter.where.push({
             tyre_id: {
               [Op.in]: [
-                ...new Set(tyres_with_media_ids.map((c) => c.tyre.tyre_id)),
-              ],
-            },
+                ...new Set(tyres_with_media_ids.map((c) => c.tyre.tyre_id))
+              ]
+            }
           });
         } else {
           filter.where.push({
             tyre_id: {
               [Op.notIn]: [
-                ...new Set(tyres_with_media_ids.map((c) => c.tyre.tyre_id)),
-              ],
-            },
+                ...new Set(tyres_with_media_ids.map((c) => c.tyre.tyre_id))
+              ]
+            }
           });
         }
       }
@@ -4266,8 +4383,8 @@ module.exports = {
 
             { specification: { [Op[op]]: text[i] } },
 
-            { notes: { [Op[op]]: text[i] } },
-          ],
+            { notes: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -4314,7 +4431,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -4351,7 +4468,7 @@ module.exports = {
 
       media,
 
-      archived_at,
+      archived_at
     },
     context
   ) {
@@ -4359,8 +4476,8 @@ module.exports = {
     let filter = {
       where: [
         {
-          dismantler_id: context.dismantler.dismantler_id,
-        },
+          dismantler_id: context.dismantler.dismantler_id
+        }
       ],
       include: [
         // Version
@@ -4371,7 +4488,7 @@ module.exports = {
             {
               model: DismantlerVersion,
               where: { dismantler_id: context.dismantler.dismantler_id },
-              required: false,
+              required: false
             },
             {
               model: Model,
@@ -4380,7 +4497,7 @@ module.exports = {
                 {
                   model: DismantlerModel,
                   where: { dismantler_id: context.dismantler.dismantler_id },
-                  required: false,
+                  required: false
                 },
                 {
                   model: Brand,
@@ -4389,9 +4506,9 @@ module.exports = {
                     {
                       model: DismantlerBrand,
                       where: {
-                        dismantler_id: context.dismantler.dismantler_id,
+                        dismantler_id: context.dismantler.dismantler_id
                       },
-                      required: false,
+                      required: false
                     },
                     {
                       model: Type,
@@ -4400,17 +4517,17 @@ module.exports = {
                         {
                           model: DismantlerType,
                           where: {
-                            dismantler_id: context.dismantler.dismantler_id,
+                            dismantler_id: context.dismantler.dismantler_id
                           },
-                          required: false,
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+                          required: false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
 
         // Manufacturer
@@ -4419,14 +4536,14 @@ module.exports = {
           include: [
             {
               model: SystemManufacturer,
-              required: false,
+              required: false
             },
             {
               model: DismantlerManufacturer,
               where: { dismantler_id: context.dismantler.dismantler_id },
-              required: false,
-            },
-          ],
+              required: false
+            }
+          ]
         },
 
         // Warehouse Bin
@@ -4453,24 +4570,24 @@ module.exports = {
                             {
                               model: Warehouse,
                               where: {
-                                dismantler_id: context.dismantler.dismantler_id,
+                                dismantler_id: context.dismantler.dismantler_id
                               },
-                              required: false,
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
+                              required: false
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
       ],
       order: [["wheel_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -4484,12 +4601,12 @@ module.exports = {
     ) {
       filter.where.push({
         archived_at: {
-          [Op.ne]: null,
-        },
+          [Op.ne]: null
+        }
       });
     } else {
       filter.where.push({
-        archived_at: null,
+        archived_at: null
       });
     }
 
@@ -4502,7 +4619,7 @@ module.exports = {
     ) {
       if (!["sold", "reserved"].includes(status)) {
         filter.where.push({
-          status: status,
+          status: status
         });
       } else {
         // Sold or Reserved
@@ -4520,11 +4637,11 @@ module.exports = {
                   {
                     model: Order,
                     attributes: ["order_id", "ordered_at"],
-                    required: true,
-                  },
-                ],
-              },
-            ],
+                    required: true
+                  }
+                ]
+              }
+            ]
           });
         } else if (status === "reserved") {
           filter.include.push({
@@ -4540,11 +4657,11 @@ module.exports = {
                   {
                     model: Reservation,
                     attributes: ["reservation_id", "reserved_at"],
-                    required: true,
-                  },
-                ],
-              },
-            ],
+                    required: true
+                  }
+                ]
+              }
+            ]
           });
         }
       }
@@ -4558,7 +4675,7 @@ module.exports = {
       material !== ""
     ) {
       filter.where.push({
-        material: material,
+        material: material
       });
     }
 
@@ -4570,7 +4687,7 @@ module.exports = {
       finish !== ""
     ) {
       filter.where.push({
-        finish: finish,
+        finish: finish
       });
     }
 
@@ -4582,7 +4699,7 @@ module.exports = {
       manufacturer_id !== ""
     ) {
       filter.where.push({
-        "$manufacturer.manufacturer_id$": manufacturer_id,
+        "$manufacturer.manufacturer_id$": manufacturer_id
       });
     }
 
@@ -4594,7 +4711,7 @@ module.exports = {
       version_id !== ""
     ) {
       filter.where.push({
-        "$version.version_id$": version_id,
+        "$version.version_id$": version_id
       });
     } else {
       // No version set
@@ -4607,7 +4724,7 @@ module.exports = {
         model_id !== ""
       ) {
         filter.where.push({
-          "$version.model.model_id$": model_id,
+          "$version.model.model_id$": model_id
         });
       }
 
@@ -4619,7 +4736,7 @@ module.exports = {
         brand_id !== ""
       ) {
         filter.where.push({
-          "$version.model.brand.brand_id$": brand_id,
+          "$version.model.brand.brand_id$": brand_id
         });
       }
 
@@ -4631,7 +4748,7 @@ module.exports = {
         type_id !== ""
       ) {
         filter.where.push({
-          "$version.model.brand.type.type_id$": type_id,
+          "$version.model.brand.type.type_id$": type_id
         });
       }
     }
@@ -4644,7 +4761,7 @@ module.exports = {
       warehouse_bin_id !== ""
     ) {
       filter.where.push({
-        "$warehouse_bin.warehouse_bin_id$": warehouse_bin_id,
+        "$warehouse_bin.warehouse_bin_id$": warehouse_bin_id
       });
     }
 
@@ -4656,8 +4773,7 @@ module.exports = {
       warehouse_shelf_id !== ""
     ) {
       filter.where.push({
-        "$warehouse_bin.warehouse_shelf.warehouse_shelf_id$":
-          warehouse_shelf_id,
+        "$warehouse_bin.warehouse_shelf.warehouse_shelf_id$": warehouse_shelf_id
       });
     }
 
@@ -4670,7 +4786,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_rack_id$":
-          warehouse_rack_id,
+          warehouse_rack_id
       });
     }
 
@@ -4683,7 +4799,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_lane_id$":
-          warehouse_lane_id,
+          warehouse_lane_id
       });
     }
 
@@ -4696,7 +4812,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.warehouse_floor_id$":
-          warehouse_floor_id,
+          warehouse_floor_id
       });
     }
 
@@ -4709,7 +4825,7 @@ module.exports = {
     ) {
       filter.where.push({
         "$warehouse_bin.warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.warehouse.warehouse_id$":
-          warehouse_id,
+          warehouse_id
       });
     }
 
@@ -4723,7 +4839,7 @@ module.exports = {
       if (media === "images" || media === "no_images") {
         const where = [
           { media_type: "image" },
-          { "$wheel.dismantler_id$": context.dismantler.dismantler_id },
+          { "$wheel.dismantler_id$": context.dismantler.dismantler_id }
         ];
 
         if (
@@ -4735,12 +4851,12 @@ module.exports = {
         ) {
           where.push({
             "$wheel.archived_at$": {
-              [Op.ne]: null,
-            },
+              [Op.ne]: null
+            }
           });
         } else {
           where.push({
-            "$wheel.archived_at$": null,
+            "$wheel.archived_at$": null
           });
         }
 
@@ -4749,26 +4865,26 @@ module.exports = {
           include: [
             {
               model: Wheel,
-              required: true,
-            },
-          ],
+              required: true
+            }
+          ]
         });
 
         if (media === "images") {
           filter.where.push({
             wheel_id: {
               [Op.in]: [
-                ...new Set(wheels_with_media_ids.map((c) => c.wheel.wheel_id)),
-              ],
-            },
+                ...new Set(wheels_with_media_ids.map((c) => c.wheel.wheel_id))
+              ]
+            }
           });
         } else {
           filter.where.push({
             wheel_id: {
               [Op.notIn]: [
-                ...new Set(wheels_with_media_ids.map((c) => c.wheel.wheel_id)),
-              ],
-            },
+                ...new Set(wheels_with_media_ids.map((c) => c.wheel.wheel_id))
+              ]
+            }
           });
         }
       }
@@ -4821,72 +4937,72 @@ module.exports = {
             { "$version.version_id$": { [Op[op]]: text[i] } },
             { "$version.ania_version.ania_version$": { [Op[op]]: text[i] } },
             {
-              "$version.ania_version.ania_id$": { [Op[op]]: text[i] },
+              "$version.ania_version.ania_id$": { [Op[op]]: text[i] }
             },
             {
               "$version.dismantler_version.dismantler_version$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
 
             // Model
             { "$version.model.model_id$": { [Op[op]]: text[i] } },
             {
-              "$version.model.ania_model.ania_model$": { [Op[op]]: text[i] },
+              "$version.model.ania_model.ania_model$": { [Op[op]]: text[i] }
             },
             {
               "$version.model.ania_model.ania_id$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
               "$version.model.dismantler_model.dismantler_model$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
 
             // Brand
             {
-              "$version.model.brand.brand_id$": { [Op[op]]: text[i] },
+              "$version.model.brand.brand_id$": { [Op[op]]: text[i] }
             },
             {
               "$version.model.brand.ania_brand.ania_brand$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
               "$version.model.brand.ania_brand.ania_id$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
               "$version.model.brand.dismantler_brand.dismantler_brand$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
 
             // Type
             {
               "$version.model.brand.type.type_id$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
               "$version.model.brand.type.ania_type.ania_type$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
               "$version.model.brand.type.ania_type.ania_id$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
               "$version.model.brand.type.dismantler_type.dismantler_type$": {
-                [Op[op]]: text[i],
-              },
-            },
-          ],
+                [Op[op]]: text[i]
+              }
+            }
+          ]
         });
       }
     }
@@ -4933,7 +5049,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -4949,16 +5065,16 @@ module.exports = {
     let filter = {
       where: [
         {
-          dismantler_id: context.dismantler.dismantler_id,
-        },
+          dismantler_id: context.dismantler.dismantler_id
+        }
       ],
       include: [
         // Client Billing
-        { model: ClientBilling },
+        { model: ClientBilling }
       ],
       order: [["client_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -4970,7 +5086,7 @@ module.exports = {
       billing !== ""
     ) {
       filter.where.push({
-        "$client_billing.billing$": billing,
+        "$client_billing.billing$": billing
       });
     }
 
@@ -4984,12 +5100,12 @@ module.exports = {
     ) {
       filter.where.push({
         archived_at: {
-          [Op.ne]: null,
-        },
+          [Op.ne]: null
+        }
       });
     } else {
       filter.where.push({
-        archived_at: null,
+        archived_at: null
       });
     }
 
@@ -5036,8 +5152,8 @@ module.exports = {
             { phone: { [Op[op]]: text[i] } },
             { email: { [Op[op]]: text[i] } },
             { website: { [Op[op]]: text[i] } },
-            { notes: { [Op[op]]: text[i] } },
-          ],
+            { notes: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -5069,7 +5185,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -5085,16 +5201,16 @@ module.exports = {
     let filter = {
       where: [
         {
-          dismantler_id: context.dismantler.dismantler_id,
-        },
+          dismantler_id: context.dismantler.dismantler_id
+        }
       ],
       include: [
         // Warehouse Address
-        { model: WarehouseAddress },
+        { model: WarehouseAddress }
       ],
       order: [["warehouse_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -5108,12 +5224,12 @@ module.exports = {
     ) {
       filter.where.push({
         archived_at: {
-          [Op.ne]: null,
-        },
+          [Op.ne]: null
+        }
       });
     } else {
       filter.where.push({
-        archived_at: null,
+        archived_at: null
       });
     }
 
@@ -5162,8 +5278,8 @@ module.exports = {
             { "$warehouse_address.city$": { [Op[op]]: text[i] } },
             { "$warehouse_address.zip$": { [Op[op]]: text[i] } },
             { "$warehouse_address.province$": { [Op[op]]: text[i] } },
-            { "$warehouse_address.country$": { [Op[op]]: text[i] } },
-          ],
+            { "$warehouse_address.country$": { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -5195,7 +5311,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -5210,13 +5326,13 @@ module.exports = {
     let filter = {
       where: [
         {
-          "$warehouse.dismantler_id$": context.dismantler.dismantler_id,
-        },
+          "$warehouse.dismantler_id$": context.dismantler.dismantler_id
+        }
       ],
       include: [{ model: Warehouse, required: true }],
       order: [["warehouse_floor_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -5226,7 +5342,7 @@ module.exports = {
       warehouse_id !== ""
     ) {
       filter.where.push({
-        warehouse_id: warehouse_id,
+        warehouse_id: warehouse_id
       });
     }
 
@@ -5267,8 +5383,8 @@ module.exports = {
           [Op.or]: [
             // Warehouse
             { warehouse_floor_id: { [Op[op]]: text[i] } },
-            { floor: { [Op[op]]: text[i] } },
-          ],
+            { floor: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -5300,7 +5416,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -5316,19 +5432,19 @@ module.exports = {
       where: [
         {
           "$warehouse_floor.warehouse.dismantler_id$":
-            context.dismantler.dismantler_id,
-        },
+            context.dismantler.dismantler_id
+        }
       ],
       include: [
         {
           model: WarehouseFloor,
           required: true,
-          include: [{ model: Warehouse, required: true }],
-        },
+          include: [{ model: Warehouse, required: true }]
+        }
       ],
       order: [["warehouse_lane_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -5338,7 +5454,7 @@ module.exports = {
       warehouse_floor_id !== ""
     ) {
       filter.where.push({
-        warehouse_floor_id: warehouse_floor_id,
+        warehouse_floor_id: warehouse_floor_id
       });
     }
 
@@ -5379,8 +5495,8 @@ module.exports = {
           [Op.or]: [
             // Warehouse
             { warehouse_lane_id: { [Op[op]]: text[i] } },
-            { lane: { [Op[op]]: text[i] } },
-          ],
+            { lane: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -5412,7 +5528,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -5428,8 +5544,8 @@ module.exports = {
       where: [
         {
           "$warehouse_lane.warehouse_floor.warehouse.dismantler_id$":
-            context.dismantler.dismantler_id,
-        },
+            context.dismantler.dismantler_id
+        }
       ],
       include: [
         {
@@ -5439,14 +5555,14 @@ module.exports = {
             {
               model: WarehouseFloor,
               required: true,
-              include: [{ model: Warehouse, required: true }],
-            },
-          ],
-        },
+              include: [{ model: Warehouse, required: true }]
+            }
+          ]
+        }
       ],
       order: [["warehouse_rack_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -5456,7 +5572,7 @@ module.exports = {
       warehouse_lane_id !== ""
     ) {
       filter.where.push({
-        warehouse_lane_id: warehouse_lane_id,
+        warehouse_lane_id: warehouse_lane_id
       });
     }
 
@@ -5497,8 +5613,8 @@ module.exports = {
           [Op.or]: [
             // Warehouse
             { warehouse_rack_id: { [Op[op]]: text[i] } },
-            { rack: { [Op[op]]: text[i] } },
-          ],
+            { rack: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -5530,7 +5646,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -5546,8 +5662,8 @@ module.exports = {
       where: [
         {
           "$warehouse_rack.warehouse_lane.warehouse_floor.warehouse.dismantler_id$":
-            context.dismantler.dismantler_id,
-        },
+            context.dismantler.dismantler_id
+        }
       ],
       include: [
         {
@@ -5561,16 +5677,16 @@ module.exports = {
                 {
                   model: WarehouseFloor,
                   required: true,
-                  include: [{ model: Warehouse, required: true }],
-                },
-              ],
-            },
-          ],
-        },
+                  include: [{ model: Warehouse, required: true }]
+                }
+              ]
+            }
+          ]
+        }
       ],
       order: [["warehouse_shelf_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -5580,7 +5696,7 @@ module.exports = {
       warehouse_rack_id !== ""
     ) {
       filter.where.push({
-        warehouse_rack_id: warehouse_rack_id,
+        warehouse_rack_id: warehouse_rack_id
       });
     }
 
@@ -5621,8 +5737,8 @@ module.exports = {
           [Op.or]: [
             // Warehouse
             { warehouse_shelf_id: { [Op[op]]: text[i] } },
-            { shelf: { [Op[op]]: text[i] } },
-          ],
+            { shelf: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -5654,7 +5770,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -5670,8 +5786,8 @@ module.exports = {
       where: [
         {
           "$warehouse_shelf.warehouse_rack.warehouse_lane.warehouse_floor.warehouse.dismantler_id$":
-            context.dismantler.dismantler_id,
-        },
+            context.dismantler.dismantler_id
+        }
       ],
       include: [
         {
@@ -5689,18 +5805,18 @@ module.exports = {
                     {
                       model: WarehouseFloor,
                       required: true,
-                      include: [{ model: Warehouse, required: true }],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
+                      include: [{ model: Warehouse, required: true }]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
       ],
       order: [["warehouse_bin_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -5710,7 +5826,7 @@ module.exports = {
       warehouse_shelf_id !== ""
     ) {
       filter.where.push({
-        warehouse_shelf_id: warehouse_shelf_id,
+        warehouse_shelf_id: warehouse_shelf_id
       });
     }
 
@@ -5751,8 +5867,8 @@ module.exports = {
           [Op.or]: [
             // Warehouse
             { warehouse_bin_id: { [Op[op]]: text[i] } },
-            { bin: { [Op[op]]: text[i] } },
-          ],
+            { bin: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -5784,7 +5900,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -5800,16 +5916,16 @@ module.exports = {
     let filter = {
       where: [
         {
-          dismantler_id: context.dismantler.dismantler_id,
-        },
+          dismantler_id: context.dismantler.dismantler_id
+        }
       ],
       include: [
         // Deposit Address
-        { model: DepositAddress },
+        { model: DepositAddress }
       ],
       order: [["deposit_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -5823,12 +5939,12 @@ module.exports = {
     ) {
       filter.where.push({
         archived_at: {
-          [Op.ne]: null,
-        },
+          [Op.ne]: null
+        }
       });
     } else {
       filter.where.push({
-        archived_at: null,
+        archived_at: null
       });
     }
 
@@ -5877,8 +5993,8 @@ module.exports = {
             { "$deposit_address.city$": { [Op[op]]: text[i] } },
             { "$deposit_address.zip$": { [Op[op]]: text[i] } },
             { "$deposit_address.province$": { [Op[op]]: text[i] } },
-            { "$deposit_address.country$": { [Op[op]]: text[i] } },
-          ],
+            { "$deposit_address.country$": { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -5910,7 +6026,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -5925,13 +6041,13 @@ module.exports = {
     let filter = {
       where: [
         {
-          "$deposit.dismantler_id$": context.dismantler.dismantler_id,
-        },
+          "$deposit.dismantler_id$": context.dismantler.dismantler_id
+        }
       ],
       include: [{ model: Deposit, required: true }],
       order: [["deposit_lot_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -5941,7 +6057,7 @@ module.exports = {
       deposit_id !== ""
     ) {
       filter.where.push({
-        deposit_id: deposit_id,
+        deposit_id: deposit_id
       });
     }
 
@@ -5982,8 +6098,8 @@ module.exports = {
           [Op.or]: [
             // Deposit
             { deposit_lot_id: { [Op[op]]: text[i] } },
-            { lot: { [Op[op]]: text[i] } },
-          ],
+            { lot: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -6015,7 +6131,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -6031,19 +6147,19 @@ module.exports = {
       where: [
         {
           "$deposit_lot.deposit.dismantler_id$":
-            context.dismantler.dismantler_id,
-        },
+            context.dismantler.dismantler_id
+        }
       ],
       include: [
         {
           model: DepositLot,
           required: true,
-          include: [{ model: Deposit, required: true }],
-        },
+          include: [{ model: Deposit, required: true }]
+        }
       ],
       order: [["deposit_lane_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -6053,7 +6169,7 @@ module.exports = {
       deposit_lot_id !== ""
     ) {
       filter.where.push({
-        deposit_lot_id: deposit_lot_id,
+        deposit_lot_id: deposit_lot_id
       });
     }
 
@@ -6094,8 +6210,8 @@ module.exports = {
           [Op.or]: [
             // Deposit
             { deposit_lane_id: { [Op[op]]: text[i] } },
-            { lane: { [Op[op]]: text[i] } },
-          ],
+            { lane: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -6127,7 +6243,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -6143,8 +6259,8 @@ module.exports = {
       where: [
         {
           "$deposit_lane.deposit_lot.deposit.dismantler_id$":
-            context.dismantler.dismantler_id,
-        },
+            context.dismantler.dismantler_id
+        }
       ],
       include: [
         {
@@ -6154,14 +6270,14 @@ module.exports = {
             {
               model: DepositLot,
               required: true,
-              include: [{ model: Deposit, required: true }],
-            },
-          ],
-        },
+              include: [{ model: Deposit, required: true }]
+            }
+          ]
+        }
       ],
       order: [["deposit_placement_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -6171,7 +6287,7 @@ module.exports = {
       deposit_lane_id !== ""
     ) {
       filter.where.push({
-        deposit_lane_id: deposit_lane_id,
+        deposit_lane_id: deposit_lane_id
       });
     }
 
@@ -6212,8 +6328,8 @@ module.exports = {
           [Op.or]: [
             // Deposit
             { deposit_placement_id: { [Op[op]]: text[i] } },
-            { placement: { [Op[op]]: text[i] } },
-          ],
+            { placement: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -6245,7 +6361,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -6261,8 +6377,8 @@ module.exports = {
       where: [
         {
           "$deposit_placement.deposit_lane.deposit_lot.deposit.dismantler_id$":
-            context.dismantler.dismantler_id,
-        },
+            context.dismantler.dismantler_id
+        }
       ],
       include: [
         {
@@ -6276,16 +6392,16 @@ module.exports = {
                 {
                   model: DepositLot,
                   required: true,
-                  include: [{ model: Deposit, required: true }],
-                },
-              ],
-            },
-          ],
-        },
+                  include: [{ model: Deposit, required: true }]
+                }
+              ]
+            }
+          ]
+        }
       ],
       order: [["deposit_floor_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -6295,7 +6411,7 @@ module.exports = {
       deposit_placement_id !== ""
     ) {
       filter.where.push({
-        deposit_placement_id: deposit_placement_id,
+        deposit_placement_id: deposit_placement_id
       });
     }
 
@@ -6336,8 +6452,8 @@ module.exports = {
           [Op.or]: [
             // Deposit
             { deposit_floor_id: { [Op[op]]: text[i] } },
-            { floor: { [Op[op]]: text[i] } },
-          ],
+            { floor: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -6369,7 +6485,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -6398,9 +6514,9 @@ module.exports = {
               Sequelize.col("ania_group.ania_group"),
               Sequelize.col("dismantler_group.dismantler_group")
             ),
-            "group",
-          ],
-        ],
+            "group"
+          ]
+        ]
       },
       where: [
         // Check type
@@ -6411,26 +6527,26 @@ module.exports = {
               { group_type: "dismantler_group" },
               {
                 "$dismantler_group.dismantler_id$":
-                  context.dismantler.dismantler_id,
-              },
-            ],
-          ],
-        },
+                  context.dismantler.dismantler_id
+              }
+            ]
+          ]
+        }
       ],
       include: [
         // Group
         {
           model: AniaGroup,
-          required: false,
+          required: false
         },
         {
           model: DismantlerGroup,
-          required: false,
-        },
+          required: false
+        }
       ],
       order: [["group_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -6440,7 +6556,7 @@ module.exports = {
       group_type !== ""
     ) {
       filter.where.push({
-        group_type: group_type,
+        group_type: group_type
       });
     }
 
@@ -6483,12 +6599,12 @@ module.exports = {
             { group_id: { [Op[op]]: text[i] } },
 
             {
-              "$dismantler_group.dismantler_group$": { [Op[op]]: text[i] },
+              "$dismantler_group.dismantler_group$": { [Op[op]]: text[i] }
             },
             {
-              "$ania_group.ania_group$": { [Op[op]]: text[i] },
-            },
-          ],
+              "$ania_group.ania_group$": { [Op[op]]: text[i] }
+            }
+          ]
         });
       }
     }
@@ -6541,7 +6657,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -6557,13 +6673,13 @@ module.exports = {
     let filter = {
       where: [
         {
-          dismantler_id: context.dismantler.dismantler_id,
-        },
+          dismantler_id: context.dismantler.dismantler_id
+        }
       ],
       include: [],
       order: [["deck_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -6604,8 +6720,8 @@ module.exports = {
           [Op.or]: [
             // Deck
             { deck_id: { [Op[op]]: text[i] } },
-            { deck: { [Op[op]]: text[i] } },
-          ],
+            { deck: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -6637,7 +6753,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -6656,7 +6772,7 @@ module.exports = {
       is_active,
       deck_id,
       group_id,
-      entry_type,
+      entry_type
     },
     context
   ) {
@@ -6671,9 +6787,9 @@ module.exports = {
               Sequelize.col("ania_entry.ania_entry"),
               Sequelize.col("dismantler_entry.dismantler_entry")
             ),
-            "entry",
-          ],
-        ],
+            "entry"
+          ]
+        ]
       },
       where: [
         {
@@ -6683,30 +6799,30 @@ module.exports = {
               { entry_type: "dismantler_entry" },
               {
                 "$dismantler_entry.dismantler_id$":
-                  context.dismantler.dismantler_id,
-              },
-            ],
-          ],
-        },
+                  context.dismantler.dismantler_id
+              }
+            ]
+          ]
+        }
       ],
       include: [
         {
           model: AniaEntry,
-          required: false,
+          required: false
         },
         {
           model: DismantlerEntry,
-          required: false,
-        },
+          required: false
+        }
       ],
       order: [["entry_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     let dismantler_ania_entry_filter = {
       attributes: ["entry_id", "entry"],
-      where: [{ dismantler_id: context.dismantler.dismantler_id }],
+      where: [{ dismantler_id: context.dismantler.dismantler_id }]
     };
 
     // Populating filter.where
@@ -6721,13 +6837,13 @@ module.exports = {
       const deck_entries = await DeckEntry.findAll({
         attributes: ["entry_id"],
         where: {
-          deck_id: deck_id,
+          deck_id: deck_id
         },
         include: [
           {
             model: Deck,
             where: { dismantler_id: context.dismantler.dismantler_id },
-            required: true,
+            required: true
           },
           {
             model: Entry,
@@ -6737,11 +6853,11 @@ module.exports = {
               {
                 model: DismantlerEntry,
                 required: false,
-                where: { dismantler_id: context.dismantler.dismantler_id },
-              },
-            ],
-          },
-        ],
+                where: { dismantler_id: context.dismantler.dismantler_id }
+              }
+            ]
+          }
+        ]
       });
 
       // Push
@@ -6766,7 +6882,7 @@ module.exports = {
           {
             model: Deck,
             where: { dismantler_id: context.dismantler.dismantler_id },
-            required: true,
+            required: true
           },
           {
             model: Entry,
@@ -6776,11 +6892,11 @@ module.exports = {
               {
                 model: DismantlerEntry,
                 required: false,
-                where: { dismantler_id: context.dismantler.dismantler_id },
-              },
-            ],
-          },
-        ],
+                where: { dismantler_id: context.dismantler.dismantler_id }
+              }
+            ]
+          }
+        ]
       });
 
       // Push
@@ -6790,7 +6906,7 @@ module.exports = {
             deck_entries.map((entry) => {
               return entry.entry_id;
             })
-          ),
+          )
         ]
       );
     }
@@ -6805,15 +6921,15 @@ module.exports = {
       const entry_ids = await TypeEntryGroup.findAll({
         attributes: ["entry_id"],
         where: {
-          group_id: group_id,
-        },
+          group_id: group_id
+        }
       });
 
       if (entry_ids.length > 0) {
         filter.where.push({
           entry_id: {
-            [Op.in]: entry_ids.map((e) => e.entry_id),
-          },
+            [Op.in]: entry_ids.map((e) => e.entry_id)
+          }
         });
       }
     }
@@ -6829,8 +6945,8 @@ module.exports = {
       const dismantler_safety_entries = await DismantlerEntry.findAll({
         where: {
           dismantler_id: context.dismantler.dismantler_id,
-          is_safety: is_safety,
-        },
+          is_safety: is_safety
+        }
       });
 
       if (dismantler_safety_entries.length > 0) {
@@ -6849,11 +6965,11 @@ module.exports = {
             model: DismantlerAniaEntry,
             where: {
               is_safety: true,
-              dismantler_id: context.dismantler.dismantler_id,
+              dismantler_id: context.dismantler.dismantler_id
             },
-            required: true,
-          },
-        ],
+            required: true
+          }
+        ]
       });
 
       if (is_safety.toString() === "true") {
@@ -6869,9 +6985,9 @@ module.exports = {
             entry_id: {
               [Op.notIn]: ania_safety_entries.map((entry) => {
                 return entry.entry_id;
-              }),
-            },
-          },
+              })
+            }
+          }
         });
 
         // Push
@@ -6893,15 +7009,15 @@ module.exports = {
         // Push in where
         filter.where.push({
           entry_id: {
-            [Op.in]: safety_entries,
-          },
+            [Op.in]: safety_entries
+          }
         });
       } else {
         // Push in where
         filter.where.push({
           entry_id: {
-            [Op.eq]: [],
-          },
+            [Op.eq]: []
+          }
         });
       }
     }
@@ -6935,15 +7051,15 @@ module.exports = {
           if (in_deck_entries.length > 0) {
             filter.where.push({
               entry_id: {
-                [Op.in]: in_deck_entries,
-              },
+                [Op.in]: in_deck_entries
+              }
             });
           } else {
             // Empty
             filter.where.push({
               entry_id: {
-                [Op.in]: [],
-              },
+                [Op.in]: []
+              }
             });
           }
         } else if (is_active.toString() === "false") {
@@ -6952,8 +7068,8 @@ module.exports = {
           if (in_deck_entries.length > 0) {
             filter.where.push({
               entry_id: {
-                [Op.notIn]: in_deck_entries,
-              },
+                [Op.notIn]: in_deck_entries
+              }
             });
           } else {
             // All
@@ -6969,14 +7085,14 @@ module.exports = {
         if (is_active.toString() === "true") {
           filter.where.push({
             entry_id: {
-              [Op.in]: active_entries,
-            },
+              [Op.in]: active_entries
+            }
           });
         } else if (is_active.toString() === "false") {
           filter.where.push({
             entry_id: {
-              [Op.notIn]: active_entries,
-            },
+              [Op.notIn]: active_entries
+            }
           });
         }
       } else if (
@@ -6989,13 +7105,13 @@ module.exports = {
         if (in_deck_entries.length > 0) {
           filter.where.push({
             entry_id: {
-              [Op.in]: in_deck_entries,
-            },
+              [Op.in]: in_deck_entries
+            }
           });
         } else {
           // Empty
           filter.where.push({
-            entry_id: { [Op.in]: [] },
+            entry_id: { [Op.in]: [] }
           });
         }
       }
@@ -7039,12 +7155,12 @@ module.exports = {
             { entry_id: { [Op[op]]: text.join(" ") } },
             {
               "$dismantler_entry.dismantler_entry$": {
-                [Op[op]]: text.join(" "),
-              },
+                [Op[op]]: text.join(" ")
+              }
             },
             {
-              "$ania_entry.ania_entry$": { [Op[op]]: text.join(" ") },
-            },
+              "$ania_entry.ania_entry$": { [Op[op]]: text.join(" ") }
+            }
           ]
         );
 
@@ -7055,11 +7171,11 @@ module.exports = {
             { entry_id: { [Op[op]]: text[i] } },
 
             {
-              "$dismantler_entry.dismantler_entry$": { [Op[op]]: text[i] },
+              "$dismantler_entry.dismantler_entry$": { [Op[op]]: text[i] }
             },
             {
-              "$ania_entry.ania_entry$": { [Op[op]]: text[i] },
-            },
+              "$ania_entry.ania_entry$": { [Op[op]]: text[i] }
+            }
           ];
 
           // Populate filter
@@ -7078,11 +7194,11 @@ module.exports = {
           { entry_id: { [Op[op]]: text } },
 
           {
-            "$dismantler_entry.dismantler_entry$": { [Op[op]]: text },
+            "$dismantler_entry.dismantler_entry$": { [Op[op]]: text }
           },
           {
-            "$ania_entry.ania_entry$": { [Op[op]]: text },
-          },
+            "$ania_entry.ania_entry$": { [Op[op]]: text }
+          }
         ];
 
         // Populate filter
@@ -7098,7 +7214,7 @@ module.exports = {
 
     if (text_params.length > 0) {
       filter.where.push({
-        [Op.or]: text_params,
+        [Op.or]: text_params
       });
     }
 
@@ -7109,8 +7225,8 @@ module.exports = {
         attributes: dismantler_ania_entry_filter.attributes,
         where: [
           ...dismantler_ania_entry_filter.where,
-          { [Op.or]: dismantler_ania_entry_text_params },
-        ],
+          { [Op.or]: dismantler_ania_entry_text_params }
+        ]
       });
 
       if (dismantler_ania_antries.length > 0) {
@@ -7152,10 +7268,10 @@ module.exports = {
           [Op.or]: [
             filter.where,
             {
-              entry_id: { [Op.in]: dismantler_ania_entries_ids },
-            },
-          ],
-        },
+              entry_id: { [Op.in]: dismantler_ania_entries_ids }
+            }
+          ]
+        }
       ];
     }
 
@@ -7166,7 +7282,7 @@ module.exports = {
       entry_type !== ""
     ) {
       filter.where.push({
-        entry_type: entry_type,
+        entry_type: entry_type
       });
     }
 
@@ -7219,7 +7335,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -7247,9 +7363,9 @@ module.exports = {
               Sequelize.col("ania_type.ania_type"),
               Sequelize.col("dismantler_type.dismantler_type")
             ),
-            "type",
-          ],
-        ],
+            "type"
+          ]
+        ]
       },
       where: [
         // Check type
@@ -7258,34 +7374,33 @@ module.exports = {
             [
               { type_type: "ania_type" },
               {
-                "$ania_type.type_id$":
-                  dismantler_settings.allowed_ania_type_ids,
-              },
+                "$ania_type.type_id$": dismantler_settings.allowed_ania_type_ids
+              }
             ],
             [
               { type_type: "dismantler_type" },
               {
                 "$dismantler_type.dismantler_id$":
-                  context.dismantler.dismantler_id,
-              },
-            ],
-          ],
-        },
+                  context.dismantler.dismantler_id
+              }
+            ]
+          ]
+        }
       ],
       include: [
         // Type
         {
           model: AniaType,
-          required: false,
+          required: false
         },
         {
           model: DismantlerType,
-          required: false,
-        },
+          required: false
+        }
       ],
       order: [["type_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -7295,7 +7410,7 @@ module.exports = {
       type_type !== ""
     ) {
       filter.where.push({
-        type_type: type_type,
+        type_type: type_type
       });
     }
 
@@ -7338,12 +7453,12 @@ module.exports = {
             { type_id: { [Op[op]]: text[i] } },
 
             {
-              "$dismantler_type.dismantler_type$": { [Op[op]]: text[i] },
+              "$dismantler_type.dismantler_type$": { [Op[op]]: text[i] }
             },
             {
-              "$ania_type.ania_type$": { [Op[op]]: text[i] },
-            },
-          ],
+              "$ania_type.ania_type$": { [Op[op]]: text[i] }
+            }
+          ]
         });
       }
     }
@@ -7396,7 +7511,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -7413,7 +7528,7 @@ module.exports = {
       page,
       brand_type,
 
-      type_id,
+      type_id
     },
     context
   ) {
@@ -7433,9 +7548,9 @@ module.exports = {
               Sequelize.col("ania_brand.ania_brand"),
               Sequelize.col("dismantler_brand.dismantler_brand")
             ),
-            "brand",
-          ],
-        ],
+            "brand"
+          ]
+        ]
       },
       where: [
         // Check brand
@@ -7446,10 +7561,10 @@ module.exports = {
               { brand_type: "dismantler_brand" },
               {
                 "$dismantler_brand.dismantler_id$":
-                  context.dismantler.dismantler_id,
-              },
-            ],
-          ],
+                  context.dismantler.dismantler_id
+              }
+            ]
+          ]
         },
 
         // Check type
@@ -7459,28 +7574,28 @@ module.exports = {
               { "$type.type_type$": "ania_type" },
               {
                 "$type.ania_type.type_id$":
-                  dismantler_settings.allowed_ania_type_ids,
-              },
+                  dismantler_settings.allowed_ania_type_ids
+              }
             ],
             [
               { "$type.type_type$": "dismantler_type" },
               {
                 "$type.dismantler_type.dismantler_id$":
-                  context.dismantler.dismantler_id,
-              },
-            ],
-          ],
-        },
+                  context.dismantler.dismantler_id
+              }
+            ]
+          ]
+        }
       ],
       include: [
         // Brand
         {
           model: AniaBrand,
-          required: false,
+          required: false
         },
         {
           model: DismantlerBrand,
-          required: false,
+          required: false
         },
 
         // Type
@@ -7489,18 +7604,18 @@ module.exports = {
           include: [
             {
               model: AniaType,
-              required: false,
+              required: false
             },
             {
               model: DismantlerType,
-              required: false,
-            },
-          ],
-        },
+              required: false
+            }
+          ]
+        }
       ],
       order: [["brand_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -7510,7 +7625,7 @@ module.exports = {
       brand_type !== ""
     ) {
       filter.where.push({
-        brand_type: brand_type,
+        brand_type: brand_type
       });
     }
 
@@ -7521,7 +7636,7 @@ module.exports = {
       type_id !== ""
     ) {
       filter.where.push({
-        "$type.type_id$": type_id,
+        "$type.type_id$": type_id
       });
     }
 
@@ -7564,12 +7679,12 @@ module.exports = {
             { brand_id: { [Op[op]]: text[i] } },
 
             {
-              "$dismantler_brand.dismantler_brand$": { [Op[op]]: text[i] },
+              "$dismantler_brand.dismantler_brand$": { [Op[op]]: text[i] }
             },
             {
-              "$ania_brand.ania_brand$": { [Op[op]]: text[i] },
-            },
-          ],
+              "$ania_brand.ania_brand$": { [Op[op]]: text[i] }
+            }
+          ]
         });
       }
     }
@@ -7622,7 +7737,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -7640,7 +7755,7 @@ module.exports = {
       model_type,
 
       type_id,
-      brand_id,
+      brand_id
     },
     context
   ) {
@@ -7660,9 +7775,9 @@ module.exports = {
               Sequelize.col("ania_model.ania_model"),
               Sequelize.col("dismantler_model.dismantler_model")
             ),
-            "model",
-          ],
-        ],
+            "model"
+          ]
+        ]
       },
       where: [
         // Check model
@@ -7673,10 +7788,10 @@ module.exports = {
               { model_type: "dismantler_model" },
               {
                 "$dismantler_model.dismantler_id$":
-                  context.dismantler.dismantler_id,
-              },
-            ],
-          ],
+                  context.dismantler.dismantler_id
+              }
+            ]
+          ]
         },
 
         // Check type
@@ -7686,28 +7801,28 @@ module.exports = {
               { "$brand.type.type_type$": "ania_type" },
               {
                 "$brand.type.ania_type.type_id$":
-                  dismantler_settings.allowed_ania_type_ids,
-              },
+                  dismantler_settings.allowed_ania_type_ids
+              }
             ],
             [
               { "$brand.type.type_type$": "dismantler_type" },
               {
                 "$brand.type.dismantler_type.dismantler_id$":
-                  context.dismantler.dismantler_id,
-              },
-            ],
-          ],
-        },
+                  context.dismantler.dismantler_id
+              }
+            ]
+          ]
+        }
       ],
       include: [
         // Model
         {
           model: AniaModel,
-          required: false,
+          required: false
         },
         {
           model: DismantlerModel,
-          required: false,
+          required: false
         },
 
         // Brand
@@ -7720,20 +7835,20 @@ module.exports = {
               include: [
                 {
                   model: AniaType,
-                  required: false,
+                  required: false
                 },
                 {
                   model: DismantlerType,
-                  required: false,
-                },
-              ],
-            },
-          ],
-        },
+                  required: false
+                }
+              ]
+            }
+          ]
+        }
       ],
       order: [["model_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -7743,7 +7858,7 @@ module.exports = {
       model_type !== ""
     ) {
       filter.where.push({
-        model_type: model_type,
+        model_type: model_type
       });
     }
 
@@ -7754,7 +7869,7 @@ module.exports = {
       type_id !== ""
     ) {
       filter.where.push({
-        "$brand.type.type_id$": type_id,
+        "$brand.type.type_id$": type_id
       });
     }
 
@@ -7765,7 +7880,7 @@ module.exports = {
       brand_id !== ""
     ) {
       filter.where.push({
-        "$brand.brand_id$": brand_id,
+        "$brand.brand_id$": brand_id
       });
     }
 
@@ -7808,10 +7923,10 @@ module.exports = {
             { model_id: { [Op[op]]: text[i] } },
 
             {
-              "$dismantler_model.dismantler_model$": { [Op[op]]: text[i] },
+              "$dismantler_model.dismantler_model$": { [Op[op]]: text[i] }
             },
-            { "$ania_model.ania_model$": { [Op[op]]: text[i] } },
-          ],
+            { "$ania_model.ania_model$": { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -7864,7 +7979,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -7883,7 +7998,7 @@ module.exports = {
 
       type_id,
       brand_id,
-      model_id,
+      model_id
     },
     context
   ) {
@@ -7903,9 +8018,9 @@ module.exports = {
               Sequelize.col("ania_version.ania_version"),
               Sequelize.col("dismantler_version.dismantler_version")
             ),
-            "version",
-          ],
-        ],
+            "version"
+          ]
+        ]
       },
       where: [
         // Check version
@@ -7916,10 +8031,10 @@ module.exports = {
               { version_type: "dismantler_version" },
               {
                 "$dismantler_version.dismantler_id$":
-                  context.dismantler.dismantler_id,
-              },
-            ],
-          ],
+                  context.dismantler.dismantler_id
+              }
+            ]
+          ]
         },
 
         // Check type
@@ -7929,28 +8044,28 @@ module.exports = {
               { "$model.brand.type.type_type$": "ania_type" },
               {
                 "$model.brand.type.ania_type.type_id$":
-                  dismantler_settings.allowed_ania_type_ids,
-              },
+                  dismantler_settings.allowed_ania_type_ids
+              }
             ],
             [
               { "$model.brand.type.type_type$": "dismantler_type" },
               {
                 "$model.brand.type.dismantler_type.dismantler_id$":
-                  context.dismantler.dismantler_id,
-              },
-            ],
-          ],
-        },
+                  context.dismantler.dismantler_id
+              }
+            ]
+          ]
+        }
       ],
       include: [
         // Version
         {
           model: AniaVersion,
-          required: false,
+          required: false
         },
         {
           model: DismantlerVersion,
-          required: false,
+          required: false
         },
 
         // Model
@@ -7967,22 +8082,22 @@ module.exports = {
                   include: [
                     {
                       model: AniaType,
-                      required: false,
+                      required: false
                     },
                     {
                       model: DismantlerType,
-                      required: false,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
+                      required: false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
       ],
       order: [["version_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -7992,7 +8107,7 @@ module.exports = {
       version_type !== ""
     ) {
       filter.where.push({
-        version_type: version_type,
+        version_type: version_type
       });
     }
 
@@ -8003,7 +8118,7 @@ module.exports = {
       type_id !== ""
     ) {
       filter.where.push({
-        "$model.brand.type.type_id$": type_id,
+        "$model.brand.type.type_id$": type_id
       });
     }
 
@@ -8014,7 +8129,7 @@ module.exports = {
       brand_id !== ""
     ) {
       filter.where.push({
-        "$model.brand.brand_id$": brand_id,
+        "$model.brand.brand_id$": brand_id
       });
     }
 
@@ -8025,7 +8140,7 @@ module.exports = {
       model_id !== ""
     ) {
       filter.where.push({
-        "$model.model_id$": model_id,
+        "$model.model_id$": model_id
       });
     }
 
@@ -8069,13 +8184,13 @@ module.exports = {
 
             {
               "$dismantler_version.dismantler_version$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
-              "$ania_version.ania_version$": { [Op[op]]: text[i] },
-            },
-          ],
+              "$ania_version.ania_version$": { [Op[op]]: text[i] }
+            }
+          ]
         });
       }
     }
@@ -8128,7 +8243,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -8151,9 +8266,9 @@ module.exports = {
               Sequelize.col("system_manufacturer.system_manufacturer"),
               Sequelize.col("dismantler_manufacturer.dismantler_manufacturer")
             ),
-            "manufacturer",
-          ],
-        ],
+            "manufacturer"
+          ]
+        ]
       },
       where: [
         // Check type
@@ -8164,26 +8279,26 @@ module.exports = {
               { manufacturer_type: "dismantler_manufacturer" },
               {
                 "$dismantler_manufacturer.dismantler_id$":
-                  context.dismantler.dismantler_id,
-              },
-            ],
-          ],
-        },
+                  context.dismantler.dismantler_id
+              }
+            ]
+          ]
+        }
       ],
       include: [
         // Manufacturer
         {
           model: SystemManufacturer,
-          required: false,
+          required: false
         },
         {
           model: DismantlerManufacturer,
-          required: false,
-        },
+          required: false
+        }
       ],
       order: [["manufacturer_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -8194,7 +8309,7 @@ module.exports = {
       manufacturer_type !== ""
     ) {
       filter.where.push({
-        manufacturer_type: manufacturer_type,
+        manufacturer_type: manufacturer_type
       });
     }
 
@@ -8215,11 +8330,11 @@ module.exports = {
           entities.push({ [Op.substring]: entity[i].trim() });
         }
         filter.where.push({
-          entity: { [Op.or]: entities },
+          entity: { [Op.or]: entities }
         });
       } else {
         filter.where.push({
-          entity: { [Op.substring]: entity.trim() },
+          entity: { [Op.substring]: entity.trim() }
         });
       }
     }
@@ -8269,15 +8384,15 @@ module.exports = {
 
             {
               "$dismantler_manufacturer.dismantler_manufacturer$": {
-                [Op[op]]: text[i],
-              },
+                [Op[op]]: text[i]
+              }
             },
             {
               "$system_manufacturer.system_manufacturer$": {
-                [Op[op]]: text[i],
-              },
-            },
-          ],
+                [Op[op]]: text[i]
+              }
+            }
+          ]
         });
       }
     }
@@ -8331,7 +8446,7 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
@@ -8349,7 +8464,7 @@ module.exports = {
       include: [],
       order: [["service_id", "DESC"]],
       offset: page && per_page ? (page - 1) * per_page : null,
-      limit: per_page ? per_page : null,
+      limit: per_page ? per_page : null
     };
 
     // Populating filter.where
@@ -8360,7 +8475,7 @@ module.exports = {
       type !== ""
     ) {
       filter.where.push({
-        type: type,
+        type: type
       });
     }
 
@@ -8401,8 +8516,8 @@ module.exports = {
           [Op.or]: [
             // Service
             { service_id: { [Op[op]]: text[i] } },
-            { service: { [Op[op]]: text[i] } },
-          ],
+            { service: { [Op[op]]: text[i] } }
+          ]
         });
       }
     }
@@ -8434,12 +8549,12 @@ module.exports = {
       include: filter.include,
       order: filter.order,
       offset: filter.offset,
-      limit: filter.limit,
+      limit: filter.limit
     });
 
     // Return
     return servicesIDs;
-  },
+  }
 };
 
 async function oem_codes_by_version(version_id) {
@@ -8449,9 +8564,9 @@ async function oem_codes_by_version(version_id) {
     where: { version_id: version_id },
     include: [
       {
-        model: OEMCode,
-      },
-    ],
+        model: OEMCode
+      }
+    ]
   });
 
   if (OEMCodeVersions && OEMCodeVersions.length > 0) {

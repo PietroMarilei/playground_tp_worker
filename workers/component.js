@@ -43,5 +43,5 @@ const component_worker = new Worker(
       return;
     }
   },
-  { connection: redis, concurrency: 1000 }
+  { connection: redis, concurrency: 5 }
 );

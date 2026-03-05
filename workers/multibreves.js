@@ -23,7 +23,7 @@ const {
 
   create_wheel,
   update_wheel,
-  delete_wheel,
+  delete_wheel
 } = require("@workers/processors/multibreves");
 
 const multibreves_worker = new Worker(

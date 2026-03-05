@@ -23,7 +23,7 @@ const {
 
   create_wheel,
   update_wheel,
-  delete_wheel,
+  delete_wheel
 } = require("@workers/processors/ricambipro");
 
 const ricambipro_worker = new Worker(

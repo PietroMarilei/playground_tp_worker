@@ -398,7 +398,9 @@ module.exports = {
         "true"
       );
     } catch (error) {
-      return error;
+      throw new Error(
+        `Error creating component on RicambiPro: ${error.message}`
+      );
     }
   },
   update_component: async function (job) {
@@ -736,7 +738,9 @@ module.exports = {
         "true"
       );
     } catch (error) {
-      return error;
+      throw new Error(
+        `Error updating component on RicambiPro: ${error.message}`
+      );
     }
   },
   delete_component: async function (job) {
@@ -789,8 +793,9 @@ module.exports = {
         "false"
       );
     } catch (error) {
-      console.log(error);
-      return error;
+      throw new Error(
+        `Error deleting component on RicambiPro: ${error.message}`
+      );
     }
   },
   // #endregion Component

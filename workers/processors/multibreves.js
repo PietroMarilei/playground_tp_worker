@@ -466,7 +466,9 @@ module.exports = {
         "true"
       );
     } catch (error) {
-      return error;
+      throw new Error(
+        `Error creating component on Multibreves: ${error.message}`
+      );
     }
   },
   update_component: async function (job) {
@@ -865,7 +867,9 @@ module.exports = {
         "true"
       );
     } catch (error) {
-      return error;
+      throw new Error(
+        `Error updating component on Multibreves: ${error.message}`
+      );
     }
   },
   delete_component: async function (job) {
@@ -879,8 +883,13 @@ module.exports = {
       }
     });
 
+    console.log(job.data);
+
     // Check
     if (!component) {
+      console.log(
+        "No component found. Cannot perform the requested operation."
+      );
       throw new Error(
         "No component found. Cannot perform the requested operation."
       );
@@ -905,9 +914,31 @@ module.exports = {
 
       // Check response
       if (response.data.ko) {
-        throw new Error(
-          "Error deleting component on Multibreves. Cannot perform the requested operation."
-        );
+        if (response.data.ko.length > 0) {
+          if (
+            response.data.ko[0].sku &&
+            response.data.ko[0].sku === component.label
+          ) {
+            if (
+              response.data.ko[0].error !== "SKU already deleted" &&
+              response.data.ko[0].error !== "SKU not valid"
+            ) {
+              throw new Error(
+                `Error deleting component on Multibreves. Cannot perform the requested operation. Response: ${JSON.stringify(response.data)}`
+              );
+            }
+          } else {
+            // No matching SKU
+            throw new Error(
+              `Error deleting component on Multibreves. No matching SKU. Response: ${JSON.stringify(response.data)}`
+            );
+          }
+        } else {
+          // No errors in response
+          throw new Error(
+            `Error deleting component on Multibreves. No error data in response. Response: ${JSON.stringify(response.data)}`
+          );
+        }
       }
 
       // Update component metafield value
@@ -917,10 +948,8 @@ module.exports = {
         "false"
       );
     } catch (error) {
-      // Throw with more context
-      throw new Error(
-        `Error deleting component on Multibreves: ${error.message}`
-      );
+      console.log(`${error.message}`);
+      throw new Error(error.message);
     }
   },
   // #endregion Component
@@ -939,6 +968,11 @@ module.exports = {
 };
 
 async function update_component_metafield_value(component_id, key, value) {
+  console.log("Updating component metafield value: ", {
+    component_id,
+    key,
+    value
+  });
   // Update metafield
   const component_metafield_value = await ComponentMetafieldValue.findOne({
     where: {
@@ -966,6 +1000,7 @@ async function update_component_metafield_value(component_id, key, value) {
         }
       }
     );
+    console.log("Component metafield value updated");
   } else {
     const metafield = await Metafield.findOne({
       where: {
@@ -985,6 +1020,7 @@ async function update_component_metafield_value(component_id, key, value) {
       value: value,
       metafield_id: metafield.metafield_id
     });
+    console.log("Component metafield value created");
   }
 }
 

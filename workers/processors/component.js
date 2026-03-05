@@ -63,7 +63,6 @@ const DismantlerAniaEntry = require("@databases/sequelize/models/dismantler/dism
 const Manufacturer = require("@databases/sequelize/models/manufacturer");
 const SystemManufacturer = require("@databases/sequelize/models/system/system_manufacturer");
 const DismantlerManufacturer = require("@databases/sequelize/models/dismantler/dismantler_manufacturer");
-const e = require("express");
 // #endregion Models
 
 // Enums
@@ -71,8 +70,6 @@ const { side_enums } = require("@databases/sequelize/enums");
 
 module.exports = {
   import_component: async function (job) {
-    console.log('creating component:', job.data.component?.oem_code)
-
     const component = job.data.component;
     const dismantler_id = job.data.dismantler_id;
     const access_id = job.data.access_id;
@@ -89,107 +86,107 @@ module.exports = {
 
       specification:
         component.specification !== undefined &&
-          component.specification !== null &&
-          component.specification !== "" &&
-          component.specification !== "null"
+        component.specification !== null &&
+        component.specification !== "" &&
+        component.specification !== "null"
           ? component.specification
           : null,
 
       is_disassembled:
         component.is_disassembled !== undefined &&
-          component.is_disassembled !== null &&
-          component.is_disassembled !== "" &&
-          component.is_disassembled !== "null"
+        component.is_disassembled !== null &&
+        component.is_disassembled !== "" &&
+        component.is_disassembled !== "null"
           ? component.is_disassembled
           : false,
 
       oem_code:
         component.oem_code !== undefined &&
-          component.oem_code !== null &&
-          component.oem_code !== "" &&
-          component.oem_code !== "null"
+        component.oem_code !== null &&
+        component.oem_code !== "" &&
+        component.oem_code !== "null"
           ? component.oem_code
           : null,
       constructor_code:
         component.constructor_code !== undefined &&
-          component.constructor_code !== null &&
-          component.constructor_code !== "" &&
-          component.constructor_code !== "null"
+        component.constructor_code !== null &&
+        component.constructor_code !== "" &&
+        component.constructor_code !== "null"
           ? component.constructor_code
           : null,
 
       manufacturer_code:
         component.manufacturer_code !== undefined &&
-          component.manufacturer_code !== null &&
-          component.manufacturer_code !== "" &&
-          component.manufacturer_code !== "null"
+        component.manufacturer_code !== null &&
+        component.manufacturer_code !== "" &&
+        component.manufacturer_code !== "null"
           ? component.manufacturer_code
           : null,
       manufacturer_id:
         component.manufacturer_id !== undefined &&
-          component.manufacturer_id !== null &&
-          component.manufacturer_id !== "" &&
-          component.manufacturer_id !== "null"
+        component.manufacturer_id !== null &&
+        component.manufacturer_id !== "" &&
+        component.manufacturer_id !== "null"
           ? component.manufacturer_id
           : null,
 
       other_codes:
         component.other_codes !== undefined &&
-          component.other_codes !== null &&
-          component.other_codes !== "" &&
-          component.other_codes !== "null"
+        component.other_codes !== null &&
+        component.other_codes !== "" &&
+        component.other_codes !== "null"
           ? component.other_codes
           : null,
 
       list_price:
         component.list_price !== undefined &&
-          component.list_price !== null &&
-          component.list_price !== "" &&
-          component.list_price !== "null"
+        component.list_price !== null &&
+        component.list_price !== "" &&
+        component.list_price !== "null"
           ? component.list_price
           : null,
       counter_price:
         component.counter_price !== undefined &&
-          component.counter_price !== null &&
-          component.counter_price !== "" &&
-          component.counter_price !== "null"
+        component.counter_price !== null &&
+        component.counter_price !== "" &&
+        component.counter_price !== "null"
           ? component.counter_price
           : null,
 
       side:
         component.side !== undefined &&
-          component.side !== null &&
-          component.side !== "" &&
-          component.side !== "null"
+        component.side !== null &&
+        component.side !== "" &&
+        component.side !== "null"
           ? component.side
           : null,
       weight:
         component.weight !== undefined &&
-          component.weight !== null &&
-          component.weight !== "" &&
-          component.weight !== "null"
+        component.weight !== null &&
+        component.weight !== "" &&
+        component.weight !== "null"
           ? component.weight
           : null,
       condition:
         component.condition !== undefined &&
-          component.condition !== null &&
-          component.condition !== "" &&
-          component.condition !== "null"
+        component.condition !== null &&
+        component.condition !== "" &&
+        component.condition !== "null"
           ? component.condition
           : null,
       status:
         component.status !== undefined &&
-          component.status !== null &&
-          component.status !== "" &&
-          component.status !== "null"
+        component.status !== null &&
+        component.status !== "" &&
+        component.status !== "null"
           ? component.status
           : "available",
 
       notes:
         component.notes !== undefined &&
-          component.notes !== null &&
-          component.notes !== "" &&
-          component.notes !== "null"
+        component.notes !== null &&
+        component.notes !== "" &&
+        component.notes !== "null"
           ? component.notes
           : null,
 
@@ -198,17 +195,17 @@ module.exports = {
 
       vehicle_id:
         component.vehicle_id !== undefined &&
-          component.vehicle_id !== null &&
-          component.vehicle_id !== "" &&
-          component.vehicle_id !== "null"
+        component.vehicle_id !== null &&
+        component.vehicle_id !== "" &&
+        component.vehicle_id !== "null"
           ? component.vehicle_id
           : null,
 
       warehouse_bin_id:
         component.warehouse_bin_id !== undefined &&
-          component.warehouse_bin_id !== null &&
-          component.warehouse_bin_id !== "" &&
-          component.warehouse_bin_id !== "null"
+        component.warehouse_bin_id !== null &&
+        component.warehouse_bin_id !== "" &&
+        component.warehouse_bin_id !== "null"
           ? component.warehouse_bin_id
           : null,
 
@@ -216,9 +213,9 @@ module.exports = {
 
       archived_at:
         component.archived_at !== undefined &&
-          component.archived_at !== null &&
-          component.archived_at !== "" &&
-          component.archived_at !== "null"
+        component.archived_at !== null &&
+        component.archived_at !== "" &&
+        component.archived_at !== "null"
           ? component.archived_at
           : null
     });
@@ -312,23 +309,23 @@ module.exports = {
       await ComponentSEO.create({
         title:
           component.component_seo.title !== undefined &&
-            component.component_seo.title !== null &&
-            component.component_seo.title !== "" &&
-            component.component_seo.title !== "null"
+          component.component_seo.title !== null &&
+          component.component_seo.title !== "" &&
+          component.component_seo.title !== "null"
             ? component.component_seo.title
             : null,
         description:
           component.component_seo.description !== undefined &&
-            component.component_seo.description !== null &&
-            component.component_seo.description !== "" &&
-            component.component_seo.description !== "null"
+          component.component_seo.description !== null &&
+          component.component_seo.description !== "" &&
+          component.component_seo.description !== "null"
             ? component.component_seo.description
             : null,
         keywords:
           component.component_seo.keywords !== undefined &&
-            component.component_seo.keywords !== null &&
-            component.component_seo.keywords !== "" &&
-            component.component_seo.keywords !== "null"
+          component.component_seo.keywords !== null &&
+          component.component_seo.keywords !== "" &&
+          component.component_seo.keywords !== "null"
             ? component.component_seo.keywords
             : null,
 
