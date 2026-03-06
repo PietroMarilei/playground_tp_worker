@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently --raw \"node index.js\" \"node workers.js\"",
-    "dev": "concurrently --raw \"node index.js\" \"node workers.js\""
+    "dev": "concurrently --raw \"nodemon index.js\" \"nodemon workers.js\""
   },
   "_moduleAliases": {
     "@root": "~",

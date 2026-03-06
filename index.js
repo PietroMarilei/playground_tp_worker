@@ -37,6 +37,7 @@ const dismantler_api_sale = new Queue("dismantler_api_sale", {
 // External
 const multibreves = new Queue("multibreves", { connection: redis });
 const ricambipro = new Queue("ricambipro", { connection: redis });
+const twiceparts_ecommerce = new Queue("twiceparts_ecommerce", { connection: redis });
 
 // System
 const system = new Queue("system", { connection: redis });
@@ -74,6 +75,9 @@ const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
       readOnlyMode: readOnlyMode
     }),
     new BullMQAdapter(ricambipro, {
+      readOnlyMode: readOnlyMode
+    }),
+    new BullMQAdapter(twiceparts_ecommerce, {
       readOnlyMode: readOnlyMode
     }),
 

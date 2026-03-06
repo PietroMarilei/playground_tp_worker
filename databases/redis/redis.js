@@ -7,7 +7,7 @@ let config = {
   port: process.env.REDIS_PORT,
 
   username: process.env.REDIS_USERNAME,
-  password: process.env.REDIS_PASSWORD,
+  // password: process.env.REDIS_PASSWORD,
 
   maxRetriesPerRequest: null,
 };
