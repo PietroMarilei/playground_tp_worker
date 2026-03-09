@@ -44,6 +44,11 @@ const WheelMetafieldValue = require("@databases/sequelize/models/wheel/wheel_met
 
 // Entry, Type, Brand, Model, Version
 const Entry = require("@databases/sequelize/models/entry");
+// Group
+const Group = require("@databases/sequelize/models/group");
+const TypeEntryGroup = require("@databases/sequelize/models/type_entry_group");
+const AniaGroup = require("@databases/sequelize/models/ania/ania_group");
+const DismantlerGroup = require("@databases/sequelize/models/dismantler/dismantler_group");
 
 const Type = require("@databases/sequelize/models/type");
 const Brand = require("@databases/sequelize/models/brand");
@@ -505,7 +510,22 @@ module.exports = {
               model: DismantlerEntry,
               where: { dismantler_id: job.data.dismantler_id },
               required: false
-            }
+            },
+            // Group
+            {
+              model: TypeEntryGroup,
+              required: false,
+              include: [
+                //non serve il type
+                {
+                  model: Group,
+                  include: [
+                    { model: AniaGroup, required: false },
+                    { model: DismantlerGroup, required: false, where: { dismantler_id: job.data.dismantler_id } }
+                  ]
+                }
+              ]
+            },
           ]
         },
 
@@ -655,11 +675,14 @@ module.exports = {
     }
     //ENDPATCH
 
+
     // Entry
     if (component.entry) {
       // Entry
       component.entry.entry = union_parse(component.entry, "entry");
     }
+
+
 
     // Version
     if (component.version) {
@@ -718,6 +741,8 @@ module.exports = {
       }
     }
 
+    //
+
     // Component Media
     if (component.component_media && component.component_media.length > 0) {
       // Media parse
@@ -728,6 +753,7 @@ module.exports = {
 
     // Entry
     let entry = null;
+    let group = null;
 
     if (component.entry !== null && component.entry.entry !== undefined) {
       if (component.entry.entry_type === "ania_entry") {
@@ -748,7 +774,26 @@ module.exports = {
       if (component.side && component.side !== null) {
         entry += ` ${side_enums[component.side][0].toLowerCase()}`;
       }
+
+      // Group
+      if (
+        component.entry.type_entry_groups &&
+        component.entry.type_entry_groups.length > 0 &&
+        component.version?.model?.brand?.type
+      ) {
+        const type_entry_group = component.entry.type_entry_groups.find(
+          (typeEntryGroup) => typeEntryGroup.type_id === component.version.model.brand.type.type_id
+        );
+
+        if (type_entry_group && type_entry_group.group) {
+          group = union_parse(type_entry_group.group, "group");
+
+          group = group.ania_group ? group.ania_group : group.dismantler_group;
+
+        }
+      }
     }
+
 
     // Component Media
     let images = [];
@@ -767,7 +812,53 @@ module.exports = {
         code: "DELETED"
       };
     }
+    // condition: {
+    //   excellent: ["Ottimo"],
+    //     very_good: ["Molto buono"],
+    //       good: ["Buono"],
+    //         decent: ["Discreto"],
+    //           sufficient: ["Sufficiente"],
+    //             barely_sufficient: ["Appena sufficiente"],
+    //               insufficient: ["Insufficiente"],
+    //                 faulty: ["Difettoso"],
+    //                   to_check: ["Da verificare"],
+    // },
+
+    // Qualità del prodotto.Uno tra i seguenti valori: 'barely_sufficient', 'sufficient', 'decent', 'good', 'very_good'
+    let condition = null;
+    switch (component.condition) {
+      case "excellent":
+      case "very_good":
+        condition = "very_good";
+        break;
+      case "good":
+        condition = 'good'
+        break;
+      case "decent":
+        condition = "decent";
+        break;
+      case "sufficient":
+        condition = "sufficient";
+        break;
+      case "barely_sufficient":
+        condition = "barely_sufficient";
+        break;
+
+      case "insufficient":
+      case "faulty":
+      case "to_check":
+        console.log('delete cause condition');
+        await module.exports.delete_component(job);
+        return {
+          code: "DELETED"
+        };
+      default:
+        condition = null;
+        break;
+    }
+
     // END Feed
+
     console.log('preparing body')
     //PATCH
     body.push({
@@ -776,44 +867,49 @@ module.exports = {
       id_seller: job.data.id_seller,
       api_token_hash: job.data.api_token_hash,
 
-      //FIXME: check sta roba
-      // Almeno uno obbligatorio tra part_number, constructor_code, manufacturer_code
-      part_number: component.oem_code !== null ? component.oem_code : (component.constructor_code !== null ? component.constructor_code : component.label),
-      constructor_code: component.constructor_code !== null ? component.constructor_code : "",
-      manufacturer_code: component.other_codes !== null ? component.other_codes : "",
+      //FIXME: é se non c'é codice OEM ? 
 
-      id_category: component.entry ? component.entry.entry_id : 0,
-      category: entry, // Utilizziamo il nome del ricambio ricavato sopra come categoria/nome
+      part_number: component.oem_code !== null ? component.oem_code : null,
 
-      quantity: 1, // Di solito un componente smontato è unico
+      constructor_code: component.constructor_code !== null ? component.constructor_code : null,
 
-      id_brand: component.version && component.version.model && component.version.model.brand ? component.version.model.brand.brand_id : 0,
-      brand: component.version && component.version.model && component.version.model.brand ?
-        (component.version.model.brand.brand_type === "ania_brand"
-          ? component.version.model.brand.brand.ania_brand
-          : component.version.model.brand.brand.dismantler_brand) : "",
+      manufacturer_code: component.manufacturer_code !== null ? component.manufacturer_code : null,
 
-      id_model: component.version && component.version.model ? component.version.model.model_id : 0,
-      model: component.version && component.version.model ?
-        (component.version.model.model_type === "ania_model"
+      // Group
+      id_category: group !== null && group.group_id !== null ? group.group_id : null,
+      category: group !== null ? group : null,
+
+      quantity: 1,
+
+      id_model:
+        component.version.model.model_type === "ania_model"
+          ? component.version.model.model.ania_id
+          : component.version.model.model.model_id,
+
+      model:
+        component.version.model.model_type === "ania_model"
           ? component.version.model.model.ania_model
-          : component.version.model.model.dismantler_model) : "",
+          : component.version.model.model.dismantler_model,
 
-      id_version: component.version ? component.version.version_id : 0,
-      version: component.version ?
-        (component.version.version_type === "ania_version"
+      id_version:
+        component.version.version_type === "ania_version"
+          ? component.version.version.ania_id
+          : component.version.version.version_id,
+
+      version:
+        component.version.version_type === "ania_version"
           ? component.version.version.ania_version
-          : component.version.version.dismantler_version) : "",
+          : component.version.version.dismantler_version,
 
-      description: component.notes !== null && component.notes !== "" ? component.notes : entry,
+      description: component.notes !== null ? component.notes : null,
 
-      price: parseFloat(twiceparts_ecommerce_price.value),
+      price: parseFloat(twiceparts_ecommerce_price.value).toFixed(2),
 
-      quality: "good", // Valore di default ammessi: 'barely_sufficient', 'sufficient', 'decent', 'good', 'very_good'
+      quality: condition,
 
       gallery: images.join(","),
-
-      tag_code: component.label,
+      //TODO:
+      tag_code: null,
 
       weight: component.weight !== null ? parseFloat(component.weight) : 0,
 
@@ -821,7 +917,8 @@ module.exports = {
       color: component.color !== null ? component.color : "",
       notes: component.notes !== null ? component.notes : "",
       other_codes: component.other_codes !== null ? component.other_codes : "",
-      vehicle_info: component.vehicle !== null && component.vehicle.vin !== null ? `VIN: ${component.vehicle.vin}` : ""
+      //TODO:
+      vehicle_info: null
     });
 
     console.log(JSON.stringify(body));
