@@ -12,6 +12,8 @@ const { Op } = require("sequelize");
 const Component = require("@databases/sequelize/models/component/component");
 const ComponentMedia = require("@databases/sequelize/models/component/component_media");
 const ComponentMetafieldValue = require("@databases/sequelize/models/component/component_metafield_value");
+const ComponentScannerCode = require("@databases/sequelize/models/component/component_scanner_code");
+
 // END Component
 
 // Vehicle
@@ -28,6 +30,7 @@ const VehicleTaillight = require("@databases/sequelize/models/vehicle/vehicle_ta
 const VehicleRearViewMirror = require("@databases/sequelize/models/vehicle/vehicle_rear_view_mirror");
 const VehicleEntertainment = require("@databases/sequelize/models/vehicle/vehicle_entertainment");
 const VehicleDashboard = require("@databases/sequelize/models/vehicle/vehicle_dashboard");
+const VehicleScannerCode = require("@databases/sequelize/models/vehicle/vehicle_scanner_code");
 // END Vehicle
 
 // Tyre
@@ -98,384 +101,519 @@ module.exports = {
   // #region Component
   create_component: async function (job) {
     console.log('JOB: create_component for Ecommerce', job.data)
-    // Init
-    // const body = [];
+    //Init
+    const body = [];
 
-    // const component = await Component.findOne({
-    //   where: {
-    //     dismantler_id: job.data.dismantler_id,
-    //     component_id: job.data.component_id,
-    //     status: {
-    //       [Op.notIn]: [
-    //         "sold",
-    //         "unprocessed",
-    //         "reserved",
-    //         "discontinued",
-    //         "lost"
-    //       ]
-    //     },
-    //     is_disassembled: true
-    //   },
-    //   include: [
-    //     // Component Media
-    //     { model: ComponentMedia, separate: true, order: [["position", "ASC"]] },
+    const component = await Component.findOne({
+      where: {
+        dismantler_id: job.data.dismantler_id,
+        component_id: job.data.component_id,
+        status: {
+          [Op.notIn]: [
+            "sold",
+            "unprocessed",
+            "reserved",
+            "discontinued",
+            "lost"
+          ]
+        },
+        is_disassembled: true
+      },
+      include: [
+        // Component Media
+        { model: ComponentMedia, separate: true, order: [["position", "ASC"]] },
 
-    //     // Entry
-    //     {
-    //       model: Entry,
-    //       include: [
-    //         {
-    //           model: AniaEntry,
-    //           required: false,
-    //           include: [
-    //             {
-    //               model: DismantlerAniaEntry,
-    //               where: { dismantler_id: job.data.dismantler_id },
-    //               required: false
-    //             }
-    //           ]
-    //         },
-    //         {
-    //           model: DismantlerEntry,
-    //           where: { dismantler_id: job.data.dismantler_id },
-    //           required: false
-    //         }
-    //       ]
-    //     },
+        // Entry
+        {
+          model: Entry,
+          include: [
+            {
+              model: AniaEntry,
+              required: false,
+              include: [
+                {
+                  model: DismantlerAniaEntry,
+                  where: { dismantler_id: job.data.dismantler_id },
+                  required: false
+                }
+              ]
+            },
+            {
+              model: DismantlerEntry,
+              where: { dismantler_id: job.data.dismantler_id },
+              required: false
+            }
+          ]
+        },
 
-    //     // Version
-    //     {
-    //       model: Version,
-    //       include: [
-    //         { model: AniaVersion, required: false },
-    //         {
-    //           model: DismantlerVersion,
-    //           where: { dismantler_id: job.data.dismantler_id },
-    //           required: false
-    //         },
-    //         {
-    //           model: Model,
-    //           include: [
-    //             { model: AniaModel, required: false },
-    //             {
-    //               model: DismantlerModel,
-    //               where: { dismantler_id: job.data.dismantler_id },
-    //               required: false
-    //             },
-    //             {
-    //               model: Brand,
-    //               include: [
-    //                 { model: AniaBrand, required: false },
-    //                 {
-    //                   model: DismantlerBrand,
-    //                   where: { dismantler_id: job.data.dismantler_id },
-    //                   required: false
-    //                 },
-    //                 {
-    //                   model: Type,
-    //                   include: [
-    //                     { model: AniaType, required: false },
-    //                     {
-    //                       model: DismantlerType,
-    //                       where: {
-    //                         dismantler_id: job.data.dismantler_id
-    //                       },
-    //                       required: false
-    //                     }
-    //                   ]
-    //                 }
-    //               ]
-    //             }
-    //           ]
-    //         }
-    //       ]
-    //     },
+        // Version
+        {
+          model: Version,
+          include: [
+            { model: AniaVersion, required: false },
+            {
+              model: DismantlerVersion,
+              where: { dismantler_id: job.data.dismantler_id },
+              required: false
+            },
+            {
+              model: Model,
+              include: [
+                { model: AniaModel, required: false },
+                {
+                  model: DismantlerModel,
+                  where: { dismantler_id: job.data.dismantler_id },
+                  required: false
+                },
+                {
+                  model: Brand,
+                  include: [
+                    { model: AniaBrand, required: false },
+                    {
+                      model: DismantlerBrand,
+                      where: { dismantler_id: job.data.dismantler_id },
+                      required: false
+                    },
+                    {
+                      model: Type,
+                      include: [
+                        { model: AniaType, required: false },
+                        {
+                          model: DismantlerType,
+                          where: {
+                            dismantler_id: job.data.dismantler_id
+                          },
+                          required: false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
 
-    //     // Metafield
-    //     {
-    //       model: ComponentMetafieldValue,
-    //       include: [
-    //         {
-    //           model: Metafield,
-    //           required: true,
-    //           where: {
-    //             key: ["ecommerce_publish", "ecommerce_price"]
-    //           }
-    //         }
-    //       ]
-    //     },
+        // Metafield
+        {
+          model: ComponentMetafieldValue,
+          include: [
+            {
+              model: Metafield,
+              required: true,
+              where: {
+                key: ["twiceparts_ecommerce_publish", "twiceparts_ecommerce_price"]
+              }
+            }
+          ]
+        },
 
-    //     // Vehicle
-    //     {
-    //       model: Vehicle,
-    //       required: false,
-    //       include: [{ model: VehicleEngine, required: false }]
-    //     }
-    //   ]
-    // });
+        // Vehicle
+        {
+          model: Vehicle,
+          required: false,
+          include: [
+            { model: VehicleTransmission, required: false },
+            { model: VehicleEngine, required: false },
+            { model: VehicleMedia, required: false },
+            { model: VehicleScannerCode, required: false }
+          ]
+        },
 
-    // // Check
-    // if (!component) {
-    //   throw new Error(
-    //     "No component found. Cannot perform the requested operation."
-    //   );
-    // }
+      ]
+    });
 
-    // // Check ecommerce_publish
-    // const ecommerce_publish = component.component_metafield_values.find(
-    //   (component_metafield_value) =>
-    //     component_metafield_value.metafield.key === "ecommerce_publish"
-    // );
+    // Check
+    if (!component) {
+      throw new Error(
+        "No component found. Cannot perform the requested operation."
+      );
+    }
 
-    // if (!ecommerce_publish || ecommerce_publish.value !== "true") {
-    //   throw new Error(
-    //     "Component not for sale on ecommerce. Cannot perform the requested operation."
-    //   );
-    // }
+    // Check twiceparts_ecommerce_publish
+    const twiceparts_ecommerce_publish = component.component_metafield_values.find(
+      (component_metafield_value) =>
+        component_metafield_value.metafield.key === "twiceparts_ecommerce_publish"
+    );
 
-    // // Check ecommerce_price
-    // const ecommerce_price = component.component_metafield_values.find(
-    //   (component_metafield_value) =>
-    //     component_metafield_value.metafield.key === "ecommerce_price"
-    // );
+    if (!twiceparts_ecommerce_publish || twiceparts_ecommerce_publish.value !== "true") {
+      throw new Error(
+        "Component not for sale on ecommerce. Cannot perform the requested operation."
+      );
+    }
 
-    // if (
-    //   !ecommerce_price ||
-    //   ecommerce_price.value === null ||
-    //   ecommerce_price.value === "" ||
-    //   parseFloat(ecommerce_price.value) === 0
-    // ) {
-    //   throw new Error(
-    //     "Component price not set. Cannot perform the requested operation."
-    //   );
-    // }
+    // Check twiceparts_ecommerce_price
+    const twiceparts_ecommerce_price = component.component_metafield_values.find(
+      (component_metafield_value) =>
+        component_metafield_value.metafield.key === "twiceparts_ecommerce_price"
+    );
 
-    // // Entry
-    // if (component.entry) {
-    //   // Entry
-    //   component.entry.entry = union_parse(component.entry, "entry");
-    // }
+    if (
+      !twiceparts_ecommerce_price ||
+      twiceparts_ecommerce_price.value === null ||
+      twiceparts_ecommerce_price.value === "" ||
+      parseFloat(twiceparts_ecommerce_price.value) === 0
+    ) {
+      throw new Error(
+        "Component price not set. Cannot perform the requested operation."
+      );
+    }
 
-    // // Version
-    // if (component.version) {
-    //   if (
-    //     !component.version.ania_version &&
-    //     !component.version.dismantler_version
-    //   ) {
-    //     return;
-    //   }
+    // Entry
+    if (component.entry) {
+      // Entry
+      component.entry.entry = union_parse(component.entry, "entry");
+    }
 
-    //   component.version.version = union_parse(component.version, "version");
+    // Version
+    if (component.version) {
+      if (
+        !component.version.ania_version &&
+        !component.version.dismantler_version
+      ) {
+        return;
+      }
 
-    //   // Model
-    //   if (component.version.model) {
-    //     if (
-    //       !component.version.model.ania_model &&
-    //       !component.version.model.dismantler_model
-    //     ) {
-    //       return;
-    //     }
+      component.version.version = union_parse(component.version, "version");
 
-    //     component.version.model.model = union_parse(
-    //       component.version.model,
-    //       "model"
-    //     );
+      // Model
+      if (component.version.model) {
+        if (
+          !component.version.model.ania_model &&
+          !component.version.model.dismantler_model
+        ) {
+          return;
+        }
 
-    //     // Brand
-    //     if (component.version.model.brand) {
-    //       if (
-    //         !component.version.model.brand.ania_brand &&
-    //         !component.version.model.brand.dismantler_brand
-    //       ) {
-    //         return;
-    //       }
+        component.version.model.model = union_parse(
+          component.version.model,
+          "model"
+        );
 
-    //       component.version.model.brand.brand = union_parse(
-    //         component.version.model.brand,
-    //         "brand"
-    //       );
+        // Brand
+        if (component.version.model.brand) {
+          if (
+            !component.version.model.brand.ania_brand &&
+            !component.version.model.brand.dismantler_brand
+          ) {
+            return;
+          }
 
-    //       // Type
-    //       if (component.version.model.brand.type) {
-    //         if (
-    //           !component.version.model.brand.type.ania_type &&
-    //           !component.version.model.brand.type.dismantler_type
-    //         ) {
-    //           return;
-    //         }
+          component.version.model.brand.brand = union_parse(
+            component.version.model.brand,
+            "brand"
+          );
 
-    //         component.version.model.brand.type.type = union_parse(
-    //           component.version.model.brand.type,
-    //           "type"
-    //         );
-    //       }
-    //     }
-    //   }
-    // }
+          // Type
+          if (component.version.model.brand.type) {
+            if (
+              !component.version.model.brand.type.ania_type &&
+              !component.version.model.brand.type.dismantler_type
+            ) {
+              return;
+            }
 
-    // // Component Media
-    // if (component.component_media && component.component_media.length > 0) {
-    //   // Media parse
-    //   component.component_media = media_parse(component.component_media);
-    // }
+            component.version.model.brand.type.type = union_parse(
+              component.version.model.brand.type,
+              "type"
+            );
+          }
+        }
+      }
+    }
 
-    // // Feed
+    // Component Media
+    if (component.component_media && component.component_media.length > 0) {
+      // Media parse
+      component.component_media = media_parse(component.component_media);
+    }
 
-    // // Entry
-    // let entry = null;
+    // Feed
+    // Entry
+    let entry = null;
+    let group = null;
+    let group_id = null
 
-    // if (component.entry !== null && component.entry.entry !== undefined) {
-    //   if (component.entry.entry_type === "ania_entry") {
-    //     // ANIA Entry
-    //     entry = component.entry.entry.ania_entry;
+    if (component.entry !== null && component.entry.entry !== undefined) {
+      if (component.entry.entry_type === "ania_entry") {
+        // ANIA Entry
+        entry = component.entry.entry.ania_entry;
 
-    //     if (component.entry.entry.dismantler_ania_entries?.length > 0) {
-    //       if (component.entry.entry.dismantler_ania_entries[0].entry !== null) {
-    //         entry = component.entry.entry.dismantler_ania_entries[0].entry;
-    //       }
-    //     }
-    //   } else {
-    //     // Dismantler Entry
-    //     entry = component.entry.entry.dismantler_entry;
-    //   }
+        if (component.entry.entry.dismantler_ania_entries?.length > 0) {
+          if (component.entry.entry.dismantler_ania_entries[0].entry !== null) {
+            entry = component.entry.entry.dismantler_ania_entries[0].entry;
+          }
+        }
+      } else {
+        // Dismantler Entry
+        entry = component.entry.entry.dismantler_entry;
+      }
 
-    //   // Side
-    //   if (component.side && component.side !== null) {
-    //     entry += ` ${side_enums[component.side][0].toLowerCase()}`;
-    //   }
-    // }
+      // Side
+      if (component.side && component.side !== null) {
+        entry += ` ${side_enums[component.side][0].toLowerCase()}`;
+      }
 
-    // // Component Media
-    // let images = [];
-    // const componentImages = component.component_media.filter((media) => {
-    //   return media.media_type === "image";
-    // });
+      // Group
+      if (
+        component.entry.type_entry_groups &&
+        component.entry.type_entry_groups.length > 0 &&
+        component.version?.model?.brand?.type
+      ) {
+        const type_entry_group = component.entry.type_entry_groups.find(
+          (typeEntryGroup) => typeEntryGroup.type_id === component.version.model.brand.type.type_id
+        );
 
-    // if (componentImages.length > 0) {
-    //   images = componentImages.map((image) => {
-    //     return `https://twice-parts.fra1.digitaloceanspaces.com/components/img/${image.media.filename}`;
-    //   });
-    // } else {
-    //   throw new Error(
-    //     "Component has no images. Cannot perform the requested operation."
-    //   );
-    // }
-    // // END Feed
+        if (type_entry_group && type_entry_group.group) {
+          group = union_parse(type_entry_group.group, "group");
 
-    // body.push({
-    //   client_id: job.data.client_id,
-    //   sku: component.label,
+          group_id = type_entry_group.group.group_id;
 
-    //   oem: component.oem_code !== null ? component.oem_code : null,
-    //   iam: component.other_codes !== null ? component.other_codes : null,
-    //   codice_costruttore:
-    //     component.constructor_code !== null ? component.constructor_code : null,
+          group = group.ania_group ? group.ania_group : group.dismantler_group;
 
-    //   brand:
-    //     component.version.model.brand.brand_type === "ania_brand"
-    //       ? component.version.model.brand.brand.ania_brand
-    //       : component.version.model.brand.brand.dismantler_brand,
+        }
+      }
+    }
 
-    //   model:
-    //     component.version.model.model_type === "ania_model"
-    //       ? component.version.model.model.ania_model
-    //       : component.version.model.model.dismantler_model,
-    //   start_model: null,
-    //   end_model: null,
+    // Component Media
+    let images = [];
+    const componentImages = component.component_media.filter((media) => {
+      return media.media_type === "image";
+    });
 
-    //   version:
-    //     component.version.version_type === "ania_version"
-    //       ? component.version.version.ania_version
-    //       : component.version.version.dismantler_version,
-    //   start_version:
-    //     component.version.version_type === "ania_version"
-    //       ? component.version.version.produced_from !== null
-    //         ? moment(component.version.version.produced_from).format("YYYY")
-    //         : null
-    //       : null,
-    //   end_version:
-    //     component.version.version_type === "ania_version"
-    //       ? component.version.version.produced_to !== null
-    //         ? moment(component.version.version.produced_to).format("YYYY")
-    //         : null
-    //       : null,
+    if (componentImages.length > 0) {
+      images = componentImages.map((image) => {
+        return `https://twice-parts.fra1.digitaloceanspaces.com/components/img/${image.media.filename}`;
+      });
+    } else {
+      throw new Error(
+        "Component has no images. Cannot perform the requested operation."
+      );
+    }
 
-    //   part_name: entry,
+    if (!component.condition || component.condition === '') {
+      console.log('missing condition, deleting component')
+      await module.exports.delete_component(job);
+      return {
+        code: "DELETED"
+      };
+    }
 
-    //   price: parseFloat(ecommerce_price.value) * 100,
+    let condition = null;
+    switch (component.condition) {
+      case "excellent":
+      case "very_good":
+        condition = "very_good";
+        break;
+      case "good":
+        condition = 'good'
+        break;
+      case "decent":
+        condition = "decent";
+        break;
+      case "sufficient":
+        condition = "sufficient";
+        break;
+      case "barely_sufficient":
+        condition = "barely_sufficient";
+        break;
+      //altri
+      case "insufficient":
+      case "faulty":
+      case "to_check":
+        console.log('delete for bad condition');
+        await module.exports.delete_component(job);
+        return {
+          code: "DELETED"
+        };
+      default:
+        condition = null;
+        break;
+    }
 
-    //   weight: component.weight !== null ? component.weight : null,
-    //   other_info: component.notes !== null ? component.notes : null,
+    // Vehicle Media
+    let vehicle_images = [];
+    const vehicleImages = component.vehicle.vehicle_media.filter((media) => {
+      return media.media_type === "image";
+    });
 
-    //   // Vehicle
-    //   id_vehicle:
-    //     component.vehicle !== null ? component.vehicle.vehicle_id : null,
-    //   vin:
-    //     component.vehicle !== null
-    //       ? component.vehicle.vin !== null
-    //         ? component.vehicle.vin
-    //         : null
-    //       : null,
-    //   kms:
-    //     component.vehicle !== null
-    //       ? component.vehicle.km !== null
-    //         ? component.vehicle.km
-    //         : null
-    //       : null,
-    //   cc:
-    //     component.vehicle !== null && component.vehicle.vehicle_engine !== null
-    //       ? component.vehicle.vehicle_engine.displacement !== null
-    //         ? component.vehicle.vehicle_engine.displacement
-    //         : null
-    //       : null,
-    //   engine_code:
-    //     component.vehicle !== null && component.vehicle.vehicle_engine !== null
-    //       ? component.vehicle.vehicle_engine.code !== null
-    //         ? component.vehicle.vehicle_engine.code
-    //         : null
-    //       : null,
-    //   type_of_fuel:
-    //     component.vehicle !== null && component.vehicle.vehicle_engine !== null
-    //       ? component.vehicle.vehicle_engine.propulsion !== null
-    //         ? component.vehicle.vehicle_engine.propulsion
-    //         : null
-    //       : null,
+    if (vehicleImages.length > 0) {
+      vehicle_images = vehicleImages.map((image) => {
+        const media = typeof image.media === 'string' ? JSON.parse(image.media) : image.media;
+        return `https://twice-parts.fra1.digitaloceanspaces.com/vehicles/img/${media.filename}`;
+      });
+    }
+    // END Feed
+    console.log('preparing body')
 
-    //   photos: images
-    // });
+    body.push({
+      action: "upsert",
+      id_product: component.label,
+      id_seller: job.data.id_seller,
+      api_token_hash: job.data.api_token_hash,
+      //FIXME: sblocca in automatico
+      status: 0,
 
-    // // console.log(JSON.stringify(body));
+      //FIXME: é se non c'é codice OEM ? 
+      part_number: component.oem_code !== null ? component.oem_code : null,
 
-    // try {
-    //   // Axios
-    //   const response = await axios({
-    //     url: `${process.env.MULTIBREVES_URL}?user=${process.env.MULTIBREVES_USER}`,
-    //     method: "post",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "x-api-key": process.env.MULTIBREVES_TOKEN
-    //     },
-    //     data: JSON.stringify(body)
-    //   });
+      constructor_code: component.constructor_code !== null ? component.constructor_code : null,
 
-    //   // Check response
-    //   if (response.data.ko) {
-    //     throw new Error(
-    //       "Error creating component on TwiceParts Ecommerce. Cannot perform the requested operation."
-    //     );
-    //   }
+      manufacturer_code: component.manufacturer_code !== null ? component.manufacturer_code : null,
 
-    //   // Update component metafield value
-    //   await update_component_metafield_value(
-    //     component.component_id,
-    //     "ecommerce_is_published",
-    //     "true"
-    //   );
-    // } catch (error) {
-    //   throw new Error(
-    //     `Error creating component on TwiceParts Ecommerce: ${error.message}`
-    //   );
-    // }
+      // Group
+      id_category: group_id !== null ? group_id : null,
+      category: group !== null ? group : null,
+
+      quantity: 1,
+
+      id_brand:
+        component.version.model.brand.brand_type === "ania_brand"
+          ? component.version.model.brand.brand.ania_id
+          : component.version.model.brand.brand.brand_id,
+
+      brand:
+        component.version.model.brand.brand_type === "ania_brand"
+          ? component.version.model.brand.brand.ania_brand
+          : component.version.model.brand.brand.dismantler_brand,
+
+      id_model:
+        component.version.model.model_type === "ania_model"
+          ? component.version.model.model.ania_id
+          : component.version.model.model.model_id,
+
+      model:
+        component.version.model.model_type === "ania_model"
+          ? component.version.model.model.ania_model
+          : component.version.model.model.dismantler_model,
+
+      id_version:
+        component.version.version_type === "ania_version"
+          ? component.version.version.ania_id
+          : component.version.version.version_id,
+
+      version:
+        component.version.version_type === "ania_version"
+          ? component.version.version.ania_version
+          : component.version.version.dismantler_version,
+
+      // FIXME: chiama cosí la entry, anche se sarebbe piú un titolo
+      description: entry !== null ? entry : null,
+      price: parseFloat(twiceparts_ecommerce_price.value).toFixed(2),
+      quality: condition,
+      gallery: componentImages.join(","),
+
+      // FIXME: chiederlo come array
+      tag_code:
+        component.component_scanner_codes?.length > 0
+          ? [
+            // FIXME: mando anche label 
+            component.label,
+            ...component.component_scanner_codes.map(code => code.scanner_code)].join(",")
+          : component.label,
+
+
+      weight: component.weight !== null ? parseFloat(component.weight) : 0,
+
+      color: component.color !== null ? component.color : null,
+      notes: component.notes !== null ? component.notes : null,
+      other_codes: component.other_codes !== null ? component.other_codes : null,
+
+      //FIXME: ad oggetto ?? 
+      vehicle_info: JSON.stringify({
+        //Vehicle
+        vehicle_id:
+          component.vehicle !== null ? component.vehicle.vehicle_id : null,
+
+        vehicle_code: component.vehicle !== null ? component.vehicle.code : null,
+
+        vehicle_vin:
+          component.vehicle !== null
+            ? component.vehicle.vin !== null
+              ? component.vehicle.vin
+              : null
+            : null,
+        vehicle_engine_km:
+          component.vehicle !== null
+            ? component.vehicle.km !== null
+              ? component.vehicle.km
+              : null
+            : null,
+        vehicle_engine_displacement:
+          component.vehicle !== null && component.vehicle.vehicle_engine !== null
+            ? component.vehicle.vehicle_engine.displacement !== null
+              ? component.vehicle.vehicle_engine.displacement
+              : null
+            : null,
+        vehicle_engine_code:
+          component.vehicle !== null && component.vehicle.vehicle_engine !== null
+            ? component.vehicle.vehicle_engine.code !== null
+              ? component.vehicle.vehicle_engine.code
+              : null
+            : null,
+        vehicle_engine_propulsion:
+          component.vehicle !== null && component.vehicle.vehicle_engine !== null
+            ? component.vehicle.vehicle_engine.propulsion !== null
+              ? component.vehicle.vehicle_engine.propulsion
+              : null
+            : null,
+
+        //PATCH
+        vehicle_images: vehicle_images && vehicle_images?.length > 0 ? vehicle_images.join(',') : null,
+
+
+        //VehicleTransmission
+        vehicle_transmission_type: component.vehicle !== null && component.vehicle.vehicle_transmission !== null
+          ? component.vehicle.vehicle_transmission.type !== null
+            ? component.vehicle.vehicle_transmission.type
+            : null
+          : null,
+        vehicle_transmission_gears: component.vehicle !== null && component.vehicle.vehicle_transmission !== null
+          ? component.vehicle.vehicle_transmission.gears !== null
+            ? component.vehicle.vehicle_transmission.gears
+            : null
+          : null,
+        vehicle_transmission_has_reverse: component.vehicle !== null && component.vehicle.vehicle_transmission !== null
+          ? component.vehicle.vehicle_transmission.has_reverse !== null
+            ? component.vehicle.vehicle_transmission.has_reverse
+            : null
+          : null,
+        vehicle_transmission_drive: component.vehicle !== null && component.vehicle.vehicle_transmission !== null
+          ? component.vehicle.vehicle_transmission.drive !== null
+            ? component.vehicle.vehicle_transmission.drive
+            : null
+          : null,
+
+      })
+    });
+
+    try {
+      //Axios
+      const response = await axios({
+        url: `${process.env.ECOMMERCE_TWICE_URL}`,
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": process.env.ECOMMERCE_TWICE_APIKEY,
+          "x-bank-key": process.env.ECOMMERCE_TWICE_BANKKEY
+        },
+        data: JSON.stringify(body)
+      });
+
+      // Update component metafield value
+      await update_component_metafield_value(
+        component.component_id,
+        "twiceparts_ecommerce_is_published",
+        "true"
+      );
+
+      console.log('TwiceParts Ecommerce create success:', response.data);
+
+    } catch (error) {
+      const error_log = JSON.stringify(error.response?.data?.message || error.response?.data?.success === false || error.response?.data?.results?.[0])
+      console.error(`TwiceParts Ecommerce Error: ${error_log}`);
+      throw new Error(`TwiceParts Ecommerce Error: ${error_log}`);
+    }
   },
   update_component: async function (job) {
     console.log('JOB: update component Ecommerce', job.data);
@@ -595,8 +733,39 @@ module.exports = {
         {
           model: Vehicle,
           required: false,
-          include: [{ model: VehicleEngine, required: false }]
-        }
+          include: [
+            { model: VehicleTransmission, required: false },
+            { model: VehicleEngine, required: false },
+            { model: VehicleMedia, required: false },
+            { model: VehicleScannerCode, required: false },
+            // {
+            //   model: Version,
+            //   required: false,
+            //   include: [
+            //     {
+            //       model: Model,
+            //       required: false,
+            //       include: [
+            //         {
+            //           model: Brand,
+            //           required: false,
+            //           include: [
+            //             {
+            //               model: Type,
+            //               required: false
+            //             }
+            //           ]
+            //         }
+            //       ]
+            //     }
+            //   ]
+            // }
+          ]
+        },
+
+        // Scanner Codes
+        { model: ComponentScannerCode, separate: true },
+
       ]
     });
 
@@ -613,7 +782,7 @@ module.exports = {
         component.status
       )
     ) {
-      console.log('delete 1')
+      console.log('delete 1: bad status')
       await module.exports.delete_component(job);
       return {
         code: "DELETED"
@@ -622,7 +791,7 @@ module.exports = {
 
     // Check is_disassembled
     if (!component.is_disassembled) {
-      console.log('delete 2')
+      console.log('delete 2: disassembled')
       await module.exports.delete_component(job);
       return {
         code: "DELETED"
@@ -631,13 +800,12 @@ module.exports = {
 
     // Check archived_at
     if (component.archived_at !== null) {
-      console.log('delete 3')
+      console.log('delete 3: archived')
       await module.exports.delete_component(job);
       return {
         code: "DELETED"
       };
     }
-    //PATCH:
     // Check twiceparts_ecommerce_publish
     const twiceparts_ecommerce_publish = component.component_metafield_values.find(
       (component_metafield_value) =>
@@ -645,10 +813,7 @@ module.exports = {
     );
 
     if (!twiceparts_ecommerce_publish || twiceparts_ecommerce_publish.value !== "true") {
-      console.log('delete 4')
-      console.log(twiceparts_ecommerce_publish)
-      console.log(twiceparts_ecommerce_publish.value)
-
+      console.log('delete 4: no publish')
       await module.exports.delete_component(job);
       return {
         code: "DELETED"
@@ -667,13 +832,12 @@ module.exports = {
       twiceparts_ecommerce_price.value === "" ||
       parseFloat(twiceparts_ecommerce_price.value) === 0
     ) {
-      console.log('delete 5')
+      console.log('delete 5: no price')
       await module.exports.delete_component(job);
       return {
         code: "DELETED"
       };
     }
-    //ENDPATCH
 
 
     // Entry
@@ -681,8 +845,6 @@ module.exports = {
       // Entry
       component.entry.entry = union_parse(component.entry, "entry");
     }
-
-
 
     // Version
     if (component.version) {
@@ -741,8 +903,6 @@ module.exports = {
       }
     }
 
-    //
-
     // Component Media
     if (component.component_media && component.component_media.length > 0) {
       // Media parse
@@ -750,10 +910,10 @@ module.exports = {
     }
 
     // Feed
-
     // Entry
     let entry = null;
     let group = null;
+    let group_id = null
 
     if (component.entry !== null && component.entry.entry !== undefined) {
       if (component.entry.entry_type === "ania_entry") {
@@ -788,43 +948,40 @@ module.exports = {
         if (type_entry_group && type_entry_group.group) {
           group = union_parse(type_entry_group.group, "group");
 
+          group_id = type_entry_group.group.group_id;
+
           group = group.ania_group ? group.ania_group : group.dismantler_group;
 
         }
       }
     }
 
-
     // Component Media
-    let images = [];
+    let component_images = [];
     const componentImages = component.component_media.filter((media) => {
       return media.media_type === "image";
     });
 
     if (componentImages.length > 0) {
-      images = componentImages.map((image) => {
+      component_images = componentImages.map((image) => {
         return `https://twice-parts.fra1.digitaloceanspaces.com/components/img/${image.media.filename}`;
       });
     } else {
-      console.log('delete cause imgs')
+      console.log('delete no imgs')
       await module.exports.delete_component(job);
       return {
         code: "DELETED"
       };
     }
-    // condition: {
-    //   excellent: ["Ottimo"],
-    //     very_good: ["Molto buono"],
-    //       good: ["Buono"],
-    //         decent: ["Discreto"],
-    //           sufficient: ["Sufficiente"],
-    //             barely_sufficient: ["Appena sufficiente"],
-    //               insufficient: ["Insufficiente"],
-    //                 faulty: ["Difettoso"],
-    //                   to_check: ["Da verificare"],
-    // },
 
-    // Qualità del prodotto.Uno tra i seguenti valori: 'barely_sufficient', 'sufficient', 'decent', 'good', 'very_good'
+    if (!component.condition || component.condition === '') {
+      console.log('missing condition, deleting component')
+      await module.exports.delete_component(job);
+      return {
+        code: "DELETED"
+      };
+    }
+
     let condition = null;
     switch (component.condition) {
       case "excellent":
@@ -843,11 +1000,11 @@ module.exports = {
       case "barely_sufficient":
         condition = "barely_sufficient";
         break;
-
+      //altri
       case "insufficient":
       case "faulty":
       case "to_check":
-        console.log('delete cause condition');
+        console.log('delete for bad condition');
         await module.exports.delete_component(job);
         return {
           code: "DELETED"
@@ -859,16 +1016,30 @@ module.exports = {
 
     // END Feed
 
+    // Vehicle Media
+    let vehicle_images = [];
+    const vehicleImages = component.vehicle.vehicle_media.filter((media) => {
+      return media.media_type === "image";
+    });
+
+    if (vehicleImages.length > 0) {
+      vehicle_images = vehicleImages.map((image) => {
+        const media = typeof image.media === 'string' ? JSON.parse(image.media) : image.media;
+        return `https://twice-parts.fra1.digitaloceanspaces.com/vehicles/img/${media.filename}`;
+      });
+    }
+
     console.log('preparing body')
-    //PATCH
+
     body.push({
       action: "upsert",
       id_product: component.label,
       id_seller: job.data.id_seller,
       api_token_hash: job.data.api_token_hash,
+      //FIXME: sblocca in automatico
+      status: 0,
 
       //FIXME: é se non c'é codice OEM ? 
-
       part_number: component.oem_code !== null ? component.oem_code : null,
 
       constructor_code: component.constructor_code !== null ? component.constructor_code : null,
@@ -876,10 +1047,20 @@ module.exports = {
       manufacturer_code: component.manufacturer_code !== null ? component.manufacturer_code : null,
 
       // Group
-      id_category: group !== null && group.group_id !== null ? group.group_id : null,
+      id_category: group_id !== null ? group_id : null,
       category: group !== null ? group : null,
 
       quantity: 1,
+
+      id_brand:
+        component.version.model.brand.brand_type === "ania_brand"
+          ? component.version.model.brand.brand.ania_id
+          : component.version.model.brand.brand.brand_id,
+
+      brand:
+        component.version.model.brand.brand_type === "ania_brand"
+          ? component.version.model.brand.brand.ania_brand
+          : component.version.model.brand.brand.dismantler_brand,
 
       id_model:
         component.version.model.model_type === "ania_model"
@@ -901,27 +1082,176 @@ module.exports = {
           ? component.version.version.ania_version
           : component.version.version.dismantler_version,
 
-      description: component.notes !== null ? component.notes : null,
-
+      // FIXME: chiama cosí la entry, anche se sarebbe piú un titolo
+      description: entry !== null ? entry : null,
       price: parseFloat(twiceparts_ecommerce_price.value).toFixed(2),
-
       quality: condition,
+      gallery: componentImages.join(","),
 
-      gallery: images.join(","),
-      //TODO:
-      tag_code: null,
+      // FIXME: chiederlo come array
+      tag_code:
+        component.component_scanner_codes?.length > 0
+          ? [
+            // FIXME: mando anche label 
+            component.label,
+            ...component.component_scanner_codes.map(code => code.scanner_code)].join(",")
+          : component.label,
+
 
       weight: component.weight !== null ? parseFloat(component.weight) : 0,
 
-      // Campi opzionali
-      color: component.color !== null ? component.color : "",
-      notes: component.notes !== null ? component.notes : "",
-      other_codes: component.other_codes !== null ? component.other_codes : "",
-      //TODO:
-      vehicle_info: null
+      color: component.color !== null ? component.color : null,
+      notes: component.notes !== null ? component.notes : null,
+      other_codes: component.other_codes !== null ? component.other_codes : null,
+
+      //FIXME: ad oggetto ?? 
+      vehicle_info: JSON.stringify({
+        //Vehicle
+        vehicle_id:
+          component.vehicle !== null ? component.vehicle.vehicle_id : null,
+
+        vehicle_code: component.vehicle !== null ? component.vehicle.code : null,
+
+        vehicle_vin:
+          component.vehicle !== null
+            ? component.vehicle.vin !== null
+              ? component.vehicle.vin
+              : null
+            : null,
+        vehicle_engine_km:
+          component.vehicle !== null
+            ? component.vehicle.km !== null
+              ? component.vehicle.km
+              : null
+            : null,
+        vehicle_engine_displacement:
+          component.vehicle !== null && component.vehicle.vehicle_engine !== null
+            ? component.vehicle.vehicle_engine.displacement !== null
+              ? component.vehicle.vehicle_engine.displacement
+              : null
+            : null,
+        vehicle_engine_code:
+          component.vehicle !== null && component.vehicle.vehicle_engine !== null
+            ? component.vehicle.vehicle_engine.code !== null
+              ? component.vehicle.vehicle_engine.code
+              : null
+            : null,
+        vehicle_engine_propulsion:
+          component.vehicle !== null && component.vehicle.vehicle_engine !== null
+            ? component.vehicle.vehicle_engine.propulsion !== null
+              ? component.vehicle.vehicle_engine.propulsion
+              : null
+            : null,
+
+        //PATCH
+        vehicle_plate:
+          component.vehicle !== null && component.vehicle.plate !== null
+            ? component.vehicle.plate
+            : null,
+        vehicle_kw:
+          component.vehicle !== null && component.vehicle.vehicle_engine !== null
+            ? component.vehicle.vehicle_engine.kw !== null ? component.vehicle.vehicle_engine.kw : null
+            : null,
+        vehicle_hp:
+          component.vehicle !== null && component.vehicle.vehicle_engine !== null
+            ? component.vehicle.vehicle_engine.hp !== null ? component.vehicle.vehicle_engine.hp : null
+            : null,
+        vehicle_cylinders:
+          component.vehicle !== null && component.vehicle.vehicle_engine !== null
+            ? component.vehicle.vehicle_engine.cylinders !== null ? component.vehicle.vehicle_engine.cylinders : null
+            : null,
+        vehicle_valves:
+          component.vehicle !== null && component.vehicle.vehicle_engine !== null
+            ? component.vehicle.vehicle_engine.valves !== null ? component.vehicle.vehicle_engine.valves : null
+            : null,
+        //headlight / VehicleTaillight /VehicleEntertainment /VehicleRearViewMirror /drainage ?
+
+        // VehicleImages
+        vehicle_images: vehicle_images && vehicle_images?.length > 0 ? vehicle_images.join(',') : null,
+
+
+        //VehicleTransmission
+        vehicle_transmission_type: component.vehicle !== null && component.vehicle.vehicle_transmission !== null
+          ? component.vehicle.vehicle_transmission.type !== null
+            ? component.vehicle.vehicle_transmission.type
+            : null
+          : null,
+        vehicle_transmission_gears: component.vehicle !== null && component.vehicle.vehicle_transmission !== null
+          ? component.vehicle.vehicle_transmission.gears !== null
+            ? component.vehicle.vehicle_transmission.gears
+            : null
+          : null,
+        vehicle_transmission_has_reverse: component.vehicle !== null && component.vehicle.vehicle_transmission !== null
+          ? component.vehicle.vehicle_transmission.has_reverse !== null
+            ? component.vehicle.vehicle_transmission.has_reverse
+            : null
+          : null,
+        vehicle_transmission_drive: component.vehicle !== null && component.vehicle.vehicle_transmission !== null
+          ? component.vehicle.vehicle_transmission.drive !== null
+            ? component.vehicle.vehicle_transmission.drive
+            : null
+          : null,
+
+      })
     });
 
-    console.log(JSON.stringify(body));
+    try {
+      //Axios
+      const response = await axios({
+        url: `${process.env.ECOMMERCE_TWICE_URL}`,
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": process.env.ECOMMERCE_TWICE_APIKEY,
+          "x-bank-key": process.env.ECOMMERCE_TWICE_BANKKEY
+        },
+        data: JSON.stringify(body)
+      });
+
+      // Update component metafield value
+      await update_component_metafield_value(
+        component.component_id,
+        "twiceparts_ecommerce_is_published",
+        "true"
+      );
+
+      console.log('TwiceParts Ecommerce update success:', response.data);
+
+    } catch (error) {
+      const error_log = JSON.stringify(error.response?.data?.message || error.response?.data?.success === false || error.response?.data?.results?.[0])
+      console.error(`TwiceParts Ecommerce Error: ${error_log}`);
+      throw new Error(`TwiceParts Ecommerce Error: ${error_log}`);
+    }
+
+  },
+  delete_component: async function (job) {
+    console.log('JOB: delete component Ecommerce', job.data)
+    //Init
+    const body = [];
+
+    const component = await Component.findOne({
+      where: {
+        dismantler_id: job.data.dismantler_id,
+        component_id: job.data.component_id
+      }
+    });
+
+    // Check
+    if (!component) {
+      console.log(
+        "No component found. Cannot perform the requested operation."
+      );
+      throw new Error(
+        "No component found. Cannot perform the requested operation."
+      );
+    }
+
+    body.push({
+      action: "blocked",
+      id_product: component.label,
+      id_seller: job.data.id_seller,
+      api_token_hash: job.data.api_token_hash,
+    });
 
     try {
       // Axios
@@ -936,113 +1266,46 @@ module.exports = {
         data: JSON.stringify(body)
       });
 
-      //TODO
-      // Check response
-      if (response.data.success === 'false' || response.data.success === false) {
-        throw new Error(
-          "Error updating component on TwiceParts Ecommerce. Cannot perform the requested operation."
-        );
-      }
+      // // Check response
+      // if (response.data.ko) {
+      //   if (response.data.ko.length > 0) {
+      //     if (
+      //       response.data.ko[0].sku &&
+      //       response.data.ko[0].sku === component.label
+      //     ) {
+      //       if (
+      //         response.data.ko[0].error !== "SKU already deleted" &&
+      //         response.data.ko[0].error !== "SKU not valid"
+      //       ) {
+      //         throw new Error(
+      //           `Error deleting component on TwiceParts Ecommerce. Cannot perform the requested operation. Response: ${JSON.stringify(response.data)}`
+      //         );
+      //       }
+      //     } else {
+      //       // No matching SKU
+      //       throw new Error(
+      //         `Error deleting component on TwiceParts Ecommerce. No matching SKU. Response: ${JSON.stringify(response.data)}`
+      //       );
+      //     }
+      //   } else {
+      //     // No errors in response
+      //     throw new Error(
+      //       `Error deleting component on TwiceParts Ecommerce. No error data in response. Response: ${JSON.stringify(response.data)}`
+      //     );
+      //   }
+      // }
 
       // Update component metafield value
       await update_component_metafield_value(
         component.component_id,
-        "ecommerce_is_published",
-        "true"
+        "twiceparts_ecommerce_is_published",
+        "false"
       );
     } catch (error) {
-      console.log('TwiceParts Ecommerce request failed', {
-        status: error.response?.status,
-        data: error.response?.data,
-        //FIXME: serve a mostrare il loro messaggio sia nel caso di auth ok - body no 
-        results: error.response?.data?.results
-      });
-      throw new Error(
-        `Error updating component on TwiceParts Ecommerce: ${error.message}`
-      );
+      const error_log = JSON.stringify(error.response?.data?.message || error.response?.data?.success === false || error.response?.data?.results?.[0])
+      console.error(`TwiceParts Ecommerce Error: ${error_log}`);
+      throw new Error(`TwiceParts Ecommerce Error: ${error_log}`);
     }
-    //ENDPATCH
-  },
-  delete_component: async function (job) {
-    console.log('JOB: delete component Ecommerce', job.data)
-    // Init
-    // const body = [];
-
-    // const component = await Component.findOne({
-    //   where: {
-    //     dismantler_id: job.data.dismantler_id,
-    //     component_id: job.data.component_id
-    //   }
-    // });
-
-    // console.log(job.data);
-
-    // // Check
-    // if (!component) {
-    //   console.log(
-    //     "No component found. Cannot perform the requested operation."
-    //   );
-    //   throw new Error(
-    //     "No component found. Cannot perform the requested operation."
-    //   );
-    // }
-
-    // body.push({
-    //   client_id: job.data.client_id,
-    //   sku: component.label
-    // });
-
-    // try {
-    //   // Axios
-    //   const response = await axios({
-    //     url: `${process.env.MULTIBREVES_URL}?user=${process.env.MULTIBREVES_USER}`,
-    //     method: "delete",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "x-api-key": process.env.MULTIBREVES_TOKEN
-    //     },
-    //     data: JSON.stringify(body)
-    //   });
-
-    //   // Check response
-    //   if (response.data.ko) {
-    //     if (response.data.ko.length > 0) {
-    //       if (
-    //         response.data.ko[0].sku &&
-    //         response.data.ko[0].sku === component.label
-    //       ) {
-    //         if (
-    //           response.data.ko[0].error !== "SKU already deleted" &&
-    //           response.data.ko[0].error !== "SKU not valid"
-    //         ) {
-    //           throw new Error(
-    //             `Error deleting component on TwiceParts Ecommerce. Cannot perform the requested operation. Response: ${JSON.stringify(response.data)}`
-    //           );
-    //         }
-    //       } else {
-    //         // No matching SKU
-    //         throw new Error(
-    //           `Error deleting component on TwiceParts Ecommerce. No matching SKU. Response: ${JSON.stringify(response.data)}`
-    //         );
-    //       }
-    //     } else {
-    //       // No errors in response
-    //       throw new Error(
-    //         `Error deleting component on TwiceParts Ecommerce. No error data in response. Response: ${JSON.stringify(response.data)}`
-    //       );
-    //     }
-    //   }
-
-    //   // Update component metafield value
-    //   await update_component_metafield_value(
-    //     component.component_id,
-    //     "ecommerce_is_published",
-    //     "false"
-    //   );
-    // } catch (error) {
-    //   console.log(`${error.message}`);
-    //   throw new Error(error.message);
-    // }
   },
   // #endregion Component
 
